@@ -133,20 +133,6 @@ public class MainFragment extends Fragment {
 
         Settings.setSelectedTab(getContext(), getMainTitle(), page);
 
-        switch(page) {
-            case 0:
-                RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_Media_Center_On));
-                break;
-            case 1:
-                RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_Cable_On));
-                break;
-            case 2:
-                if (!switched) {
-                    RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_TV_On));
-                }
-                break;
-        }
-
         currentPage = page;
     }
 

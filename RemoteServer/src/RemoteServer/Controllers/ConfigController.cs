@@ -16,11 +16,11 @@ namespace RemoteServer.Controllers
             this.configManager = configManager;
         }
 
-        [HttpGet("config")]
-        public IActionResult Get()
+        [HttpGet("config/{version}")]
+        public IActionResult Get(long version)
         {
             ContentResult ret = new ContentResult();
-            ret.Content = configManager.configJson();
+            ret.Content = configManager.configJson(version);
             ret.ContentType = "application/json";
             ret.StatusCode = 200;
             return ret;

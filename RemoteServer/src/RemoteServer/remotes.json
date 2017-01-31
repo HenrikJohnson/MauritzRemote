@@ -68,7 +68,9 @@
       "AudioMenu": "/jsonrpc?request={\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"GUI.ActivateWindow\",\"params\":{\"window\":\"osdvideosettings\"}}",
       "VideoMenu": "/jsonrpc?request={\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"GUI.ActivateWindow\",\"params\":{\"window\":\"osdaudiosettings\"}}",
       "FastForward": "/jsonrpc?request={\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"Input.ExecuteAction\",\"params\":{\"action\":\"fastforward\"}}",
-      "Rewind": "/jsonrpc?request={\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"Input.ExecuteAction\",\"params\":{\"action\":\"rewind\"}}"
+      "Rewind": "/jsonrpc?request={\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"Input.ExecuteAction\",\"params\":{\"action\":\"rewind\"}}",
+      "StepForward": "/jsonrpc?request={\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"Input.ExecuteAction\",\"params\":{\"action\":\"stepforward\"}}",
+      "StepBack": "/jsonrpc?request={\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"Input.ExecuteAction\",\"params\":{\"action\":\"stepback\"}}"
     },
     "Roku": {
       "Home": "POST:/keypress/Home",
@@ -88,6 +90,17 @@
       "Amazon": "POST:/launch/13",
       "Plex": "POST:/launch/13535",
       "TED": "POST:/launch/4070"
+    },
+    "RemoteServer": {
+      "SelectLivingroomMusic": "PUT:/remote/activequeue/Livingroom/Music",
+      "SelectLivingroomTv": "PUT:/remote/activequeue/Livingroom/Tv",
+      "SelectLivingroomMovie": "PUT:/remote/activequeue/Livingroom/Movie",
+      "SelectOfficeMusic": "PUT:/remote/activequeue/Office/Music",
+      "SelectOfficeTv": "PUT:/remote/activequeue/Office/Tv",
+      "SelectOfficeMovie": "PUT:/remote/activequeue/Office/Movie",
+      "SelectBedroomMusic": "PUT:/remote/activequeue/Bedroom/Music",
+      "SelectBedroomTv": "PUT:/remote/activequeue/Bedroom/Tv",
+      "SelectBedroomMovie": "PUT:/remote/activequeue/Bedroom/Movie"
     },
     "Panasonic": {
       "Hash": "37117,1,1,127,64,16,16,16,48,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,48,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,48,16,48,16,16,16,16,16,48,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,48,16,16,16,48,16,48,16,48,16,16,16,16,16,48,16,48,16,16,16,48,16,16,16,2731",
@@ -690,18 +703,30 @@
         {
           "Command": "Kodi.PlayMusic",
           "Remote": "LivingroomKodiRPC"
+        },
+        {
+          "Command": "RemoteServer.SelectLivingroomMusic",
+          "Remote": "RemoteServer"
         }
       ],
       "Play_Movies_In_Media_Center": [
         {
           "Command": "Kodi.PlayMovies",
           "Remote": "LivingroomKodiRPC"
+        },
+        {
+          "Command": "RemoteServer.SelectLivingroomMovie",
+          "Remote": "RemoteServer"
         }
       ],
       "Play_TV_In_Media_Center": [
         {
           "Command": "Kodi.PlayTV",
           "Remote": "LivingroomKodiRPC"
+        },
+        {
+          "Command": "RemoteServer.SelectLivingroomTv",
+          "Remote": "RemoteServer"
         }
       ],
       "Play_In_Media_Center": [
@@ -755,6 +780,18 @@
       "Rewind_In_Media_Center": [
         {
           "Command": "Kodi.Rewind",
+          "Remote": "LivingroomKodiRPC"
+        }
+      ],
+      "Step_Forward_In_Media_Center": [
+        {
+          "Command": "Kodi.StepForward",
+          "Remote": "LivingroomKodiRPC"
+        }
+      ],
+      "Step_Back_In_Media_Center": [
+        {
+          "Command": "Kodi.StepBack",
           "Remote": "LivingroomKodiRPC"
         }
       ],

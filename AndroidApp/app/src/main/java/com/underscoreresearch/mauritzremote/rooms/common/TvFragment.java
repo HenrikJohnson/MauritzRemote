@@ -23,6 +23,9 @@ public class TvFragment extends DeviceFragment {
         setupButton(view, R.id.btn_tv_volume_up, R.string.cmd_Increase_Volume_In_TV);
         setupButton(view, R.id.btn_tv_volume_down, R.string.cmd_Decrease_Volume_In_TV);
         setupButton(view, R.id.btn_tv_mute, R.string.cmd_Mute_In_TV);
+        setupButton(view, R.id.btn_tv_last, R.string.cmd_Go_To_Last_Channel_In_TV);
+        setupButton(view, R.id.btn_tv_channel_down, R.string.cmd_Show_Previous_Channel_In_TV);
+        setupButton(view, R.id.btn_tv_channel_up, R.string.cmd_Show_Next_Channel_In_TV);
 
         setupButton(view, R.id.btn_d1, R.string.cmd_Press_One_In_TV);
         setupButton(view, R.id.btn_d2, R.string.cmd_Press_Two_In_TV);
@@ -37,18 +40,18 @@ public class TvFragment extends DeviceFragment {
         setupButton(view, R.id.btn_hash, R.string.cmd_Press_Star_In_TV);
         setupButton(view, R.id.btn_star, R.string.cmd_Press_Hash_In_TV);
 
-        setupButton(view, R.id.btn_b1, R.string.cmd_Show_Viera_Link_In_TV, "Link");
-        setupButton(view, R.id.btn_b2, R.string.cmd_Show_Viera_Tools_In_TV, "Tools");
-        setupButton(view, R.id.btn_b3, R.string.cmd_Show_Info_In_TV, "Info");
-        setupButton(view, R.id.btn_b4, R.string.cmd_Show_Option_In_TV, "Option");
-        setupButton(view, R.id.btn_b5, R.string.cmd_Change_Input_In_TV, "Input");
-        setupButton(view, R.id.btn_b6, R.string.cmd_Show_Favorite_In_TV, "Favorite");
-        setupButton(view, R.id.btn_b7, R.string.cmd_Show_Format_In_TV, "Format");
-        setupButton(view, R.id.btn_b8, R.string.cmd_Show_3D_In_TV, "3D");
-        setupButton(view, R.id.btn_b9, R.string.cmd_Press_Red_In_TV, "").setBackgroundColor(getResources().getColor(R.color.red));
-        setupButton(view, R.id.btn_b10, R.string.cmd_Press_Green_In_TV, "").setBackgroundColor(getResources().getColor(R.color.green));
-        setupButton(view, R.id.btn_b11, R.string.cmd_Press_Blue_In_TV, "").setBackgroundColor(getResources().getColor(R.color.blue));
-        setupButton(view, R.id.btn_b12, R.string.cmd_Press_Yellow_In_TV, "").setBackgroundColor(getResources().getColor(R.color.yellow));
+        setupButton(view, R.id.btn_b1, R.string.cmd_Press_Red_In_TV, "").setBackgroundColor(getResources().getColor(R.color.red));
+        setupButton(view, R.id.btn_b2, R.string.cmd_Press_Green_In_TV, "").setBackgroundColor(getResources().getColor(R.color.green));
+        setupButton(view, R.id.btn_b3, R.string.cmd_Press_Blue_In_TV, "").setBackgroundColor(getResources().getColor(R.color.blue));
+        setupButton(view, R.id.btn_b4, R.string.cmd_Press_Yellow_In_TV, "").setBackgroundColor(getResources().getColor(R.color.yellow));
+        setupButton(view, R.id.btn_b5, R.string.cmd_Show_Viera_Link_In_TV, "Link");
+        setupButton(view, R.id.btn_b6, R.string.cmd_Show_Viera_Tools_In_TV, "Tools");
+        setupButton(view, R.id.btn_b7, R.string.cmd_Show_Info_In_TV, "Info");
+        setupButton(view, R.id.btn_b8, R.string.cmd_Show_Option_In_TV, "Option");
+        setupButton(view, R.id.btn_b9, R.string.cmd_Change_Input_In_TV, "Input");
+        setupButton(view, R.id.btn_b10, R.string.cmd_Show_Favorite_In_TV, "Fav");
+        setupButton(view, R.id.btn_b11, R.string.cmd_Show_Format_In_TV, "Format");
+        setupButton(view, R.id.btn_b12, R.string.cmd_Show_3D_In_TV, "3D");
     }
 
     public static class Livingroom extends TvFragment {

@@ -1,12 +1,21 @@
 package com.underscoreresearch.mauritzremote;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.EditText;
 
 import com.android.volley.Response;
@@ -25,6 +35,9 @@ import com.underscoreresearch.mauritzremote.rooms.BedroomFragment;
 import com.underscoreresearch.mauritzremote.rooms.LivingroomFragment;
 import com.underscoreresearch.mauritzremote.rooms.MainFragment;
 import com.underscoreresearch.mauritzremote.rooms.OfficeFragment;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainFragment.OnFragmentListener {
@@ -131,23 +144,26 @@ public class MainActivity extends AppCompatActivity
         RemoteService.getRoomDevice(this, room, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Settings.setSelectedTab(MainActivity.this, room, Integer.parseInt(response));
+                int page = Integer.parseInt(response);
+                if (mainFragment == null || !mainFragment.getMainTitle().equals(room) || page != Settings.getSelectedTab(MainActivity.this, room)) {
+                    Settings.setSelectedTab(MainActivity.this, room, page);
 
-                fragmentLoaded = false;
-                switch(Settings.getSelectedRoom(MainActivity.this)) {
-                    case Bedroom:
-                        mainFragment = new BedroomFragment();
-                        break;
-                    case Office:
-                        mainFragment = new OfficeFragment();
-                        break;
-                    default:
-                        mainFragment = new LivingroomFragment();
-                        break;
+                    fragmentLoaded = false;
+                    switch (Settings.getSelectedRoom(MainActivity.this)) {
+                        case Bedroom:
+                            mainFragment = new BedroomFragment();
+                            break;
+                        case Office:
+                            mainFragment = new OfficeFragment();
+                            break;
+                        default:
+                            mainFragment = new LivingroomFragment();
+                            break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, mainFragment).commit();
+                    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                    toolbar.setTitle(mainFragment.getMainTitle());
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, mainFragment).commit();
-                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-                toolbar.setTitle(mainFragment.getMainTitle());
             }
         });
     }
@@ -166,6 +182,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
@@ -177,10 +194,37 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.nav_turn_on) {
-            mainFragment.turnOn();
-            return true;
+        switch (id) {
+            case R.id.menu_turn_on:
+                mainFragment.turnOn();
+                return true;
+            case R.id.menu_nanit: {
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.nanit.baby");
+                startActivity(intent);
+                return true;
+            }
+            case R.id.menu_browser: {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://home.henrik.org"));
+                startActivity(browserIntent);
+                return true;
+            }
+            case R.id.menu_nest: {
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.nest.android");
+                startActivity(intent);
+                return true;
+            }
+            case R.id.menu_sense: {
+                Intent intent = getPackageManager().getLaunchIntentForPackage("is.hello.sense");
+                startActivity(intent);
+                return true;
+            }
+            case R.id.menu_launcher: {
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.teslacoilsw.launcher");
+                startActivity(intent);
+                return true;
+            }
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -214,6 +258,20 @@ public class MainActivity extends AppCompatActivity
     public void onViewCreated(Fragment fragment, View view) {
         if ((Object)fragment == (Object)mainFragment) {
             mainFragment.applyPager(tabLayout, mainFragment.getViewPager(view));
+            mainFragment.getViewPager(view).addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    RemoteService.cancelButton();
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                }
+            });
             fragmentLoaded = true;
         }
     }

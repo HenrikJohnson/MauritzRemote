@@ -12,6 +12,7 @@
     <dimen name="roundedSquareRadius">12dp</dimen>
     <dimen name="buttonHeight">48dp</dimen>
     <dimen name="buttonWidth">96dp</dimen>
+    <dimen name="buttonNarrowWidth">48dp</dimen>
     <dimen name="controlSize">72dp</dimen>
     <dimen name="controlIconSize">48dp</dimen>
     <dimen name="controlSmallSize">48dp</dimen>
@@ -31,6 +32,15 @@
     <dimen name="modeIconPadding">6dp</dimen>
     <dimen name="plexTopOffset">10dp</dimen>
     <dimen name="buttonTextSize">21sp</dimen>
-    <dimen name="buttonSmallTextSize">14sp</dimen>
+    <dimen name="buttonSmallTextSize">12sp</dimen>
+    <dimen name="buttonSmallerTextSize">8sp</dimen>
     <dimen name="smallTextSize">11sp</dimen>
+
+    <dimen name="itemArtistTextSize">12sp</dimen>
+    <dimen name="itemTitleTextSize">11sp</dimen>
+    <dimen name="itemTextTextSize">11sp</dimen>
+    <dimen name="itemTextMargin">6dp</dimen>
+
+    <dimen name="list_item_elevation">2dp</dimen>
+    <dimen name="list_item_height">48dp</dimen>
 </resources>

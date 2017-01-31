@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RemoteServer.Controllers
+namespace RemoteServer.Library
 {
-    public class SongItem
+    public class LibraryItem
     {
-        public int SongId { get; set; }
+        public String ItemId { get; set; }
         public String Artist { get; set; }
         public String Album { get; set; }
         public String Title { get; set; }
@@ -16,6 +16,7 @@ namespace RemoteServer.Controllers
         public int Voted { get; set; }
         public int TrackNumber { get; set; }
         public int Rating { get; set; }
+        public double Toplist { get; set; }
         public String CoverUrl { get; set; }
     }
 }

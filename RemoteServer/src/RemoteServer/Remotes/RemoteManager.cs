@@ -43,6 +43,8 @@ namespace RemoteServer.Remotes
             remotes.Add("BedroomKodiEvent", new EventClientRemote("hush." + Constants.HomeDomainName, EventClientRemote.DEFAULT_PORT, loggerFactory));
             remotes.Add("BedroomKodiRPC", new HttpRemote("http://" + Constants.KodiCredentials + "@hush." + Constants.HomeDomainName + ":8080/", loggerFactory, configurationManager));
             remotes.Add("BedroomRoku", new HttpRemote("http://bedroku." + Constants.HomeDomainName + ":8060/", loggerFactory, configurationManager));
+
+            remotes.Add("RemoteServer", new HttpRemote("http://localhost:5000/", loggerFactory, configurationManager));
         }
 
         public bool scheduleCommand(String category, String name, bool onlyIdle)

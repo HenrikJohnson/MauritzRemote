@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using RemoteServer.Config;
+using RemoteServer.Library;
 using RemoteServer.Remotes;
 
 namespace RemoteServer
@@ -39,6 +40,8 @@ namespace RemoteServer
 
             services.AddSingleton<IConfigurationManager, ConfigurationManager>();
             services.AddSingleton<IRemoteManager, RemoteManager>();
+
+            services.AddTransient<ILibraryRepository, JukeboxLibraryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -21,4 +21,11 @@
     <color name="blue">#00f</color>
     <color name="yellow">#ff0</color>
 
+    <color name="bg_item_normal_state">#ff000000</color>
+    <color name="bg_item_dragging_state">#ff000000</color>
+    <color name="bg_item_dragging_active_state">#ff404040</color>
+    <color name="bg_item_swiping_state">#ff000000</color>
+    <color name="bg_item_swiping_active_state">#ff804040</color>
+    <color name="bg_swipe_item_neutral">@android:color/transparent</color>
+    <color name="bg_swipe_item_dismiss">#ff990000</color>
 </resources>

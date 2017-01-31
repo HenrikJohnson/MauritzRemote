@@ -9,6 +9,7 @@ public class Settings {
     private static final String PREFERENCES_KEY = "remotepreferences";
     private static final String ROOM_PREFERENCE = "ROOM";
     private static final String PASSWORD_PREFERENCE = "PASSWORD";
+    private static final String SEARCH_TYPE_PREFERENCE = "SEARCH_TYPE";
 
     public static String getPassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
@@ -18,6 +19,16 @@ public class Settings {
     public static void setPassword(Context context, String password) {
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         preferences.edit().putString(PASSWORD_PREFERENCE, password).apply();
+    }
+
+    public static void setSelectedSearchType(Context context, String type) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+        preferences.edit().putString(SEARCH_TYPE_PREFERENCE, type).apply();
+    }
+
+    public static String getSelectedSearchType(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+        return preferences.getString(SEARCH_TYPE_PREFERENCE, "Entered");
     }
 
     public enum Room {

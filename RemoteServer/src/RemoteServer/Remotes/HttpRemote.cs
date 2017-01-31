@@ -30,10 +30,20 @@ namespace RemoteServer.Remotes
             if (commandData.StartsWith("POST:/"))
             {
                 method = "POST";
-                commandData = commandData.Substring(5);
+                commandData = commandData.Substring(method.Length + 1);
+            }
+            else if (commandData.StartsWith("DELETE:/"))
+            {
+                method = "DELETE";
+                commandData = commandData.Substring(method.Length + 1);
+            }
+            else if (commandData.StartsWith("PUT:/"))
+            {
+                method = "PUT";
+                commandData = commandData.Substring(method.Length + 1);
             }
             else if (commandData.StartsWith("GET:/"))
-                commandData = commandData.Substring(4);
+                commandData = commandData.Substring(method.Length + 1);
 
             logger.LogInformation(new EventId(2), "{0} {1}", method, commandData);
 

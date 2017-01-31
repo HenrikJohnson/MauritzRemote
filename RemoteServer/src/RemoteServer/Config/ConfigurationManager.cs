@@ -23,8 +23,11 @@ namespace RemoteServer.Config
             Config.GetType();
         }
 
-        public String configJson()
+        public String configJson(long version)
         {
+            if (config.Version == version)
+                return JsonConvert.SerializeObject(new RootConfig {Version = version});
+
             return JsonConvert.SerializeObject(config);
         }
 
@@ -52,6 +55,7 @@ namespace RemoteServer.Config
                                         settings);
 
                                     config = new RootConfig();
+                                    config.Version = new DateTime().Ticks;
                                     config.CommandData = caseRoot.CommandData;
                                     config.RemoteCommands = new Dictionary<string, Dictionary<string, List<RemoteCommand>>>(StringComparer.OrdinalIgnoreCase);
 

@@ -100,7 +100,18 @@
     <string name="cmd_Quieter_In_TV">Quieter_In_TV</string>
     <string name="cmd_Select_In_Media_Center">Select_In_Media_Center</string>
     <string name="cmd_Show_Info_In_Media_Center">Show_Info_In_Media_Center</string>
+    <string name="cmd_Step_Forward_In_Media_Center">Step_Forward_In_Media_Center</string>
+    <string name="cmd_Step_Back_In_Media_Center">Step_Back_In_Media_Center</string>
+
     <string name="page">Page</string>
     <string name="on">On</string>
     <string name="tv_volume">TV\nVolume</string>
+    <string name="nanit">Nanit</string>
+    <string name="nest">Nest</string>
+    <string name="sense">Sense</string>
+    <string name="other">Other...</string>
+    <string name="tv_channel">Channel</string>
+    <string name="browser">Browser</string>
+    <string name="library_contents">Contents</string>
+    <string name="library_queue">Queue</string>
 </resources>

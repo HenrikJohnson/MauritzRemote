@@ -1,0 +1,440 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+using RemoteServer.Config;
+
+namespace RemoteServer.Library
+{
+    public class JukeboxLibraryRepository : ILibraryRepository
+    {
+        private static Regex quoteCharacters = new Regex(@"[\x00'""\b\n\r\t\cZ\\%_]");
+        private static Regex split = new Regex("\\S+");
+
+        private static string escape(string str)
+        {
+            return quoteCharacters.Replace(str,
+                delegate (Match match)
+                {
+                    string v = match.Value;
+                    switch (v)
+                    {
+                        case "\x00": // ASCII NUL (0x00) character
+                            return "\\0";
+                        case "\b": // BACKSPACE character
+                            return "\\b";
+                        case "\n": // NEWLINE (linefeed) character
+                            return "\\n";
+                        case "\r": // CARRIAGE RETURN character
+                            return "\\r";
+                        case "\t": // TAB
+                            return "\\t";
+                        case "\u001A": // Ctrl-Z
+                            return "\\Z";
+                        default:
+                            return "\\" + v;
+                    }
+                });
+        }
+
+        private static String queueName(String room, LibraryQueue queue)
+        {
+            if (room.ToLower() == "office")
+            {
+                switch (queue)
+                {
+                    default:
+                        return "wMusic";
+                    case LibraryQueue.Movie:
+                        return "wMovie";
+                    case LibraryQueue.Tv:
+                        return "wTv";
+                }
+            }
+            else if (room.ToLower() == "bedroom")
+            {
+                switch (queue)
+                {
+                    default:
+                        return "bMusic";
+                    case LibraryQueue.Movie:
+                        return "bMovie";
+                    case LibraryQueue.Tv:
+                        return "wTv";
+                }
+            }
+            switch (queue)
+            {
+                default:
+                    return null;
+                case LibraryQueue.Movie:
+                    return "Movie";
+                case LibraryQueue.Tv:
+                    return "Tv";
+            }
+        }
+
+        private async Task<List<QueueItem>> GenerateQueue(MySqlConnection mysqlConnection, String room, LibraryQueue queue)
+        {
+            String queueSel;
+            if (null == queueName(room, queue))
+                queueSel = "a.user is null";
+            else
+                queueSel = "a.user = '" + queueName(room, queue) + "'";
+
+            using (MySqlCommand command = mysqlConnection.CreateCommand())
+            {
+                command.CommandText =
+                    "select a.queueid,a.id,b.artist,b.volume,b.title,b.length,b.played,b.voted,b.trackno,b.rating,d.cover " +
+                    "from queue a left join songs b on a.id = b.id left join programmember c on b.id = c.songid left join programs d on c.programid = d.id and d.name != 'Backlog' and d.artist != 'Miniseries' " +
+                    "where pri < 1001 and " + queueSel + " order by a.pri, a.queueid";
+
+                using (DbDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    List<QueueItem> items = new List<QueueItem>();
+                    HashSet<int> queueIds = new HashSet<int>();
+                    while (await reader.ReadAsync())
+                    {
+                        int queueId = reader.GetInt32(0);
+                        if (queueIds.Add(queueId))
+                        {
+                            String cover = reader.IsDBNull(10) ? null : reader.GetString(10);
+                            if (!String.IsNullOrEmpty(cover))
+                                cover = Constants.JukeboxUrl + "cover_art/" + cover;
+
+                            items.Add(new QueueItem()
+                            {
+                                QueueId = reader.GetInt32(0),
+                                ItemId = "I" + reader.GetInt32(1).ToString(),
+                                Artist = reader.GetString(2),
+                                Album = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                Title = reader.GetString(4),
+                                Duration = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                Played = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+                                Voted = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
+                                TrackNumber = reader.IsDBNull(8) ? 0 : reader.GetInt32(8),
+                                Rating = reader.IsDBNull(9) ? 0 : reader.GetInt32(9),
+                                CoverUrl = cover
+                            });
+                        }
+                    }
+                    return items;
+                }
+            }
+        }
+
+
+        public JukeboxLibraryRepository()
+        {
+        }
+
+        public async Task<List<QueueItem>> GetQueue(String room, LibraryQueue queue)
+        {
+            using (MySqlConnection mysqlConnection = new MySqlConnection(Constants.ConnectionString))
+            {
+                await mysqlConnection.OpenAsync();
+                return await GenerateQueue(mysqlConnection, room, queue);
+            }
+        }
+
+        public async Task<List<QueueItem>> AddQueueItem(String room, LibraryQueue queue, string songId)
+        {
+            if (songId.StartsWith("I"))
+            {
+                String id = songId.Substring(1);
+                HttpWebRequest request =
+                    WebRequest.CreateHttp(Constants.JukeboxUrl + "action.php?SEL=" + Int32.Parse(id) + "&AUTH_USER=" +
+                                          Uri.EscapeUriString(Constants.JukeboxUser) + "&AUTH_PWD=" +
+                                          Uri.EscapeUriString(Constants.JukeboxPassword));
+
+                request.Method = "GET";
+                request.CookieContainer = new CookieContainer();
+                if (queueName(room, queue) != null)
+                {
+                    request.CookieContainer.Add(new Uri(Constants.JukeboxUrl),
+                        new Cookie("CURRENTGROUP", queueName(room, queue)));
+                }
+                try
+                {
+                    using ((HttpWebResponse) await request.GetResponseAsync())
+                    {
+                    }
+                }
+                catch (WebException exc)
+                {
+                    HttpWebResponse response = (HttpWebResponse) exc.Response;
+                    if (!response.ResponseUri.AbsolutePath.EndsWith("/left.php"))
+                        throw;
+                }
+            }
+            else
+            {
+                throw new IOException("Invalid song ID");
+            }
+            return await GetQueue(room, queue);
+        }
+
+        public async Task<List<QueueItem>> DeleteQueueItem(String room, LibraryQueue queue, int queueId)
+        {
+            HttpWebRequest request =
+                WebRequest.CreateHttp(Constants.JukeboxUrl + "action.php?REMOVE=" + queueId + "&AUTH_USER=" +
+                                      Uri.EscapeUriString(Constants.JukeboxUser) + "&AUTH_PWD=" +
+                                      Uri.EscapeUriString(Constants.JukeboxPassword));
+
+            request.Method = "GET";
+            request.CookieContainer = new CookieContainer();
+            if (queueName(room, queue) != null)
+            {
+                request.CookieContainer.Add(new Uri(Constants.JukeboxUrl), new Cookie("CURRENTGROUP", queueName(room, queue)));
+            }
+            try
+            {
+                using ((HttpWebResponse)await request.GetResponseAsync())
+                {
+                }
+            }
+            catch (WebException exc)
+            {
+                HttpWebResponse response = (HttpWebResponse)exc.Response;
+                if (!response.ResponseUri.AbsolutePath.EndsWith("/left.php"))
+                    throw;
+            }
+            return await GetQueue(room, queue);
+        }
+
+        public async Task<List<QueueItem>> MoveQueueItem(String room, LibraryQueue queue, int queueId, int afterQueueId)
+        {
+            if (queueId == afterQueueId)
+                throw new IOException("Can't move item before itself");
+
+            using (MySqlConnection mysqlConnection = new MySqlConnection(Constants.ConnectionString))
+            {
+                await mysqlConnection.OpenAsync();
+
+                String queueSel;
+                if (null == queueName(room, queue))
+                    queueSel = "a.user is null";
+                else
+                    queueSel = "a.user = '" + queueName(room, queue) + "'";
+
+                int foundPri = -1;
+                int foundQueueId = -1;
+                bool found = false;
+                bool foundFrom = false;
+
+                using (MySqlCommand command = mysqlConnection.CreateCommand())
+                {
+                    command.CommandText = "select a.queueid,a.pri " +
+                                          "from queue a where pri < 1001 and " + queueSel + " order by a.pri, a.queueid";
+                    using (DbDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            int currentQueueId = reader.GetInt32(0);
+                            int currentPri = reader.GetInt32(1);
+                            if (currentQueueId == afterQueueId)
+                            {
+                                found = true;
+                            }
+                            else if (found && foundPri < 0)
+                            {
+                                foundPri = currentPri;
+                                foundQueueId = currentQueueId;
+                            }
+
+                            if (queueId == currentQueueId)
+                            {
+                                if (currentPri == 0)
+                                    throw new IOException("Can't move currently playing item");
+                                foundFrom = true;
+                            }
+                        }
+
+                    }
+                }
+
+                if (!found || !foundFrom)
+                    return null;
+
+                if (foundQueueId != queueId)
+                {
+                    if (foundPri > 0)
+                    {
+                        List<int> queueIds = new List<int>();
+                        using (MySqlCommand command = mysqlConnection.CreateCommand())
+                        {
+                            command.CommandText = "select queueid from queue where queueid >= " + foundQueueId +
+                                                  " order by queueid desc";
+                            using (DbDataReader reader = await command.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    queueIds.Add(reader.GetInt32(0));
+                                }
+                            }
+                        }
+
+                        foreach (int changeId in queueIds)
+                        {
+                            if (changeId == queueId)
+                                queueId++;
+
+                            using (MySqlCommand command = mysqlConnection.CreateCommand())
+                            {
+                                command.CommandText = "update queue set queueid = queueid + 1 where queueid = " +
+                                                        changeId;
+                                await command.ExecuteNonQueryAsync();
+                            }
+                        }
+                    }
+
+                    using (MySqlCommand command = mysqlConnection.CreateCommand())
+                    {
+                        command.CommandText = "update queue set queueid = " + foundQueueId + ", pri = " + foundPri +
+                                              " where queueid = " + queueId;
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+
+                return await GenerateQueue(mysqlConnection, room, queue);
+            }
+        }
+
+        public async Task<List<LibraryItem>> Query(LibraryQueue queue, LibrarySearchType type, string search, int? offset, int? limit)
+        {
+            if (offset == null)
+                offset = 0;
+            if (limit == null || limit <= 0)
+                limit = 100;
+
+            String queueCriteria;
+
+            switch (queue)
+            {
+                case LibraryQueue.Tv:
+                    queueCriteria = "(a.volume like 'Season %' or a.volume in ('Miniseries','Single Episode'))";
+                    break;
+
+                case LibraryQueue.Music:
+                    queueCriteria = "((a.volume not like 'Season %' and a.volume not in ('Movie','Miniseries','DVD','Single Episode','Podcast')) or a.volume is null)";
+                    break;
+
+                case LibraryQueue.Movie:
+                    queueCriteria = "(a.volume in ('Movie','DVD'))";
+                    break;
+
+                default:
+                    throw new IOException("Unknown queue");
+            }
+
+            String criteria = "";
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                StringBuilder searchCriteria = new StringBuilder();
+                Match match = split.Match(search);
+                while (match.Success)
+                {
+                    if (searchCriteria.Length > 0)
+                    {
+                        searchCriteria.Append(" AND ");
+                    }
+                    searchCriteria.AppendFormat(
+                        "(a.Artist LIKE '%{0}%' OR a.Title LIKE '%{0}%' OR a.Volume LIKE '%{0}%')",
+                        escape(match.Groups[0].Value));
+                    match = match.NextMatch();
+                }
+                if (searchCriteria.Length > 0)
+                {
+                    criteria = String.Format(" AND ({0})", searchCriteria);
+                }
+            }
+
+            switch (type)
+            {
+                default:
+                    criteria += " order by a.artist, a.volume, a.trackno, a.title";
+                    break;
+                case LibrarySearchType.Title:
+                    criteria += " order by a.title";
+                    break;
+                case LibrarySearchType.Entered:
+                    criteria += " order by a.entered desc";
+                    break;
+                case LibrarySearchType.LastPlayed:
+                    criteria += " order by a.lastplayed desc";
+                    break;
+                case LibrarySearchType.Toplist:
+                    criteria += " order by adjtoplist desc";
+                    break;
+            }
+
+            using (MySqlConnection mysqlConnection = new MySqlConnection(Constants.ConnectionString))
+            {
+                await mysqlConnection.OpenAsync();
+
+                double maxToplist = 1;
+                using (MySqlCommand command = mysqlConnection.CreateCommand())
+                {
+                    command.CommandText =
+                        "select max(a.toplist*pow(1.5, if(a.rating<=5,1,a.rating+1-5))) as adjtoplist " +
+                        "from songs a where " + queueCriteria;
+
+                    using (DbDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync() && !reader.IsDBNull(0))
+                        {
+                            maxToplist = reader.GetDouble(0);
+                        }
+                    }
+                }
+
+                using (MySqlCommand command = mysqlConnection.CreateCommand())
+                {
+                    command.CommandText =
+                        "select a.id,a.artist,a.volume,a.title,a.length,a.played,a.voted,a.trackno,a.rating,d.cover,a.toplist*pow(1.5, if(a.rating<=5,1,a.rating+1-5)) as adjtoplist " +
+                        "from songs a left join programmember c on a.id = c.songid and c.programid in (select e.id from programs e where e.cover is not null) " +
+                        "left join programs d on c.programid = d.id and d.artist != 'Backlog' and d.name != 'Miniseries' " +
+                        "where " + queueCriteria + criteria + " limit " + limit + " offset " + offset;
+
+                    using (DbDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        List<LibraryItem> items = new List<LibraryItem>();
+                        HashSet<int> songIds = new HashSet<int>();
+                        while (await reader.ReadAsync())
+                        {
+                            int songId = reader.GetInt32(0);
+                            if (songIds.Add(songId))
+                            {
+                                String cover = reader.IsDBNull(9) ? null : reader.GetString(9);
+                                if (!String.IsNullOrEmpty(cover))
+                                    cover = Constants.JukeboxUrl + "cover_art/" + cover;
+
+                                items.Add(new LibraryItem()
+                                {
+                                    ItemId = "I" + reader.GetInt32(0),
+                                    Artist = reader.GetString(1),
+                                    Album = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                    Title = reader.GetString(3),
+                                    Duration = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
+                                    Played = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                    Voted = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+                                    TrackNumber = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
+                                    Rating = reader.IsDBNull(8) ? 0 : reader.GetInt32(8),
+                                    CoverUrl = cover,
+                                    Toplist = reader.IsDBNull(10) ? 0 : reader.GetDouble(10) / maxToplist
+                                });
+                            }
+                        }
+                        return items;
+                    }
+                }
+            }
+        }
+    }
+}

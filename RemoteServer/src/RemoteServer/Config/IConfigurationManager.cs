@@ -7,6 +7,6 @@ namespace RemoteServer.Config
     {
         String getCommandData(String name);
         List<RemoteCommand> getRemoteCommand(String category, String name);
-        String configJson();
+        String configJson(long previousVersion);
     }
 }
