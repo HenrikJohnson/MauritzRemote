@@ -30,6 +30,15 @@ public class RemoteService {
     private static Handler handler;
     private static RequestQueue queue;
     private static String password;
+    private static String currentRoom;
+
+    public static void setCurrentRoom(String currentRoom) {
+        RemoteService.currentRoom = currentRoom;
+    }
+
+    public static String getCurrentRoom() {
+        return currentRoom;
+    }
 
     private static class AuthenticatedStringRequest extends StringRequest {
         public AuthenticatedStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
@@ -329,7 +338,7 @@ public class RemoteService {
     }
 
     public static void query(String queryRoom, String type, String criteria, int offset, int size, Response.Listener<String> response) {
-        String url = Constants.SERVER_BASE + "search/" + queryRoom + "/" + type + "/" + Uri.encode(criteria) + "?offset=" + offset + "&size=" + size;
+        String url = Constants.SERVER_BASE + "search/" + queryRoom + "/" + type.replace(" ", "") + "/" + Uri.encode(criteria) + "?offset=" + offset + "&size=" + size;
 
         Log.i("RemoteService", "Sending " + url);
 

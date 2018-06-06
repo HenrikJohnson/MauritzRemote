@@ -6,6 +6,8 @@
         Title,
         Toplist,
         LastPlayed,
-        Entered
+        Entered,
+        Album,
+        Backlog
     }
 }

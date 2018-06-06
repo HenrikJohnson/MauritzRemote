@@ -1,12 +1,18 @@
 package com.underscoreresearch.mauritzremote;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -28,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.underscoreresearch.mauritzremote.config.Settings;
@@ -39,17 +46,40 @@ import com.underscoreresearch.mauritzremote.rooms.OfficeFragment;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainFragment.OnFragmentListener {
+    private static final String NANIT_PACKAGE = "com.nanit.baby";
+    private static final String NEST_PACKAGE = "com.nest.android";
+    private static final String LAUNCHER_PACKAGE = "com.teslacoilsw.launcher";
+    private static final String BROWSER_PACKAGE = "com.android.chrome";
     private MainFragment mainFragment;
     private boolean fragmentLoaded;
     private TabLayout tabLayout;
+    private HomeWatcher watcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         RemoteService.initialize(this);
+        watcher = new HomeWatcher(this);
+        watcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+            @Override
+            public void onHomePressed() {
+                if (mainFragment != null) {
+                    mainFragment.homePressed();
+                }
+            }
+
+            @Override
+            public void onHomeLongPressed() {
+                if (mainFragment != null) {
+                    mainFragment.homePressed();
+                }
+            }
+        });
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -106,9 +136,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPause() {
+        watcher.stopWatch();
+
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         loadMainFragment(false);
+        if (mainFragment != null) {
+            mainFragment.homePressed();
+        }
+        watcher.startWatch();
 
         if (Settings.getPassword(this) == null)
         {
@@ -141,6 +182,14 @@ public class MainActivity extends AppCompatActivity
     private void loadMainFragment(boolean replace) {
         final String room = Settings.getSelectedRoom(this).name();
 
+        final Snackbar snackbar;
+        if (!replace) {
+            snackbar = Snackbar.make(findViewById(R.id.main_frame), "Network not available", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        } else {
+            snackbar = null;
+        }
+
         RemoteService.getRoomDevice(this, room, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -160,9 +209,16 @@ public class MainActivity extends AppCompatActivity
                             mainFragment = new LivingroomFragment();
                             break;
                     }
+                    RemoteService.setCurrentRoom(mainFragment.getMainTitle());
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
                     toolbar.setTitle(mainFragment.getMainTitle());
+                } else {
+                    mainFragment.refresh();
+                }
+
+                if (snackbar != null) {
+                    snackbar.dismiss();
                 }
             }
         });
@@ -183,6 +239,31 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
+        MenuItem item = menu.findItem(R.id.menu_nanit);
+        try {
+            item.setIcon(getPackageManager().getApplicationIcon(NANIT_PACKAGE));
+        } catch (PackageManager.NameNotFoundException e) {
+            item.setVisible(false);
+        }
+        item = menu.findItem(R.id.menu_browser);
+        try {
+            item.setIcon(getPackageManager().getApplicationIcon(BROWSER_PACKAGE));
+        } catch (PackageManager.NameNotFoundException e) {
+            item.setVisible(false);
+        }
+        item = menu.findItem(R.id.menu_launcher);
+        try {
+            item.setIcon(getPackageManager().getApplicationIcon(LAUNCHER_PACKAGE));
+        } catch (PackageManager.NameNotFoundException e) {
+            item.setVisible(false);
+        }
+        item = menu.findItem(R.id.menu_nest);
+        try {
+            item.setIcon(getPackageManager().getApplicationIcon(NEST_PACKAGE));
+        } catch (PackageManager.NameNotFoundException e) {
+            item.setVisible(false);
+        }
+
         return true;
     }
 
@@ -199,7 +280,7 @@ public class MainActivity extends AppCompatActivity
                 mainFragment.turnOn();
                 return true;
             case R.id.menu_nanit: {
-                Intent intent = getPackageManager().getLaunchIntentForPackage("com.nanit.baby");
+                Intent intent = getPackageManager().getLaunchIntentForPackage(NANIT_PACKAGE);
                 startActivity(intent);
                 return true;
             }
@@ -209,17 +290,12 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
             case R.id.menu_nest: {
-                Intent intent = getPackageManager().getLaunchIntentForPackage("com.nest.android");
-                startActivity(intent);
-                return true;
-            }
-            case R.id.menu_sense: {
-                Intent intent = getPackageManager().getLaunchIntentForPackage("is.hello.sense");
+                Intent intent = getPackageManager().getLaunchIntentForPackage(NEST_PACKAGE);
                 startActivity(intent);
                 return true;
             }
             case R.id.menu_launcher: {
-                Intent intent = getPackageManager().getLaunchIntentForPackage("com.teslacoilsw.launcher");
+                Intent intent = getPackageManager().getLaunchIntentForPackage(LAUNCHER_PACKAGE);
                 startActivity(intent);
                 return true;
             }

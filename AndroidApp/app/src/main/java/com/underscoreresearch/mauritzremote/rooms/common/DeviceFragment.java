@@ -69,4 +69,10 @@ public class DeviceFragment extends Fragment {
             }
         }
     }
+
+    public void refresh() {
+    }
+
+    public void homePressed() {
+    }
 }

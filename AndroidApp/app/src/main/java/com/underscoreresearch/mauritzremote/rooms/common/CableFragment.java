@@ -15,7 +15,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 public class CableFragment extends DeviceFragment {
     private void setupButtons(View view) {
-        setupButton(view, R.id.btn_menu, R.string.cmd_Search_In_Cable, "Home");
+        setupButton(view, R.id.btn_menu, R.string.cmd_Go_To_Home_In_Cable, "Home");
         setupButton(view, R.id.btn_up, R.string.cmd_Go_Up_In_Cable);
         setupButton(view, R.id.btn_context, R.string.cmd_Search_In_Cable, "Search");
         setupButton(view, R.id.btn_left, R.string.cmd_Go_Left_In_Cable);
@@ -26,6 +26,7 @@ public class CableFragment extends DeviceFragment {
         setupButton(view, R.id.btn_back, R.string.cmd_Go_Back_In_Cable, "Back");
 
         setupButton(view, R.id.btn_ted, R.string.cmd_Go_To_TED_In_Cable);
+        setupButton(view, R.id.btn_netflix, R.string.cmd_Go_To_Netflix_In_Cable);
         setupButton(view, R.id.btn_slingtv, R.string.cmd_Go_To_Sling_In_Cable);
         setupButton(view, R.id.btn_plex, R.string.cmd_Go_To_Plex_In_Cable);
         setupButton(view, R.id.btn_amazon, R.string.cmd_Go_To_Amazon_In_Cable);

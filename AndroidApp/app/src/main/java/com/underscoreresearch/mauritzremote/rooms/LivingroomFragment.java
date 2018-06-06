@@ -17,6 +17,7 @@ public class LivingroomFragment extends MainFragment {
     protected void addPages() {
         addPage(new MediaCenterFragment.Livingroom(), "Media", R.drawable.ic_mediacenter_white);
         addPage(new CableFragment.Livingroom(), "Cable", R.drawable.ic_cable_white);
+        addPage(new CableFragment.Livingroom(), "Netflix", R.drawable.ic_netflix_white);
         addPage(new TvFragment.Livingroom(), "TV", R.drawable.ic_tv_white);
         //addPage(new DeviceFragment(), "Audio", R.drawable.ic_audio_white);
     }
@@ -33,6 +34,9 @@ public class LivingroomFragment extends MainFragment {
                 RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_Cable_On));
                 break;
             case 2:
+                RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_Netflix_On));
+                break;
+            case 3:
                 if (!switched) {
                     RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_TV_On));
                 }

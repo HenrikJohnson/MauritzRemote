@@ -95,7 +95,7 @@
             android:layout_gravity="fill"
             android:layout_width="match_parent">
             <include
-                layout="@layout/piece_buttons_narrow"
+                layout="@layout/piece_buttons_xbox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="fill" />

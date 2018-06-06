@@ -20,7 +20,7 @@
     <dimen name="muteMargin">36dp</dimen>
     <dimen name="digitSize">48dp</dimen>
     <dimen name="modeNarrowSize">72dp</dimen>
-    <dimen name="modeSize">96dp</dimen>
+    <dimen name="modeSize">80dp</dimen>
     <dimen name="modeIconSize">48dp</dimen>
     <dimen name="pageUpWidth">48dp</dimen>
     <dimen name="pageUpWHeight">36dp</dimen>
@@ -31,7 +31,7 @@
     <dimen name="buttonSmallHeight">36dp</dimen>
     <dimen name="modeIconPadding">6dp</dimen>
     <dimen name="plexTopOffset">10dp</dimen>
-    <dimen name="buttonTextSize">21sp</dimen>
+    <dimen name="buttonTextSize">15sp</dimen>
     <dimen name="buttonSmallTextSize">12sp</dimen>
     <dimen name="buttonSmallerTextSize">8sp</dimen>
     <dimen name="smallTextSize">11sp</dimen>

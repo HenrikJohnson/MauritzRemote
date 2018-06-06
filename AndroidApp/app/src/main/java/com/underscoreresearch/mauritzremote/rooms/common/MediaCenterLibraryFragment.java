@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
@@ -13,9 +14,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -47,9 +51,12 @@ import com.underscoreresearch.mauritzremote.RemoteService;
 import com.underscoreresearch.mauritzremote.config.Settings;
 import com.underscoreresearch.mauritzremote.library.LibraryItem;
 import com.underscoreresearch.mauritzremote.library.QueueItem;
+import com.underscoreresearch.mauritzremote.view.BackAwareEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
  * Created by henri on 1/29/2017.
@@ -61,8 +68,11 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
             "Toplist",
             "Artist",
             "Title",
-            "Last Played"
+            "Last Played",
+            "Album",
+            "Backlog"
     };
+    private View rootView;
     private RecyclerView queueRecyclerView;
     private LinearLayoutManager queueLayoutManager;
     private RecyclerViewTouchActionGuardManager queueRecyclerViewTouchActionGuardManager;
@@ -74,9 +84,18 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
     private List<QueueItem> items = new ArrayList<>();
     private DraggableSwipeableAdapter adapter;
     private Spinner searchTypeSpinner;
-    private EditText searchCriteriaEdit;
+    private BackAwareEditText searchCriteriaEdit;
     private RecyclerView libraryRecyclerView;
     private String lastSearchKey;
+
+    private Handler handler = new Handler();
+
+    private void setupButtons(View view) {
+        setupButton(view, R.id.btn_rewind, R.string.cmd_Rewind_In_Media_Center);
+        setupButton(view, R.id.btn_play, R.string.cmd_Play_In_Media_Center);
+        setupButton(view, R.id.btn_forward, R.string.cmd_Fast_Forward_In_Media_Center);
+        setupButton(view, R.id.btn_skip, R.string.cmd_Go_To_Next_In_Media_Center);
+    }
 
     public void setEditEnabled(boolean enabled) {
         View parent = getView();
@@ -130,11 +149,11 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
                 // set text
                 mArtistView.setText(item.getArtist());
                 String title = item.getTitle();
-                if (title.startsWith("Episode "))
+                if (title != null && title.startsWith("Episode "))
                     title = title.substring(7);
                 mTitleView.setText(title);
                 String album = item.getAlbum();
-                if (album.startsWith("Season "))
+                if (album != null && album.startsWith("Season "))
                     album = "S" + album.substring(7);
                 mAlbumView.setText(album);
                 itemView.setTag(item);
@@ -282,6 +301,11 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
             }
 
             notifyItemMoved(fromPosition, toPosition);
+
+//            item.setQueueId(items.get(toPosition + 1).getQueueId());
+//            for (int i = toPosition + 1; i < items.size(); i++) {
+//                items.get(i).setQueueId(items.get(i).getQueueId()+1);
+//            }
         }
 
         @Override
@@ -374,7 +398,6 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
             @Override
             protected void onPerformAction() {
                 super.onPerformAction();
-
 
                 if (mAdapter.mEventListener != null) {
                     mAdapter.mEventListener.onItemRemoved(mAdapter.items.remove(mPosition));
@@ -516,13 +539,17 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
         // Inflate the layout for this fragment
         View ret = inflater.inflate(R.layout.media_center_library, container, false);
 
+        setupButtons(ret);
+
+        if (ret instanceof ViewGroup) {
+            attachButtonCallbacks((ViewGroup) ret);
+        }
+
         return ret;
     }
 
-
-
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         queueRecyclerView = (RecyclerView) view.findViewById(R.id.queueView);
@@ -600,7 +627,7 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
         queueRecyclerViewSwipeManager.attachRecyclerView(queueRecyclerView);
         queueRecyclerViewDragDropManager.attachRecyclerView(queueRecyclerView);
 
-        searchTypeSpinner = (Spinner)view.findViewById(R.id.searchType);
+        searchTypeSpinner = (Spinner) view.findViewById(R.id.searchType);
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, searchTypes);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -620,11 +647,10 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
             }
         });
 
-        searchCriteriaEdit = (EditText)view.findViewById(R.id.searchCriteria);
+        searchCriteriaEdit = (BackAwareEditText) view.findViewById(R.id.searchCriteria);
         searchCriteriaEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -637,10 +663,76 @@ public class MediaCenterLibraryFragment extends DeviceFragment {
                 updateSearch();
             }
         });
+        searchCriteriaEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchCriteriaEdit.getWindowToken(), 0);
+                    showControls(true);
+                    return true;
+                }
+                return false;
+            }
+        });
+        searchCriteriaEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showControls(false);
+            }
+        });
+        searchCriteriaEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    showControls(false);
+                }
+            }
+        });
+        searchCriteriaEdit.setBackPressedListener(new BackAwareEditText.BackPressedListener() {
+            @Override
+            public void onImeBack(BackAwareEditText editText) {
+                showControls(true);
+            }
+        });
 
-        libraryRecyclerView = (RecyclerView)view.findViewById(R.id.libraryView);
+        libraryRecyclerView = (RecyclerView) view.findViewById(R.id.libraryView);
         libraryRecyclerView.addItemDecoration(new SimpleListDividerDecorator(ContextCompat.getDrawable(getContext(), R.drawable.list_divider_h), true));
         libraryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        View newButton = view.findViewById(R.id.btn_new);
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                libraryRecyclerView.clearOnScrollListeners();
+                libraryRecyclerView.setAdapter(new LibraryAdapter(new LibraryItem[0]));
+
+                lastSearchKey = null;
+                searchTypeSpinner.setSelection(0);
+                searchCriteriaEdit.setText("");
+                updateSearch();
+            }
+        });
+        newButton.setVisibility(View.VISIBLE);
+
+        rootView = view;
+    }
+
+    private void showControls(boolean visible) {
+        if (visible) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    rootView.findViewById(R.id.controlAbove).setVisibility(View.VISIBLE);
+                    rootView.findViewById(R.id.controlButtons).setVisibility(View.VISIBLE);
+                    rootView.findViewById(R.id.controlBelow).setVisibility(View.VISIBLE);
+                }
+            }, 100);
+        } else {
+            rootView.findViewById(R.id.controlAbove).setVisibility(View.GONE);
+            rootView.findViewById(R.id.controlButtons).setVisibility(View.GONE);
+            rootView.findViewById(R.id.controlBelow).setVisibility(View.GONE);
+        }
     }
 
     private void updateSearch() {

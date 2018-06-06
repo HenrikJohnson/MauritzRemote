@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -12,6 +13,14 @@ namespace RemoteServer.Remotes
 {
     public class GlobalCacheRemote : IRemoteTarget
     {
+        public class Factory : IRemoteTargetFactory
+        {
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            {
+                return new GlobalCacheRemote(options["Host"], Int32.Parse(options["Port"]), options["Device"], loggerFactory, config);
+            }
+        }
+
         private String hostname;
         private int port;
         private String device;
@@ -21,7 +30,7 @@ namespace RemoteServer.Remotes
         private IConfigurationManager config;
         private ILogger logger;
 
-        public GlobalCacheRemote(IConfigurationManager config, ILoggerFactory loggerFactory, String hostname, int port, String device)
+        public GlobalCacheRemote(String hostname, int port, String device, ILoggerFactory loggerFactory, IConfigurationManager config)
         {
             this.hostname = hostname;
             this.port = port;
@@ -47,11 +56,6 @@ namespace RemoteServer.Remotes
                 }
                 catch (Exception)
                 {
-                    client?.Dispose();
-                    socket?.Dispose();
-                    client = null;
-                    socket = null;
-
                     await reconnectAsync();
 
                     try
@@ -60,8 +64,20 @@ namespace RemoteServer.Remotes
                     }
                     catch (Exception exc2)
                     {
-                        client?.Dispose();
-                        socket?.Dispose();
+                        try
+                        {
+                            client?.Dispose();
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        try
+                        {
+                            socket?.Dispose();
+                        }
+                        catch (Exception)
+                        {
+                        }
 
                         client = null;
                         socket = null;
@@ -118,11 +134,28 @@ namespace RemoteServer.Remotes
 
         private async Task reconnectAsync()
         {
+            try
+            {
+                client?.Dispose();
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                socket?.Dispose();
+            }
+            catch (Exception)
+            {
+            }
+
             IPAddress[] addresses = await Dns.GetHostAddressesAsync(hostname);
-            TcpClient client = new TcpClient();
+            client = new TcpClient();
             client.SendTimeout = 1000;
             client.ReceiveBufferSize = 1000;
             await client.ConnectAsync(addresses[0], port);
+            client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+
             socket = client.GetStream();
         }
     }

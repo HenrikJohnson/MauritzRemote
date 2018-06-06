@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.underscoreresearch.mauritzremote.R;
 import com.underscoreresearch.mauritzremote.RemoteService;
 import com.underscoreresearch.mauritzremote.config.Settings;
+import com.underscoreresearch.mauritzremote.rooms.common.DeviceFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,10 +135,30 @@ public class MainFragment extends Fragment {
         Settings.setSelectedTab(getContext(), getMainTitle(), page);
 
         currentPage = page;
+
+        refresh();
+    }
+
+    public void refresh() {
+        Fragment fragment = pageAdapter.getItem(currentPage);
+        if (fragment instanceof DeviceFragment) {
+            ((DeviceFragment)fragment).refresh();
+        }
+    }
+
+    public void homePressed() {
+        Fragment fragment = pageAdapter.getItem(currentPage);
+        if (fragment instanceof DeviceFragment) {
+            ((DeviceFragment)fragment).homePressed();
+        }
     }
 
     public void turnOn() {
         selectPage(currentPage, false);
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
     }
 
     public void turnOff() {

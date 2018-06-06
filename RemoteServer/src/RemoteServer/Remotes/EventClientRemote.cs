@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,6 +10,14 @@ namespace RemoteServer.Remotes
 {
     public class EventClientRemote : IRemoteTarget
     {
+        public class Factory : IRemoteTargetFactory
+        {
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            {
+                return new EventClientRemote(options["Host"], Int32.Parse(options["Port"]), loggerFactory);
+            }
+        }
+
         public const int DEFAULT_PORT = 9777;
 
         private EventClient eventClient;

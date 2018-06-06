@@ -31,8 +31,8 @@ public class MediaCenterControlFragment extends DeviceFragment {
         setupButton(view, R.id.btn_play_movie, R.string.cmd_Play_Movies_In_Media_Center);
         setupButton(view, R.id.btn_play_tv, R.string.cmd_Play_TV_In_Media_Center);
 
-        setupButton(view, R.id.btn_skip_back, R.string.cmd_Step_Forward_In_Media_Center);
-        setupButton(view, R.id.btn_skip_forward, R.string.cmd_Step_Back_In_Media_Center);
+        setupButton(view, R.id.btn_skip_back, R.string.cmd_Step_Back_In_Media_Center);
+        setupButton(view, R.id.btn_skip_forward, R.string.cmd_Step_Forward_In_Media_Center);
         setupButton(view, R.id.btn_mute, R.string.cmd_Mute);
 
         setupButton(view, R.id.btn_rewind, R.string.cmd_Rewind_In_Media_Center);

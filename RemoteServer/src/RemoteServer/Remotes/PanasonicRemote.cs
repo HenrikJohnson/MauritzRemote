@@ -1,14 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using RemoteServer.Config;
 
 namespace RemoteServer.Remotes
 {
     public class PanasonicRemote : IRemoteTarget
     {
-        private Uri uri;
+        public class Factory : IRemoteTargetFactory
+        {
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            {
+                return new PanasonicRemote(options["BaseUrl"]);
+            }
+        }
+
+        private readonly Uri uri;
 
         public PanasonicRemote(String baseUri)
         {
@@ -57,7 +68,8 @@ namespace RemoteServer.Remotes
             using (Stream requestStream = await request.GetRequestStreamAsync())
             {
                 await requestStream.WriteAsync(data, 0, data.Length);
-                (await request.GetResponseAsync()).Dispose();
+                var response = (await request.GetResponseAsync());
+                response.Dispose();
             }
         }
     }

@@ -18,7 +18,7 @@ import java.util.List;
 
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 
-public class MediaCenterFragment extends Fragment {
+public class MediaCenterFragment extends DeviceFragment {
     private String room;
     private VerticalViewPager pager;
     private ViewPagerAdapter adapter;
@@ -86,6 +86,21 @@ public class MediaCenterFragment extends Fragment {
         View ret = inflater.inflate(R.layout.media_center_fragment, container, false);
 
         return ret;
+    }
+
+    @Override
+    public void refresh() {
+        int page = pager.getCurrentItem();
+        if (page == 1) {
+            MediaCenterLibraryFragment fragment = (MediaCenterLibraryFragment) adapter.getItem(page);
+            fragment.refresh();
+        }
+    }
+
+    @Override
+    public void homePressed() {
+        pager.setCurrentItem(0);
+        super.homePressed();
     }
 
     @Override

@@ -144,37 +144,46 @@ namespace RemoteServer.Library
 
         public async Task<List<QueueItem>> AddQueueItem(String room, LibraryQueue queue, string songId)
         {
+            HttpWebRequest request;
             if (songId.StartsWith("I"))
             {
                 String id = songId.Substring(1);
-                HttpWebRequest request =
+                request =
                     WebRequest.CreateHttp(Constants.JukeboxUrl + "action.php?SEL=" + Int32.Parse(id) + "&AUTH_USER=" +
                                           Uri.EscapeUriString(Constants.JukeboxUser) + "&AUTH_PWD=" +
                                           Uri.EscapeUriString(Constants.JukeboxPassword));
-
-                request.Method = "GET";
-                request.CookieContainer = new CookieContainer();
-                if (queueName(room, queue) != null)
-                {
-                    request.CookieContainer.Add(new Uri(Constants.JukeboxUrl),
-                        new Cookie("CURRENTGROUP", queueName(room, queue)));
-                }
-                try
-                {
-                    using ((HttpWebResponse) await request.GetResponseAsync())
-                    {
-                    }
-                }
-                catch (WebException exc)
-                {
-                    HttpWebResponse response = (HttpWebResponse) exc.Response;
-                    if (!response.ResponseUri.AbsolutePath.EndsWith("/left.php"))
-                        throw;
-                }
+            }
+            else if (songId.StartsWith("A"))
+            {
+                String id = songId.Substring(1);
+                request =
+                    WebRequest.CreateHttp(Constants.JukeboxUrl + "action.php?SELPRG=" + Int32.Parse(id) + "&AUTH_USER=" +
+                                          Uri.EscapeUriString(Constants.JukeboxUser) + "&AUTH_PWD=" +
+                                          Uri.EscapeUriString(Constants.JukeboxPassword));
             }
             else
             {
                 throw new IOException("Invalid song ID");
+            }
+
+            request.Method = "GET";
+            request.CookieContainer = new CookieContainer();
+            if (queueName(room, queue) != null)
+            {
+                request.CookieContainer.Add(new Uri(Constants.JukeboxUrl),
+                    new Cookie("CURRENTGROUP", queueName(room, queue)));
+            }
+            try
+            {
+                using ((HttpWebResponse)await request.GetResponseAsync())
+                {
+                }
+            }
+            catch (WebException exc)
+            {
+                HttpWebResponse response = (HttpWebResponse)exc.Response;
+                if (!response.ResponseUri.AbsolutePath.EndsWith("/left.php"))
+                    throw;
             }
             return await GetQueue(room, queue);
         }
@@ -305,133 +314,232 @@ namespace RemoteServer.Library
             }
         }
 
-        public async Task<List<LibraryItem>> Query(LibraryQueue queue, LibrarySearchType type, string search, int? offset, int? limit)
+        public async Task<List<LibraryItem>> Query(LibraryQueue queue, LibrarySearchType type, string search,
+            int? offset, int? limit)
         {
             if (offset == null)
                 offset = 0;
             if (limit == null || limit <= 0)
                 limit = 100;
 
-            String queueCriteria;
-
-            switch (queue)
+            if (type != LibrarySearchType.Album)
             {
-                case LibraryQueue.Tv:
-                    queueCriteria = "(a.volume like 'Season %' or a.volume in ('Miniseries','Single Episode'))";
-                    break;
+                String queueCriteria;
 
-                case LibraryQueue.Music:
-                    queueCriteria = "((a.volume not like 'Season %' and a.volume not in ('Movie','Miniseries','DVD','Single Episode','Podcast')) or a.volume is null)";
-                    break;
-
-                case LibraryQueue.Movie:
-                    queueCriteria = "(a.volume in ('Movie','DVD'))";
-                    break;
-
-                default:
-                    throw new IOException("Unknown queue");
-            }
-
-            String criteria = "";
-
-            if (!String.IsNullOrEmpty(search))
-            {
-                StringBuilder searchCriteria = new StringBuilder();
-                Match match = split.Match(search);
-                while (match.Success)
+                switch (queue)
                 {
+                    case LibraryQueue.Tv:
+                        queueCriteria = "(a.volume like 'Season %' or a.volume in ('Miniseries','Single Episode'))";
+                        break;
+
+                    case LibraryQueue.Music:
+                        queueCriteria =
+                            "((a.volume not like 'Season %' and a.volume not in ('Movie','Miniseries','DVD','Single Episode','Podcast')) or a.volume is null)";
+                        break;
+
+                    case LibraryQueue.Movie:
+                        queueCriteria = "(a.volume in ('Movie','DVD'))";
+                        break;
+
+                    default:
+                        throw new IOException("Unknown queue");
+                }
+
+                String criteria = "";
+
+                if (!String.IsNullOrEmpty(search))
+                {
+                    StringBuilder searchCriteria = new StringBuilder();
+                    Match match = split.Match(search);
+                    while (match.Success)
+                    {
+                        if (searchCriteria.Length > 0)
+                        {
+                            searchCriteria.Append(" AND ");
+                        }
+                        searchCriteria.AppendFormat(
+                            "(a.Artist LIKE '%{0}%' OR a.Title LIKE '%{0}%' OR a.Volume LIKE '%{0}%')",
+                            escape(match.Groups[0].Value));
+                        match = match.NextMatch();
+                    }
                     if (searchCriteria.Length > 0)
                     {
-                        searchCriteria.Append(" AND ");
-                    }
-                    searchCriteria.AppendFormat(
-                        "(a.Artist LIKE '%{0}%' OR a.Title LIKE '%{0}%' OR a.Volume LIKE '%{0}%')",
-                        escape(match.Groups[0].Value));
-                    match = match.NextMatch();
-                }
-                if (searchCriteria.Length > 0)
-                {
-                    criteria = String.Format(" AND ({0})", searchCriteria);
-                }
-            }
-
-            switch (type)
-            {
-                default:
-                    criteria += " order by a.artist, a.volume, a.trackno, a.title";
-                    break;
-                case LibrarySearchType.Title:
-                    criteria += " order by a.title";
-                    break;
-                case LibrarySearchType.Entered:
-                    criteria += " order by a.entered desc";
-                    break;
-                case LibrarySearchType.LastPlayed:
-                    criteria += " order by a.lastplayed desc";
-                    break;
-                case LibrarySearchType.Toplist:
-                    criteria += " order by adjtoplist desc";
-                    break;
-            }
-
-            using (MySqlConnection mysqlConnection = new MySqlConnection(Constants.ConnectionString))
-            {
-                await mysqlConnection.OpenAsync();
-
-                double maxToplist = 1;
-                using (MySqlCommand command = mysqlConnection.CreateCommand())
-                {
-                    command.CommandText =
-                        "select max(a.toplist*pow(1.5, if(a.rating<=5,1,a.rating+1-5))) as adjtoplist " +
-                        "from songs a where " + queueCriteria;
-
-                    using (DbDataReader reader = await command.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync() && !reader.IsDBNull(0))
-                        {
-                            maxToplist = reader.GetDouble(0);
-                        }
+                        criteria = String.Format(" AND ({0})", searchCriteria);
                     }
                 }
 
-                using (MySqlCommand command = mysqlConnection.CreateCommand())
-                {
-                    command.CommandText =
-                        "select a.id,a.artist,a.volume,a.title,a.length,a.played,a.voted,a.trackno,a.rating,d.cover,a.toplist*pow(1.5, if(a.rating<=5,1,a.rating+1-5)) as adjtoplist " +
-                        "from songs a left join programmember c on a.id = c.songid and c.programid in (select e.id from programs e where e.cover is not null) " +
-                        "left join programs d on c.programid = d.id and d.artist != 'Backlog' and d.name != 'Miniseries' " +
-                        "where " + queueCriteria + criteria + " limit " + limit + " offset " + offset;
+                String backlogId = ", 0";
 
-                    using (DbDataReader reader = await command.ExecuteReaderAsync())
+                switch (type)
+                {
+                    default:
+                        criteria += " order by a.artist, a.volume, a.trackno, a.title";
+                        break;
+                    case LibrarySearchType.Title:
+                        criteria += " order by a.title";
+                        break;
+                    case LibrarySearchType.Entered:
+                        criteria += " order by a.entered desc";
+                        break;
+                    case LibrarySearchType.LastPlayed:
+                        criteria += " order by a.lastplayed desc";
+                        break;
+                    case LibrarySearchType.Toplist:
+                        criteria += " order by adjtoplist desc";
+                        break;
+                    case LibrarySearchType.Backlog:
+                        criteria += " having backlogid is not null order by backlogid";
+                        backlogId =
+                            ", (select max(f.id) from programmember f, programs g where f.songid = a.id and g.id = f.programid and g.artist = 'Backlog' and g.name = 'Miniseries') backlogid";
+                        break;
+                }
+
+                using (MySqlConnection mysqlConnection = new MySqlConnection(Constants.ConnectionString))
+                {
+                    await mysqlConnection.OpenAsync();
+
+                    double maxToplist = 1;
+                    using (MySqlCommand command = mysqlConnection.CreateCommand())
                     {
-                        List<LibraryItem> items = new List<LibraryItem>();
-                        HashSet<int> songIds = new HashSet<int>();
-                        while (await reader.ReadAsync())
+                        command.CommandText =
+                            "select max(a.toplist*pow(1.5, if(a.rating<=5,1,a.rating+1-5))) as adjtoplist " +
+                            "from songs a where " + queueCriteria;
+
+                        using (DbDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            int songId = reader.GetInt32(0);
-                            if (songIds.Add(songId))
+                            if (await reader.ReadAsync() && !reader.IsDBNull(0))
                             {
-                                String cover = reader.IsDBNull(9) ? null : reader.GetString(9);
-                                if (!String.IsNullOrEmpty(cover))
-                                    cover = Constants.JukeboxUrl + "cover_art/" + cover;
-
-                                items.Add(new LibraryItem()
-                                {
-                                    ItemId = "I" + reader.GetInt32(0),
-                                    Artist = reader.GetString(1),
-                                    Album = reader.IsDBNull(2) ? null : reader.GetString(2),
-                                    Title = reader.GetString(3),
-                                    Duration = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
-                                    Played = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
-                                    Voted = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
-                                    TrackNumber = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
-                                    Rating = reader.IsDBNull(8) ? 0 : reader.GetInt32(8),
-                                    CoverUrl = cover,
-                                    Toplist = reader.IsDBNull(10) ? 0 : reader.GetDouble(10) / maxToplist
-                                });
+                                maxToplist = reader.GetDouble(0);
                             }
                         }
-                        return items;
+                    }
+
+                    using (MySqlCommand command = mysqlConnection.CreateCommand())
+                    {
+                        command.CommandText =
+                            "select a.id,a.artist,a.volume,a.title,a.length,a.played,a.voted,a.trackno,a.rating,d.cover,a.toplist*pow(1.5, if(a.rating<=5,1,a.rating+1-5)) as adjtoplist" +
+                            backlogId +
+                            " from songs a left join programmember c on a.id = c.songid and c.programid in (select e.id from programs e where e.cover is not null) " +
+                            "left join programs d on c.programid = d.id and d.artist != 'Backlog' and d.name != 'Miniseries' " +
+                            "where " + queueCriteria + criteria + " limit " + limit + " offset " + offset;
+
+                        using (DbDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            List<LibraryItem> items = new List<LibraryItem>();
+                            HashSet<int> songIds = new HashSet<int>();
+                            while (await reader.ReadAsync())
+                            {
+                                int songId = reader.GetInt32(0);
+                                if (songIds.Add(songId))
+                                {
+                                    String cover = reader.IsDBNull(9) ? null : reader.GetString(9);
+                                    if (!String.IsNullOrEmpty(cover))
+                                        cover = Constants.JukeboxUrl + "cover_art/" + cover;
+
+                                    items.Add(new LibraryItem()
+                                    {
+                                        ItemId = "I" + reader.GetInt32(0),
+                                        Artist = reader.GetString(1),
+                                        Album = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                        Title = reader.GetString(3),
+                                        Duration = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
+                                        Played = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                        Voted = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+                                        TrackNumber = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
+                                        Rating = reader.IsDBNull(8) ? 0 : reader.GetInt32(8),
+                                        CoverUrl = cover,
+                                        Toplist = reader.IsDBNull(10) ? 0 : reader.GetDouble(10) / maxToplist
+                                    });
+                                }
+                            }
+                            return items;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                String queueCriteria;
+
+                switch (queue)
+                {
+                    case LibraryQueue.Tv:
+                        queueCriteria = "(a.name like 'Season %' or a.name in ('Miniseries','Single Episode'))";
+                        break;
+
+                    case LibraryQueue.Music:
+                        queueCriteria =
+                            "((a.name not like 'Season %' and a.name not in ('Movie','Miniseries','DVD','Single Episode','Podcast')) or a.name is null)";
+                        break;
+
+                    case LibraryQueue.Movie:
+                        queueCriteria = "(a.name in ('Movie','DVD'))";
+                        break;
+
+                    default:
+                        throw new IOException("Unknown queue");
+                }
+
+                String criteria = "";
+
+                if (!String.IsNullOrEmpty(search))
+                {
+                    StringBuilder searchCriteria = new StringBuilder();
+                    Match match = split.Match(search);
+                    while (match.Success)
+                    {
+                        if (searchCriteria.Length > 0)
+                        {
+                            searchCriteria.Append(" AND ");
+                        }
+
+                        searchCriteria.AppendFormat(
+                            "(a.Artist LIKE '%{0}%' OR a.name LIKE '%{0}%')",
+                            escape(match.Groups[0].Value));
+
+                        match = match.NextMatch();
+                    }
+                    if (searchCriteria.Length > 0)
+                    {
+                        criteria = String.Format(" AND ({0})", searchCriteria);
+                    }
+                }
+
+                using (MySqlConnection mysqlConnection = new MySqlConnection(Constants.ConnectionString))
+                {
+                    await mysqlConnection.OpenAsync();
+
+                    using (MySqlCommand command = mysqlConnection.CreateCommand())
+                    {
+                        command.CommandText =
+                            "select a.id,a.artist,a.name,(select count(1) from programmember b where a.id = b.programid),a.cover" +
+                            " from programs a where " + queueCriteria + criteria + " order by a.artist,a.name limit " + limit + " offset " + offset;
+
+                        using (DbDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            List<LibraryItem> items = new List<LibraryItem>();
+                            HashSet<int> songIds = new HashSet<int>();
+                            while (await reader.ReadAsync())
+                            {
+                                int songId = reader.GetInt32(0);
+                                if (songIds.Add(songId))
+                                {
+                                    String cover = reader.IsDBNull(4) ? null : reader.GetString(4);
+                                    if (!String.IsNullOrEmpty(cover))
+                                        cover = Constants.JukeboxUrl + "cover_art/" + cover;
+
+                                    items.Add(new LibraryItem()
+                                    {
+                                        ItemId = "A" + reader.GetInt32(0),
+                                        Artist = reader.GetString(1),
+                                        Album = reader.IsDBNull(2) ? null : reader.GetString(2),
+                                        TrackNumber = reader.IsDBNull(3) ? 0 : reader.GetInt32(3),
+                                        CoverUrl = cover
+                                    });
+                                }
+                            }
+                            return items;
+                        }
                     }
                 }
             }

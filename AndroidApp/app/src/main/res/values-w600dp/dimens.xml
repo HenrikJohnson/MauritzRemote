@@ -25,7 +25,7 @@
     <dimen name="buttonSmallHeight">48dp</dimen>
     <dimen name="modeIconPadding">8dp</dimen>
     <dimen name="plexTopOffset">16dp</dimen>
-    <dimen name="buttonTextSize">28sp</dimen>
+    <dimen name="buttonTextSize">18sp</dimen>
     <dimen name="buttonSmallTextSize">16sp</dimen>
     <dimen name="buttonSmallerTextSize">10sp</dimen>
     <dimen name="smallTextSize">14sp</dimen>
