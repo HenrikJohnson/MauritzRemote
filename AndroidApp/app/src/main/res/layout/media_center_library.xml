@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="3"
+    android:layout_gravity="fill">
+
+    <Space
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.underscoreresearch.mauritzremote.view.BackAwareEditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/searchCriteria"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:hint="@string/enter_search" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/searchType" />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_new"
+            android:layout_width="@dimen/controlSize"
+            android:layout_height="@dimen/controlSmallSize"
+            fancy:fb_radius="@dimen/buttonSmallHeight"
+            fancy:fb_defaultColor="@color/buttonDefault"
+            fancy:fb_focusColor="@color/buttonPressed"
+            fancy:fb_textColor="#FFFFFF"
+            fancy:fb_textSize="@dimen/buttonSmallTextSize"
+            fancy:fb_text="New" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/content_main"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/buttonTextSize"
+                android:text="@string/library_queue"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/queueView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/buttonTextSize"
+                android:text="@string/library_contents"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/libraryView"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Space android:id="@+id/controlAbove"
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+    <LinearLayout
+        android:id="@+id/controlButtons"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <FrameLayout
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="fill"
+            android:layout_width="match_parent">
+            <include
+                layout="@layout/piece_control"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+    </LinearLayout>
+
+    <Space android:id="@+id/controlBelow"
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+</LinearLayout>

@@ -1,0 +1,40 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_size">96dp</dimen>
+
+    <dimen name="margin">16dp</dimen>
+    <dimen name="roundedSquareRadius">16dp</dimen>
+    <dimen name="buttonHeight">64dp</dimen>
+    <dimen name="buttonWidth">128dp</dimen>
+    <dimen name="buttonNarrowWidth">64dp</dimen>
+    <dimen name="controlSize">96dp</dimen>
+    <dimen name="controlIconSize">64dp</dimen>
+    <dimen name="controlSmallSize">64dp</dimen>
+    <dimen name="controlSmallIconSize">32dp</dimen>
+    <dimen name="muteMargin">48dp</dimen>
+    <dimen name="digitSize">64dp</dimen>
+    <dimen name="modeNarrowSize">96dp</dimen>
+    <dimen name="modeSize">128dp</dimen>
+    <dimen name="modeIconSize">64dp</dimen>
+    <dimen name="pageUpWidth">64dp</dimen>
+    <dimen name="pageUpWHeight">48dp</dimen>
+    <dimen name="pageUpIconSize">24dp</dimen>
+    <dimen name="navigationWideSize">96dp</dimen>
+    <dimen name="navigationSize">64dp</dimen>
+    <dimen name="navigationIconSize">32dp</dimen>
+    <dimen name="buttonSmallHeight">48dp</dimen>
+    <dimen name="modeIconPadding">8dp</dimen>
+    <dimen name="plexTopOffset">16dp</dimen>
+    <dimen name="buttonTextSize">18sp</dimen>
+    <dimen name="buttonSmallTextSize">16sp</dimen>
+    <dimen name="buttonSmallerTextSize">10sp</dimen>
+    <dimen name="smallTextSize">14sp</dimen>
+
+    <dimen name="itemArtistTextSize">16sp</dimen>
+    <dimen name="itemTitleTextSize">14sp</dimen>
+    <dimen name="itemTextTextSize">14sp</dimen>
+    <dimen name="itemTextMargin">8dp</dimen>
+
+    <dimen name="list_item_elevation">3dp</dimen>
+    <dimen name="list_item_height">64dp</dimen>
+</resources>

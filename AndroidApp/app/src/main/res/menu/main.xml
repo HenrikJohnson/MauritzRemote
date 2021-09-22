@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_browser"
+        android:title="@string/browser" />
+
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_nanit"
+        android:title="@string/nanit" />
+
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_nest"
+        android:title="@string/nest" />
+
+    <item
+        app:showAsAction="ifRoom"
+        android:id="@+id/menu_launcher"
+        android:title="@string/other" />
+
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_turn_on"
+        android:title="@string/on" />
+
+</menu>

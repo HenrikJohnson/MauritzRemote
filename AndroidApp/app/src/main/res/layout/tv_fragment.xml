@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Space
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:layout_gravity="fill">
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <FrameLayout
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="fill"
+            android:layout_width="match_parent">
+            <include
+                layout="@layout/piece_digits"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill"
+                android:id="@+id/include" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <FrameLayout
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="fill"
+            android:layout_width="match_parent">
+            <include
+                layout="@layout/piece_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:layout_gravity="fill">
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <FrameLayout
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="fill"
+            android:layout_width="match_parent">
+            <include
+                layout="@layout/piece_buttons_tv_channel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <FrameLayout
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="fill"
+            android:layout_width="match_parent">
+            <include
+                layout="@layout/piece_buttons_narrow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <FrameLayout
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="fill"
+            android:layout_width="match_parent">
+            <include
+                layout="@layout/piece_control_top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+        <FrameLayout
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="fill"
+            android:layout_width="match_parent">
+            <include
+                layout="@layout/piece_control"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="@dimen/margin"
+            android:layout_height="@dimen/margin" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="@dimen/margin"
+        android:layout_height="@dimen/margin" />
+
+</LinearLayout>

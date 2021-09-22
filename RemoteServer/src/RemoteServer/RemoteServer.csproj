@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>RemoteServer</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>RemoteServer</PackageId>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Update="wwwroot\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" />
+    <PackageReference Include="MySql.Data" Version="8.0.16" />
+  </ItemGroup>
+
+</Project>

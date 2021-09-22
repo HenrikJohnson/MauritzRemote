@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_tv_volume_up"
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            fancy:fb_radius="@dimen/buttonSmallHeight"
+            fancy:fb_fontIconResource="&#xf077;"
+            fancy:fb_fontIconSize="@dimen/controlSmallIconSize"
+            fancy:fb_iconPaddingLeft="0dp"
+            fancy:fb_iconPaddingRight="0dp"
+            fancy:fb_defaultColor="@color/modeDefault"
+            fancy:fb_focusColor="@color/modePressed"
+            fancy:fb_textColor="#FFFFFF"
+            fancy:fb_text="" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_tv_channel_up"
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            fancy:fb_radius="@dimen/buttonSmallHeight"
+            fancy:fb_fontIconResource="&#xf077;"
+            fancy:fb_fontIconSize="@dimen/controlSmallIconSize"
+            fancy:fb_iconPaddingLeft="0dp"
+            fancy:fb_iconPaddingRight="0dp"
+            fancy:fb_defaultColor="@color/modeDefault"
+            fancy:fb_focusColor="@color/modePressed"
+            fancy:fb_textColor="#FFFFFF"
+            fancy:fb_text="" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Space
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_tv_mute"
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            fancy:fb_radius="@dimen/buttonSmallHeight"
+            fancy:fb_iconResource="@drawable/ic_mute_white"
+            fancy:fb_iconPaddingLeft="0dp"
+            fancy:fb_iconPaddingRight="0dp"
+            fancy:fb_defaultColor="@color/modeDefault"
+            fancy:fb_focusColor="@color/modePressed"
+            fancy:fb_textColor="#FFFFFF"
+            fancy:fb_text="" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/lbl_tv_volume"
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            android:textSize="@dimen/smallTextSize"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="@string/tv_volume"/>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            android:textSize="@dimen/smallTextSize"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="@string/tv_channel"/>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_tv_last"
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            fancy:fb_radius="@dimen/buttonSmallHeight"
+            fancy:fb_fontIconResource="&#xf0e2;"
+            fancy:fb_fontIconSize="@dimen/controlSmallIconSize"
+            fancy:fb_iconPaddingLeft="0dp"
+            fancy:fb_iconPaddingRight="0dp"
+            fancy:fb_defaultColor="@color/modeDefault"
+            fancy:fb_focusColor="@color/modePressed"
+            fancy:fb_textColor="#FFFFFF"
+            fancy:fb_text="" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_tv_volume_down"
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            fancy:fb_radius="@dimen/buttonSmallHeight"
+            fancy:fb_fontIconResource="&#xf078;"
+            fancy:fb_fontIconSize="@dimen/controlSmallIconSize"
+            fancy:fb_iconPaddingLeft="0dp"
+            fancy:fb_iconPaddingRight="0dp"
+            fancy:fb_defaultColor="@color/modeDefault"
+            fancy:fb_focusColor="@color/modePressed"
+            fancy:fb_textColor="#FFFFFF"
+            fancy:fb_text="" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_tv_channel_down"
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight"
+            fancy:fb_radius="@dimen/buttonSmallHeight"
+            fancy:fb_fontIconResource="&#xf078;"
+            fancy:fb_fontIconSize="@dimen/controlSmallIconSize"
+            fancy:fb_iconPaddingLeft="0dp"
+            fancy:fb_iconPaddingRight="0dp"
+            fancy:fb_defaultColor="@color/modeDefault"
+            fancy:fb_focusColor="@color/modePressed"
+            fancy:fb_textColor="#FFFFFF"
+            fancy:fb_text="" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Space
+            android:layout_width="@dimen/buttonNarrowWidth"
+            android:layout_height="@dimen/buttonSmallHeight" />
+
+    </LinearLayout>
+
+</LinearLayout>
