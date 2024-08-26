@@ -81,11 +81,38 @@ namespace RemoteServer.Library
             }
         }
 
-        private ILogger logger;
-        private string jukeboxUrl;
-        private string jukeboxUser;
-        private string jukeboxPassword;
-        private string connectionString;
+        private string JukeboxUrl
+        {
+            get
+            {
+                return configurationManager.JukeboxUrl;
+            }
+        }
+
+        private string JukeboxUser
+        {
+            get
+            {
+                return configurationManager.JukeboxUser;
+            }
+        }
+
+        private string JukeboxPassword
+        {
+            get
+            {
+                return configurationManager.JukeboxPassword;
+            }
+        }
+        private string ConnectionString
+        {
+            get
+            {
+                return configurationManager.ConnectionString;
+            }
+        }
+
+        private readonly IConfigurationManager configurationManager;
 
         private async Task<List<QueueItem>> GenerateQueue(MySqlConnection mysqlConnection, String room, LibraryQueue queue)
         {
@@ -113,7 +140,7 @@ namespace RemoteServer.Library
                         {
                             String cover = reader.IsDBNull(10) ? null : reader.GetString(10);
                             if (!String.IsNullOrEmpty(cover))
-                                cover = jukeboxUrl + "cover_art/" + cover;
+                                cover = JukeboxUrl + "cover_art/" + cover;
 
                             items.Add(new QueueItem()
                             {
@@ -139,17 +166,12 @@ namespace RemoteServer.Library
 
         public JukeboxLibraryRepository(IConfigurationManager configurationManager, ILoggerFactory loggerFactory)
         {
-            connectionString = configurationManager.ConnectionString;
-            jukeboxUrl = configurationManager.JukeboxUrl;
-            jukeboxUser = configurationManager.JukeboxUser;
-            jukeboxPassword = configurationManager.JukeboxPassword;
-
-            this.logger = loggerFactory.CreateLogger("JukeboxLibrary");
+            this.configurationManager = configurationManager;
         }
 
         public async Task<List<QueueItem>> GetQueue(String room, LibraryQueue queue)
         {
-            using (MySqlConnection mysqlConnection = new MySqlConnection(connectionString))
+            using (MySqlConnection mysqlConnection = new MySqlConnection(ConnectionString))
             {
                 await mysqlConnection.OpenAsync();
                 return await GenerateQueue(mysqlConnection, room, queue);
@@ -163,17 +185,17 @@ namespace RemoteServer.Library
             {
                 String id = songId.Substring(1);
                 request =
-                    WebRequest.CreateHttp(jukeboxUrl + "action.php?SEL=" + Int32.Parse(id) + "&AUTH_USER=" +
-                                          Uri.EscapeUriString(jukeboxUser) + "&AUTH_PWD=" +
-                                          Uri.EscapeUriString(jukeboxPassword));
+                    WebRequest.CreateHttp(JukeboxUrl + "action.php?SEL=" + Int32.Parse(id) + "&AUTH_USER=" +
+                                          Uri.EscapeUriString(JukeboxUser) + "&AUTH_PWD=" +
+                                          Uri.EscapeUriString(JukeboxPassword));
             }
             else if (songId.StartsWith("A"))
             {
                 String id = songId.Substring(1);
                 request =
-                    WebRequest.CreateHttp(jukeboxUrl + "action.php?SELPRG=" + Int32.Parse(id) + "&AUTH_USER=" +
-                                          Uri.EscapeUriString(jukeboxUser) + "&AUTH_PWD=" +
-                                          Uri.EscapeUriString(jukeboxPassword));
+                    WebRequest.CreateHttp(JukeboxUrl + "action.php?SELPRG=" + Int32.Parse(id) + "&AUTH_USER=" +
+                                          Uri.EscapeUriString(JukeboxUser) + "&AUTH_PWD=" +
+                                          Uri.EscapeUriString(JukeboxPassword));
             }
             else
             {
@@ -184,7 +206,7 @@ namespace RemoteServer.Library
             request.CookieContainer = new CookieContainer();
             if (queueName(room, queue) != null)
             {
-                request.CookieContainer.Add(new Uri(jukeboxUrl),
+                request.CookieContainer.Add(new Uri(JukeboxUrl),
                     new Cookie("CURRENTGROUP", queueName(room, queue)));
             }
             try
@@ -205,15 +227,15 @@ namespace RemoteServer.Library
         public async Task<List<QueueItem>> DeleteQueueItem(String room, LibraryQueue queue, int queueId)
         {
             HttpWebRequest request =
-                WebRequest.CreateHttp(jukeboxUrl+ "action.php?REMOVE=" + queueId + "&AUTH_USER=" +
-                                      Uri.EscapeUriString(jukeboxUser) + "&AUTH_PWD=" +
-                                      Uri.EscapeUriString(jukeboxPassword));
+                WebRequest.CreateHttp(JukeboxUrl+ "action.php?REMOVE=" + queueId + "&AUTH_USER=" +
+                                      Uri.EscapeUriString(JukeboxUser) + "&AUTH_PWD=" +
+                                      Uri.EscapeUriString(JukeboxPassword));
 
             request.Method = "GET";
             request.CookieContainer = new CookieContainer();
             if (queueName(room, queue) != null)
             {
-                request.CookieContainer.Add(new Uri(jukeboxUrl), new Cookie("CURRENTGROUP", queueName(room, queue)));
+                request.CookieContainer.Add(new Uri(JukeboxUrl), new Cookie("CURRENTGROUP", queueName(room, queue)));
             }
             try
             {
@@ -235,7 +257,7 @@ namespace RemoteServer.Library
             if (queueId == afterQueueId)
                 throw new IOException("Can't move item before itself");
 
-            using (MySqlConnection mysqlConnection = new MySqlConnection(connectionString))
+            using (MySqlConnection mysqlConnection = new MySqlConnection(ConnectionString))
             {
                 await mysqlConnection.OpenAsync();
 
@@ -408,7 +430,7 @@ namespace RemoteServer.Library
                         break;
                 }
 
-                using (MySqlConnection mysqlConnection = new MySqlConnection(connectionString))
+                using (MySqlConnection mysqlConnection = new MySqlConnection(ConnectionString))
                 {
                     await mysqlConnection.OpenAsync();
 
@@ -448,7 +470,7 @@ namespace RemoteServer.Library
                                 {
                                     String cover = reader.IsDBNull(9) ? null : reader.GetString(9);
                                     if (!String.IsNullOrEmpty(cover))
-                                        cover = jukeboxUrl + "cover_art/" + cover;
+                                        cover = JukeboxUrl + "cover_art/" + cover;
 
                                     items.Add(new LibraryItem()
                                     {
@@ -519,7 +541,7 @@ namespace RemoteServer.Library
                     }
                 }
 
-                using (MySqlConnection mysqlConnection = new MySqlConnection(connectionString))
+                using (MySqlConnection mysqlConnection = new MySqlConnection(ConnectionString))
                 {
                     await mysqlConnection.OpenAsync();
 
@@ -540,7 +562,7 @@ namespace RemoteServer.Library
                                 {
                                     String cover = reader.IsDBNull(4) ? null : reader.GetString(4);
                                     if (!String.IsNullOrEmpty(cover))
-                                        cover = jukeboxUrl + "cover_art/" + cover;
+                                        cover = JukeboxUrl + "cover_art/" + cover;
 
                                     items.Add(new LibraryItem()
                                     {
@@ -571,7 +593,7 @@ namespace RemoteServer.Library
 
         public async Task<AmazonCatalog<T>> Catalog<T>(string type, Func<AmazonRawData, T> converter) where T : AmazonEntity
         {
-            using (MySqlConnection mysqlConnection = new MySqlConnection(connectionString))
+            using (MySqlConnection mysqlConnection = new MySqlConnection(ConnectionString))
             {
                 await mysqlConnection.OpenAsync();
 

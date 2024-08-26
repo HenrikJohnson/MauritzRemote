@@ -1,0 +1,92 @@
+import React, {useEffect, useState} from "react";
+import {activeQueue, makeApiCall, MediaItem, query} from "../utils/Api";
+import {FlatList, Keyboard, ListRenderItemInfo, Pressable, View} from "react-native";
+import {ContentItem} from "./ContentItem";
+import {TextInput} from "react-native-paper";
+import {Dropdown, Option} from "react-native-paper-dropdown";
+import {AppContext, useAppContent} from "./AppContex";
+import {getRoom} from "../utils/Storage";
+
+const CRITERIA_OPTIONS : Option[] = [
+    "Entered",
+    "Toplist",
+    "Artist",
+    "Title",
+    "Last Played",
+    "Album",
+    "Backlog"
+].map((value) => ({label: value, value: value}));
+
+export function ContentList(props: {queue: string}) {
+    const [data, setData] = useState([] as MediaItem[]);
+    const [sort, setSort] = useState("Entered" as string | undefined);
+    const [refreshing, setRefreshing] = useState(false);
+    const appContext = useAppContent();
+
+    const [search, setSearch] = useState("")
+
+    async function fetchContents(clear: boolean) {
+        if (clear) {
+            const newData = await query(appContext, props.queue, sort ?? "", search, 0, 100);
+            setData(newData);
+        } else {
+            const newData = await query(appContext, props.queue, sort ?? "", search, data.length, 100);
+            setData([...data, ...newData]);
+        }
+
+        setTimeout(() => setRefreshing(false), 10);
+    }
+
+    useEffect(() => {
+        Keyboard.dismiss();
+        setRefreshing(true);
+        fetchContents(true);
+    }, [props.queue, search, sort]);
+
+    async function selectItem(appContext: AppContext, item: MediaItem) {
+        try {
+            await makeApiCall(appContext, `queue/${getRoom()}/${props.queue}/${item.itemId}`, {
+                method: "POST"
+            });
+            appContext.setNotification(`Selected ${item.artist} - ${item.title}`)
+            appContext.setQueueState(appContext.queueState + 1);
+        } catch (e) {
+        }
+    }
+
+    function renderItem(itemProps: ListRenderItemInfo<MediaItem>) {
+        return <ContentItem queue={props.queue} item={itemProps.item} appContext={appContext}/>
+    }
+
+    return (
+        <View>
+            <View style={{flexDirection: "row", columnGap: 2}}>
+                <TextInput style={{flex: 1}} placeholder={"Search"} onChangeText={setSearch} value={search}/>
+                <Dropdown
+                    label="Sort"
+                    placeholder="Sort"
+                    options={CRITERIA_OPTIONS}
+                    hideMenuHeader={true}
+                    value={sort}
+                    onSelect={setSort}
+                />
+            </View>
+            <FlatList
+                data={data}
+                renderItem={renderItem}
+                onScroll={() => {
+                    if (!refreshing)
+                        Keyboard.dismiss();
+                }}
+                refreshing={refreshing}
+                onRefresh={() => {
+                    setRefreshing(true);
+                    fetchContents(true);
+                }}
+                onEndReached={() => fetchContents(false)}
+                onEndReachedThreshold={0.5}
+                keyExtractor={(item: MediaItem) => String(item.itemId)}
+            />
+        </View>
+    );
+};

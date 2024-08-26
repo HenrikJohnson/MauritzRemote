@@ -1,9 +1,12 @@
 package com.underscoreresearch.mauritzremote;
 
+import static android.content.Context.RECEIVER_EXPORTED;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 
 public class HomeWatcher {
     public interface OnHomePressedListener {
@@ -29,7 +32,11 @@ public class HomeWatcher {
 
     public void startWatch() {
         if (mRecevier != null) {
-            mContext.registerReceiver(mRecevier, mFilter);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                mContext.registerReceiver(mRecevier, mFilter, RECEIVER_EXPORTED);
+            } else {
+                mContext.registerReceiver(mRecevier, mFilter);
+            }
         }
     }
 

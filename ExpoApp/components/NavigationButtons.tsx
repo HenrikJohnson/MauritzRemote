@@ -1,0 +1,128 @@
+import {View} from "react-native";
+import {RemoteButton} from "./RemoteButton";
+import {Text, Icon, useTheme} from "react-native-paper";
+import {ContainerWithDimensions} from "./ContainerWithDimensions";
+import {StyleProp} from "react-native/Libraries/StyleSheet/StyleSheet";
+import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
+import React from "react";
+import {FlexContainer} from "./FlexContainer";
+import {RemoteIconButton} from "./RemoteIconButton";
+import {determineTextSizes} from "../utils/Layout";
+
+export function NavigationButtons(props: {
+    postFix: string,
+    additionalText: string[],
+    additionalActions: string[],
+    style?: StyleProp<ViewStyle>
+}) {
+    const theme = useTheme();
+
+    return <ContainerWithDimensions style={props.style}>
+        {({width, height}) => {
+            const size = Math.min(width, height);
+            let {textSize, largeText} = determineTextSizes(size);
+            const buttonSize = size / 8;
+
+            return <View style={{
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                rowGap: 5,
+                height: size,
+                width: size,
+            }}>
+                <View style={
+                    {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        columnGap: 5,
+                        flex: 1
+                    }
+                }>
+                    <FlexContainer flex={3}>
+                        <RemoteButton action={props.additionalActions[0]} contentStyle={{
+                            width: size * 3 / 9
+                        }}>
+                            <Text variant={textSize}>{props.additionalText[0]}</Text>
+                        </RemoteButton>
+                    </FlexContainer>
+                    <FlexContainer flex={2}>
+                        <RemoteButton action={"Go_Up_In_" + props.postFix}>
+                            <Icon source={"chevron-up"} size={buttonSize}/>
+                        </RemoteButton>
+                    </FlexContainer>
+                    <FlexContainer flex={3}>
+                        <RemoteButton action={props.additionalActions[1]} contentStyle={{
+                            width: size * 3 / 9
+                        }}>
+                            <Text variant={textSize}>{props.additionalText[1]}</Text>
+                        </RemoteButton>
+                    </FlexContainer>
+                </View>
+                <View style={
+                    {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        columnGap: 5,
+                        flex: 3,
+                    }
+                }>
+                    <FlexContainer flex={4}>
+                        <RemoteButton action={"Go_Left_In_" + props.postFix}>
+                            <Icon source={"chevron-left"} size={buttonSize}/>
+                        </RemoteButton>
+                    </FlexContainer>
+                    <FlexContainer flex={4}>
+                        <ContainerWithDimensions style={{
+                            height: "100%",
+                            width: "100%",
+                            margin: 0,
+                            padding: 0,
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}>
+                            {({width, height}) => {
+                                return <RemoteIconButton size={Math.min(width, height)} action={"Select_In_" + props.postFix} mode={"contained"}
+                                                         containerColor={theme.colors.onSecondary}
+                                                         icon={() => <Text  variant={largeText}>OK</Text>}/>
+                            }}
+                        </ContainerWithDimensions>
+                    </FlexContainer>
+                    <FlexContainer flex={4}>
+                        <RemoteButton action={"Go_Right_In_" + props.postFix}>
+                            <Icon source={"chevron-right"} size={buttonSize}/>
+                        </RemoteButton>
+                    </FlexContainer>
+                </View>
+                <View style={
+                    {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        columnGap: 5,
+                        flex: 1
+                    }
+                }>
+                    <FlexContainer flex={3}>
+                        <RemoteButton action={props.additionalActions[2]} contentStyle={{
+                            width: size * 3 / 9
+                        }}>
+                            <Text variant={textSize}>{props.additionalText[2]}</Text>
+                        </RemoteButton>
+                    </FlexContainer>
+                    <FlexContainer flex={2}>
+                        <RemoteButton action={"Go_Down_In_" + props.postFix}>
+                            <Icon source={"chevron-down"} size={buttonSize}/>
+                        </RemoteButton>
+                    </FlexContainer>
+                    <FlexContainer flex={3}>
+                        <RemoteButton action={props.additionalActions[3]} contentStyle={{
+                            width: size * 3 / 9
+                        }}>
+                            <Text variant={textSize}>{props.additionalText[3]}</Text>
+                        </RemoteButton>
+                    </FlexContainer>
+                </View>
+            </View>
+        }}
+    </ContainerWithDimensions>
+}
+

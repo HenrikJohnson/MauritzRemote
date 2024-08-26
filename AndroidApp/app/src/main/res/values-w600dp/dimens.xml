@@ -11,7 +11,8 @@
     <dimen name="controlIconSize">64dp</dimen>
     <dimen name="controlSmallSize">64dp</dimen>
     <dimen name="controlSmallIconSize">32dp</dimen>
-    <dimen name="muteMargin">48dp</dimen>
+    <dimen name="muteMargin">72dp</dimen>
+    <dimen name="pageMargin">72dp</dimen>
     <dimen name="digitSize">64dp</dimen>
     <dimen name="modeNarrowSize">96dp</dimen>
     <dimen name="modeSize">128dp</dimen>

@@ -37,6 +37,10 @@ public class TvFragment extends DeviceFragment {
         setupButton(view, R.id.btn_play, R.string.cmd_Play_In_Media_Center);
         setupButton(view, R.id.btn_forward, R.string.cmd_Fast_Forward_In_Media_Center);
         setupButton(view, R.id.btn_skip, R.string.cmd_Go_To_Next_In_Media_Center);
+
+        if (getRoom().equals("Livingroom")) {
+            setupButton(view, R.id.btn_compress, R.string.cmd_DRC);
+        }
     }
 
     protected void setupPanasonicButtons(View view) {

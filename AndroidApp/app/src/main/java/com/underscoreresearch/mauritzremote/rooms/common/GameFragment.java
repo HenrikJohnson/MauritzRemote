@@ -13,8 +13,9 @@ public class GameFragment extends DeviceFragment {
         setupButton(view, R.id.btn_xbox, R.string.cmd_Go_To_Xbox_In_Game);
         setupButton(view, R.id.btn_playstation, R.string.cmd_Go_To_Playstation_In_Game);
         setupButton(view, R.id.btn_wii, R.string.cmd_Go_To_Wii_In_Game);
-        setupButton(view, R.id.btn_mac, R.string.cmd_Go_To_Mac_In_Game);
-        setupButton(view, R.id.btn_mac2, R.string.cmd_Go_To_Mac_Secondary_In_Game);
+        setupButton(view, R.id.btn_vc, R.string.cmd_Go_To_VC_In_Game);
+        setupButton(view, R.id.btn_vc2, R.string.cmd_Go_To_VC_Secondary_In_Game);
+        setupButton(view, R.id.btn_pc, R.string.cmd_Go_To_PC_In_Game);
 
         setupButton(view, R.id.btn_menu, R.string.cmd_Show_Menu_In_Media_Center, "Menu");
         setupButton(view, R.id.btn_up, R.string.cmd_Go_Up_In_Media_Center);
@@ -34,6 +35,10 @@ public class GameFragment extends DeviceFragment {
         setupButton(view, R.id.btn_play, R.string.cmd_Play_In_Media_Center);
         setupButton(view, R.id.btn_forward, R.string.cmd_Fast_Forward_In_Media_Center);
         setupButton(view, R.id.btn_skip, R.string.cmd_Go_To_Next_In_Media_Center);
+
+        if (getRoom().equals("Livingroom")) {
+            setupButton(view, R.id.btn_compress, R.string.cmd_DRC);
+        }
     }
 
     public static class Livingroom extends GameFragment {

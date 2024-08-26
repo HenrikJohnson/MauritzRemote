@@ -1,0 +1,128 @@
+import {StyleProp} from "react-native/Libraries/StyleSheet/StyleSheet";
+import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
+import {ContainerWithDimensions} from "./ContainerWithDimensions";
+import React, {useEffect, useState} from "react";
+
+import {Icon, SegmentedButtons, IconButton} from "react-native-paper";
+import {RemoteIconButton} from "./RemoteIconButton";
+import {FlexContainer} from "./FlexContainer";
+import {activeQueue, apiSend} from "../utils/Api";
+import {View} from "react-native";
+import {useAppContent} from "./AppContex";
+
+export function MediaType(props: {
+    style?: StyleProp<ViewStyle>,
+    width: number,
+    height: number,
+    room: string
+}) {
+    const [currentQueue, setCurrentQueue] = useState(undefined as string | undefined);
+    const buttonSize = Math.min((props.width - 20) / 6, props.height / 8);
+    const appContext = useAppContent();
+
+    async function fectchCurrentQueue() {
+        setCurrentQueue(await activeQueue(appContext, props.room) || "Tv");
+    }
+
+    useEffect(() => {
+        fectchCurrentQueue();
+    }, []);
+
+    return <ContainerWithDimensions style={props.style}>
+        {({width, height}) => {
+            const buttonStyle : StyleProp<ViewStyle> = {
+                height: height / 4,
+                justifyContent: "center",
+            };
+
+            const iconSize = height / 6;
+
+            return <>
+                <View style={{
+                    flex: 1,
+                    columnGap: 5,
+                    flexDirection: 'row',
+                    alignItems: "center"
+                }}>
+                    <FlexContainer>
+                        <RemoteIconButton size={buttonSize - 10}
+                                          icon={"home"}
+                                          action={"Go_To_Home_In_Media_Center"}
+                                          mode={"contained-tonal"}/>
+                    </FlexContainer>
+
+                    <FlexContainer flex={3}>
+                        <SegmentedButtons
+                            value={currentQueue || "Music"}
+                            style={{width: "100%"}}
+                            buttons={[
+                                {
+                                    icon: () => <Icon size={iconSize} source={"music"}/>,
+                                    value: "Music",
+                                    style: buttonStyle,
+                                    disabled: currentQueue === undefined
+                                },
+                                {
+                                    icon: () => <Icon size={iconSize} source={"movie-open"}/>,
+                                    value: "Movie",
+                                    style: buttonStyle,
+                                    disabled: currentQueue === undefined
+                                },
+                                {
+                                    icon: () => <Icon size={iconSize} source={"television"}/>,
+                                    value: "Tv",
+                                    style: buttonStyle,
+                                    disabled: currentQueue === undefined
+                                }
+                            ]} onValueChange={(e) => {
+                            if (currentQueue === e)
+                                switch(e) {
+                                    case "Music":
+                                        apiSend(appContext, "Play_Music_In_Media_Center");
+                                        break;
+                                    case "Movie":
+                                        apiSend(appContext, "Play_Movies_In_Media_Center");
+                                        break;
+                                    case "Tv":
+                                        apiSend(appContext, "Play_TV_In_Media_Center");
+                                        break;
+                                }
+                            else
+                                setCurrentQueue(e);
+
+                        }}/>
+                    </FlexContainer>
+                </View>
+                <View style={{
+                    flex: 1,
+                    rowGap: 5,
+                    flexDirection: 'row',
+                    alignItems: "flex-start"
+                }}>
+                    <FlexContainer>
+                        <IconButton
+                            mode={"contained-tonal"}
+                            icon={"playlist-play"}
+                            size={buttonSize - 10}
+                            onPress={() => {
+                                appContext.setKeyboardView(currentQueue);
+                            }}
+                        />
+                    </FlexContainer>
+                    <FlexContainer flex={1}/>
+                    <FlexContainer>
+                        <IconButton
+                            mode={"contained-tonal"}
+                            icon={"bullhorn"}
+                            size={buttonSize - 10}
+                            onPress={() => {
+                                appContext.setKeyboardView("Contents" + currentQueue);
+                            }}
+                        />
+                    </FlexContainer>
+                    <FlexContainer flex={1}/>
+                </View>
+            </>
+        }}
+    </ContainerWithDimensions>
+}

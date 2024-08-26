@@ -85,7 +85,7 @@
         fancy:fb_text="TV" />
 
     <Space
-        android:layout_width="@dimen/muteMargin"
+        android:layout_width="@dimen/pageMargin"
         android:layout_height="wrap_content"/>
 
     <LinearLayout

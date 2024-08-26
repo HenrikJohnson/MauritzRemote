@@ -55,12 +55,19 @@
         android:layout_weight="1"/>
 
     <Space
-        android:layout_width="@dimen/controlSize"
-        android:layout_height="wrap_content"/>
-
-    <Space
         android:layout_width="@dimen/muteMargin"
         android:layout_height="wrap_content"/>
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/btn_compress"
+        android:layout_width="@dimen/controlSmallSize"
+        android:layout_height="@dimen/controlSmallSize"
+        fancy:fb_iconResource="@drawable/ic_compression"
+        fancy:fb_defaultColor="@color/buttonDefault"
+        fancy:fb_focusColor="@color/buttonPressed"
+        fancy:fb_radius="@dimen/controlSmallSize"
+        fancy:fb_textColor="#FFFFFF"
+        fancy:fb_text="" />
 
     <mehdi.sakout.fancybuttons.FancyButton
         android:id="@+id/btn_mute"

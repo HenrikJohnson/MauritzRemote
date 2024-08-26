@@ -48,6 +48,11 @@ public class CableSearchTopFragment extends DeviceFragment {
             setRoom("Zone2");
         }
     }
+    public static class Bedroom extends CableSearchTopFragment {
+        public Bedroom() {
+            setRoom("Bedroom");
+        }
+    }
 
     protected class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();

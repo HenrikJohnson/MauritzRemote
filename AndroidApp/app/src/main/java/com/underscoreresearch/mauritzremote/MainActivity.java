@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.underscoreresearch.mauritzremote.config.Settings;
+import com.underscoreresearch.mauritzremote.rooms.BedroomFragment;
 import com.underscoreresearch.mauritzremote.rooms.Zone2Fragment;
 import com.underscoreresearch.mauritzremote.rooms.LivingroomFragment;
 import com.underscoreresearch.mauritzremote.rooms.MainFragment;
@@ -40,7 +41,6 @@ import com.underscoreresearch.mauritzremote.rooms.OfficeFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainFragment.OnFragmentListener {
-    private static final String NANIT_PACKAGE = "com.nanit.baby";
     private static final String NEST_PACKAGE = "com.nest.android";
     private static final String LAUNCHER_PACKAGE = "com.teslacoilsw.launcher";
     private static final String BROWSER_PACKAGE = "com.android.chrome";
@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case Office:
                 menuId = R.id.nav_office;
+                break;
+            case Bedroom:
+                menuId = R.id.nav_bedroom;
                 break;
         }
         navigationView.setCheckedItem(menuId);
@@ -202,6 +205,9 @@ public class MainActivity extends AppCompatActivity
                         case Office:
                             mainFragment = new OfficeFragment();
                             break;
+                        case Bedroom:
+                            mainFragment = new BedroomFragment();
+                            break;
                         default:
                             mainFragment = new LivingroomFragment();
                             break;
@@ -236,13 +242,7 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        MenuItem item = menu.findItem(R.id.menu_nanit);
-        try {
-            item.setIcon(getPackageManager().getApplicationIcon(NANIT_PACKAGE));
-        } catch (PackageManager.NameNotFoundException e) {
-            item.setVisible(false);
-        }
-        item = menu.findItem(R.id.menu_browser);
+        MenuItem item = menu.findItem(R.id.menu_browser);
         try {
             item.setIcon(getPackageManager().getApplicationIcon(BROWSER_PACKAGE));
         } catch (PackageManager.NameNotFoundException e) {
@@ -273,14 +273,6 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.menu_turn_on:
-                mainFragment.turnOn();
-                return true;
-            case R.id.menu_nanit: {
-                Intent intent = getPackageManager().getLaunchIntentForPackage(NANIT_PACKAGE);
-                startActivity(intent);
-                return true;
-            }
             case R.id.menu_browser: {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://home.henrik.org"));
                 startActivity(browserIntent);
@@ -315,6 +307,8 @@ public class MainActivity extends AppCompatActivity
             newRoom = Settings.Room.Office;
         } else if (id == R.id.nav_livingroom) {
             newRoom = Settings.Room.Livingroom;
+        } else if (id == R.id.nav_bedroom) {
+            newRoom = Settings.Room.Bedroom;
         }
 
         if (newRoom != currentRoom) {

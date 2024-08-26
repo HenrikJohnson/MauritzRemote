@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols;
+﻿using Microsoft.AspNetCore.Mvc;
 using RemoteServer.Config;
-using RemoteServer.Remotes;
 
 namespace RemoteServer.Controllers
 {

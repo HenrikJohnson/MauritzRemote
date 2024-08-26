@@ -35,7 +35,7 @@ namespace RemoteServer.Config
             remoteTypes["Process"] = new ProcessRemote.Factory();
         }
 
-        public ConfigurationManager(IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public ConfigurationManager(IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             this.configFile = Path.Combine(env.ContentRootPath, "remotes.json");
             this.loggerFactory = loggerFactory;

@@ -73,9 +73,10 @@
             android:layout_weight="1"/>
 
         <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btn_extra1"
+            android:id="@+id/btn_pc"
             android:layout_width="@dimen/modeSize"
             android:layout_height="@dimen/modeSize"
+            fancy:fb_iconResource="@drawable/ic_gaming_pc"
             fancy:fb_iconPaddingLeft="@dimen/modeIconPadding"
             fancy:fb_iconPaddingRight="@dimen/modeIconPadding"
             fancy:fb_defaultColor="@color/modeDefault"
@@ -98,7 +99,7 @@
 
 
         <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btn_mac"
+            android:id="@+id/btn_vc"
             android:layout_width="@dimen/modeSize"
             android:layout_height="@dimen/modeSize"
             fancy:fb_iconResource="@drawable/ic_webcam"
@@ -115,7 +116,7 @@
             android:layout_weight="1"/>
 
         <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btn_mac2"
+            android:id="@+id/btn_vc2"
             android:layout_width="@dimen/modeSize"
             android:layout_height="@dimen/modeSize"
             fancy:fb_iconPaddingLeft="@dimen/modeIconPadding"

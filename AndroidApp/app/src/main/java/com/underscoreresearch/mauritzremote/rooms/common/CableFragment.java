@@ -25,7 +25,7 @@ public class CableFragment extends DeviceFragment {
         setupButton(view, R.id.btn_plex, R.string.cmd_Go_To_Plex_In_Cable);
         setupButton(view, R.id.btn_amazon, R.string.cmd_Go_To_Amazon_In_Cable);
         setupButton(view, R.id.btn_apple, R.string.cmd_Go_To_Apple_In_Cable);
-        setupButton(view, R.id.btn_discovery, R.string.cmd_Go_To_Discovery_In_Cable);
+        setupButton(view, R.id.btn_paramount, R.string.cmd_Go_To_Paramount_In_Cable);
         setupButton(view, R.id.btn_hbo, R.string.cmd_Go_To_HBO_In_Cable);
 
         setupButton(view, R.id.btn_mute, R.string.cmd_Mute);
@@ -33,6 +33,10 @@ public class CableFragment extends DeviceFragment {
         setupButton(view, R.id.btn_rewind, R.string.cmd_Rewind_In_Cable);
         setupButton(view, R.id.btn_play, R.string.cmd_Play_In_Cable);
         setupButton(view, R.id.btn_forward, R.string.cmd_Fast_Forward_In_Cable);
+
+        if ("Livingroom".equals(getRoom())) {
+            setupButton(view, R.id.btn_compress, R.string.cmd_DRC);
+        }
     }
 
     public static class Livingroom extends CableFragment {

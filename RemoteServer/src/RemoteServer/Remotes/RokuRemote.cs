@@ -8,7 +8,7 @@ namespace RemoteServer.Remotes
 {
     public class RokuRemote : HttpRemote
     {
-        public class Factory : IRemoteTargetFactory
+        public new class Factory : IRemoteTargetFactory
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
             {

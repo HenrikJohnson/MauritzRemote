@@ -8,11 +8,6 @@
 
     <item
         app:showAsAction="always"
-        android:id="@+id/menu_nanit"
-        android:title="@string/nanit" />
-
-    <item
-        app:showAsAction="always"
         android:id="@+id/menu_nest"
         android:title="@string/nest" />
 
@@ -20,10 +15,5 @@
         app:showAsAction="ifRoom"
         android:id="@+id/menu_launcher"
         android:title="@string/other" />
-
-    <item
-        app:showAsAction="always"
-        android:id="@+id/menu_turn_on"
-        android:title="@string/on" />
 
 </menu>

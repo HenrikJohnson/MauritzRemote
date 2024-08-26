@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Utilities;
 using RemoteServer.Config;
 
 namespace RemoteServer.Remotes
@@ -44,6 +45,7 @@ namespace RemoteServer.Remotes
         public virtual async Task<String> sendCommandAsync(string command)
         {
             logger.LogDebug("Entering send command {0}", command);
+            String response;
             try
             {
                 lock (connectionLock)
@@ -57,7 +59,7 @@ namespace RemoteServer.Remotes
 
                 try
                 {
-                    await actualSend(command);
+                    response = await actualSend(command);
                 }
                 catch (Exception exc)
                 {
@@ -67,7 +69,7 @@ namespace RemoteServer.Remotes
 
                     try
                     {
-                        await actualSend(command);
+                        response = await actualSend(command);
                     }
                     catch (Exception exc2)
                     {
@@ -106,7 +108,7 @@ namespace RemoteServer.Remotes
                 logger.LogDebug("Leaving send command {0}", command);
             }
 
-            return "OK";
+            return response;
         }
 
         private void CloseSocket(NetworkStream socket, TcpClient client)
@@ -137,23 +139,46 @@ namespace RemoteServer.Remotes
             }
         }
 
-        private async Task actualSend(string command)
+        private async Task<String> actualSend(string command)
         {
-            byte[] incomingData = new byte[1024];
-            while (socket.DataAvailable)
-            {
-                if (await socket.ReadAsync(incomingData, 0, 1) <= 0)
-                    await reconnectAsync();
-                else
-                {
-                    await ProcessTelnetBytes(incomingData, 0);
-                }
-            }
+            await consumeInput();
 
             String commandData = config.getCommandData(command);
 
             byte[] data = Encoding.UTF8.GetBytes(commandData + "\r");
             await socket.WriteAsync(data, 0, data.Length);
+
+            await Task.Delay(100);
+            
+            return await consumeInput();
+        }
+
+        private async Task<string> consumeInput()
+        {
+            byte[] incomingData = new byte[1024];
+            int offset = 0;
+            while (socket.DataAvailable)
+            {
+                if (await socket.ReadAsync(incomingData, offset, 1) <= 0)
+                {
+                    await reconnectAsync();
+                    offset = 0;
+                }
+                else
+                {
+                    try
+                    {
+                        if (await ProcessTelnetBytes(incomingData, offset))
+                            offset++;
+                    }
+                    catch (IOException exc)
+                    {
+                        await reconnectAsync();
+                        offset = 0;
+                    }
+                }
+            }
+            return Encoding.UTF8.GetString(incomingData, 0, offset);
         }
 
         private async Task<bool> ProcessTelnetBytes(byte[] inputData, int offset)
@@ -162,13 +187,13 @@ namespace RemoteServer.Remotes
             {
                 case InterpretAsCommand:
                     if (await socket.ReadAsync(inputData, offset, 1) <= 0)
-                        throw new IOException("Failed to read Telnet command");
+                        throw new IOException();
 
                     byte cmd = inputData[offset];
                     switch (cmd)
                     {
                         case InterpretAsCommand:
-                            return true;
+                            throw new IOException();
                         case Will:
                         case Wont:
                         case Do:

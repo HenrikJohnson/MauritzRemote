@@ -73,14 +73,14 @@
             android:layout_weight="1"/>
 
         <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btn_discovery"
+            android:id="@+id/btn_paramount"
             android:layout_width="@dimen/modeSize"
             android:layout_height="@dimen/modeSize"
             fancy:fb_defaultColor="@color/modeDefault"
             fancy:fb_focusColor="@color/modePressed"
             fancy:fb_iconPaddingLeft="@dimen/modeIconPadding"
             fancy:fb_iconPaddingRight="@dimen/modeIconPadding"
-            fancy:fb_iconResource="@drawable/ic_discovery_logo"
+            fancy:fb_iconResource="@drawable/ic_paramount"
             fancy:fb_radius="@dimen/roundedSquareRadius"
             fancy:fb_text=""
             fancy:fb_textColor="#FFFFFF" />

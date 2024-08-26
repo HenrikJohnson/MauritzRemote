@@ -43,6 +43,10 @@ public class MediaCenterControlFragment extends DeviceFragment {
         setupButton(view, R.id.btn_page_up, R.string.cmd_Page_Up_In_Media_Center);
         ((TextView)view.findViewById(R.id.lbl_page)).setText("Page");
         setupButton(view, R.id.btn_page_down, R.string.cmd_Page_Down_In_Media_Center);
+
+        if (getRoom().equals("Livingroom")) {
+            setupButton(view, R.id.btn_compress, R.string.cmd_DRC);
+        }
     }
 
     public MediaCenterControlFragment() {

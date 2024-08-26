@@ -2,6 +2,7 @@ package com.underscoreresearch.mauritzremote.rooms;
 
 import com.underscoreresearch.mauritzremote.R;
 import com.underscoreresearch.mauritzremote.RemoteService;
+import com.underscoreresearch.mauritzremote.rooms.common.AmazonTVFragment;
 import com.underscoreresearch.mauritzremote.rooms.common.CableSearchTopFragment;
 import com.underscoreresearch.mauritzremote.rooms.common.GameFragment;
 import com.underscoreresearch.mauritzremote.rooms.common.MediaCenterFragment;
@@ -17,6 +18,7 @@ public class OfficeFragment extends MainFragment {
     protected void addPages() {
         addPage(new MediaCenterFragment.Office(), "Media", R.drawable.ic_mediacenter_white);
         addPage(new CableSearchTopFragment.Office(), "Roku", R.drawable.ic_cable_white);
+        addPage(new AmazonTVFragment.Office(), "Swedish", R.drawable.ic_swedish);
         addPage(new GameFragment.Office(), "Games", R.drawable.ic_game_white);
         addPage(new TvFragment.Office(), "TV", R.drawable.ic_tv_white);
     }
@@ -34,9 +36,12 @@ public class OfficeFragment extends MainFragment {
                     RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_Cable_On));
                     break;
                 case 2:
-                    RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_Game_On));
+                    RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_AmazonTV_On));
                     break;
                 case 3:
+                    RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_Game_On));
+                    break;
+                case 4:
                     RemoteService.issueRemote(getMainTitle() + "/" + getString(R.string.cmd_Turn_TV_On));
                     break;
             }

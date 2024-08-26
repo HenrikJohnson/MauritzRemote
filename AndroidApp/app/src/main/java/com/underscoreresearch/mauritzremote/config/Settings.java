@@ -34,7 +34,8 @@ public class Settings {
     public enum Room {
         Livingroom,
         Office,
-        Zone2
+        Zone2,
+        Bedroom
     };
 
     public static Room getSelectedRoom(Context context) {

@@ -11,13 +11,14 @@
     <dimen name="margin">12dp</dimen>
     <dimen name="roundedSquareRadius">12dp</dimen>
     <dimen name="buttonHeight">48dp</dimen>
-    <dimen name="buttonWidth">96dp</dimen>
+    <dimen name="buttonWidth">80dp</dimen>
     <dimen name="buttonNarrowWidth">48dp</dimen>
     <dimen name="controlSize">72dp</dimen>
     <dimen name="controlIconSize">48dp</dimen>
     <dimen name="controlSmallSize">48dp</dimen>
     <dimen name="controlSmallIconSize">24dp</dimen>
-    <dimen name="muteMargin">36dp</dimen>
+    <dimen name="muteMargin">64dp</dimen>
+    <dimen name="pageMargin">36dp</dimen>
     <dimen name="digitSize">48dp</dimen>
     <dimen name="modeNarrowSize">72dp</dimen>
     <dimen name="modeSize">80dp</dimen>
@@ -25,7 +26,7 @@
     <dimen name="pageUpWidth">48dp</dimen>
     <dimen name="pageUpWHeight">36dp</dimen>
     <dimen name="pageUpIconSize">18dp</dimen>
-    <dimen name="navigationWideSize">72dp</dimen>
+    <dimen name="navigationWideSize">64dp</dimen>
     <dimen name="navigationSize">48dp</dimen>
     <dimen name="navigationIconSize">24dp</dimen>
     <dimen name="buttonSmallHeight">36dp</dimen>

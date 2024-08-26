@@ -6,11 +6,10 @@ using Microsoft.Extensions.Logging;
 using RemoteServer.Config;
 using RemoteServer.Library;
 using RemoteServer.Remotes;
+using Microsoft.Extensions.Logging;
 
 namespace RemoteServer
 {
-    // webapp/nFI2T97jaG9EpmBz350b
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -30,22 +29,23 @@ namespace RemoteServer
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "Anybody",
-                                  builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials(); });
+                                  builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
             });
-            services.AddSingleton<IConfigurationManager, ConfigurationManager>();
+            services.AddSingleton<IConfigurationManager, Config.ConfigurationManager>();
             services.AddSingleton<IRemoteManager, RemoteManager>();
 
             services.AddTransient<ILibraryRepository, JukeboxLibraryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration);
-            loggerFactory.AddDebug();
-
+            app.UseRouting();
             app.UseCors("Anybody");
-            app.UseMvc();
+
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
         }
     }
 }
