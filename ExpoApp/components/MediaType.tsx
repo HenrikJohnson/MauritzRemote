@@ -38,45 +38,6 @@ export function MediaType(props: {
             const iconSize = height / 6;
 
             return <>
-                        <SegmentedButtons
-                            value={currentQueue || "Music"}
-                            style={{width: "100%", flex: 1}}
-                            buttons={[
-                                {
-                                    icon: () => <Icon size={iconSize} source={"music"}/>,
-                                    value: "Music",
-                                    style: buttonStyle,
-                                    disabled: currentQueue === undefined
-                                },
-                                {
-                                    icon: () => <Icon size={iconSize} source={"movie-open"}/>,
-                                    value: "Movie",
-                                    style: buttonStyle,
-                                    disabled: currentQueue === undefined
-                                },
-                                {
-                                    icon: () => <Icon size={iconSize} source={"television"}/>,
-                                    value: "Tv",
-                                    style: buttonStyle,
-                                    disabled: currentQueue === undefined
-                                }
-                            ]} onValueChange={(e) => {
-                            if (currentQueue === e)
-                                switch(e) {
-                                    case "Music":
-                                        apiSend(appContext, "Play_Music_In_Media_Center");
-                                        break;
-                                    case "Movie":
-                                        apiSend(appContext, "Play_Movies_In_Media_Center");
-                                        break;
-                                    case "Tv":
-                                        apiSend(appContext, "Play_TV_In_Media_Center");
-                                        break;
-                                }
-                            else
-                                setCurrentQueue(e);
-
-                        }}/>
                 <View style={{
                     flex: 1,
                     rowGap: 5,
@@ -113,6 +74,45 @@ export function MediaType(props: {
                     </FlexContainer>
                     <FlexContainer flex={1}/>
                 </View>
+                <SegmentedButtons
+                    value={currentQueue || "Music"}
+                    style={{width: "100%", flex: 1}}
+                    buttons={[
+                        {
+                            icon: () => <Icon size={iconSize} source={"music"}/>,
+                            value: "Music",
+                            style: buttonStyle,
+                            disabled: currentQueue === undefined
+                        },
+                        {
+                            icon: () => <Icon size={iconSize} source={"movie-open"}/>,
+                            value: "Movie",
+                            style: buttonStyle,
+                            disabled: currentQueue === undefined
+                        },
+                        {
+                            icon: () => <Icon size={iconSize} source={"television"}/>,
+                            value: "Tv",
+                            style: buttonStyle,
+                            disabled: currentQueue === undefined
+                        }
+                    ]} onValueChange={(e) => {
+                    if (currentQueue === e)
+                        switch(e) {
+                            case "Music":
+                                apiSend(appContext, "Play_Music_In_Media_Center");
+                                break;
+                            case "Movie":
+                                apiSend(appContext, "Play_Movies_In_Media_Center");
+                                break;
+                            case "Tv":
+                                apiSend(appContext, "Play_TV_In_Media_Center");
+                                break;
+                        }
+                    else
+                        setCurrentQueue(e);
+
+                }}/>
             </>
         }}
     </ContainerWithDimensions>

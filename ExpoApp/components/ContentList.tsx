@@ -13,8 +13,7 @@ const CRITERIA_OPTIONS : Option[] = [
     "Artist",
     "Title",
     "Last Played",
-    "Album",
-    "Backlog"
+    "Album"
 ].map((value) => ({label: value, value: value}));
 
 export function ContentList(props: {queue: string}) {
@@ -34,25 +33,13 @@ export function ContentList(props: {queue: string}) {
             setData([...data, ...newData]);
         }
 
-        setTimeout(() => setRefreshing(false), 10);
+        setRefreshing(false);
     }
 
     useEffect(() => {
-        Keyboard.dismiss();
         setRefreshing(true);
         fetchContents(true);
     }, [props.queue, search, sort]);
-
-    async function selectItem(appContext: AppContext, item: MediaItem) {
-        try {
-            await makeApiCall(appContext, `queue/${getRoom()}/${props.queue}/${item.itemId}`, {
-                method: "POST"
-            });
-            appContext.setNotification(`Selected ${item.artist} - ${item.title}`)
-            appContext.setQueueState(appContext.queueState + 1);
-        } catch (e) {
-        }
-    }
 
     function renderItem(itemProps: ListRenderItemInfo<MediaItem>) {
         return <ContentItem queue={props.queue} item={itemProps.item} appContext={appContext}/>
@@ -66,7 +53,6 @@ export function ContentList(props: {queue: string}) {
                     label="Sort"
                     placeholder="Sort"
                     options={CRITERIA_OPTIONS}
-                    hideMenuHeader={true}
                     value={sort}
                     onSelect={setSort}
                 />
@@ -74,9 +60,8 @@ export function ContentList(props: {queue: string}) {
             <FlatList
                 data={data}
                 renderItem={renderItem}
-                onScroll={() => {
-                    if (!refreshing)
-                        Keyboard.dismiss();
+                onScrollBeginDrag={() => {
+                    Keyboard.dismiss();
                 }}
                 refreshing={refreshing}
                 onRefresh={() => {
