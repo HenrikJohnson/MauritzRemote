@@ -36,6 +36,19 @@ export function QueueList(props: {queue: string}) {
 
     function renderItem(itemProps: ReorderableListRenderItemInfo<QueueItem>) {
         function renderRightActions(dragX: any) {
+
+            async function deleteQueueItem() {
+                try {
+                    makeApiCall(appContext, "/queue/" + getRoom() + "/" + props.queue + "/" + itemProps.item.queueId, {
+                        method: "DELETE"
+                    });
+                    const newData = [...data];
+                    newData.splice(itemProps.index, 1);
+                    setData(newData);
+                } catch (e) {
+                }
+            }
+
             return (
                 <Animated.View
                     style={{
@@ -49,21 +62,10 @@ export function QueueList(props: {queue: string}) {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}
-                        onPress={() => {
-                        }}>
+                        onPress={() => deleteQueueItem()}>
                         <IconButton size={40} icon={"delete"}
                                     containerColor={theme.colors.errorContainer} iconColor={theme.colors.error}
-                                    onPress={() => {
-                                        try {
-                                            makeApiCall(appContext, "/queue/" + getRoom() + "/" + props.queue + "/" + itemProps.item.queueId, {
-                                                method: "DELETE"
-                                            });
-                                            const newData = [...data];
-                                            newData.splice(itemProps.index, 1);
-                                            setData(newData);
-                                        } catch (e) {
-                                        }
-                                    }}
+                                    onPress={() => deleteQueueItem()}
                         />
                     </RectButton>
                 </Animated.View>

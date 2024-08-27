@@ -38,23 +38,9 @@ export function MediaType(props: {
             const iconSize = height / 6;
 
             return <>
-                <View style={{
-                    flex: 1,
-                    columnGap: 5,
-                    flexDirection: 'row',
-                    alignItems: "center"
-                }}>
-                    <FlexContainer>
-                        <RemoteIconButton size={buttonSize - 10}
-                                          icon={"home"}
-                                          action={"Go_To_Home_In_Media_Center"}
-                                          mode={"contained-tonal"}/>
-                    </FlexContainer>
-
-                    <FlexContainer flex={3}>
                         <SegmentedButtons
                             value={currentQueue || "Music"}
-                            style={{width: "100%"}}
+                            style={{width: "100%", flex: 1}}
                             buttons={[
                                 {
                                     icon: () => <Icon size={iconSize} source={"music"}/>,
@@ -91,14 +77,19 @@ export function MediaType(props: {
                                 setCurrentQueue(e);
 
                         }}/>
-                    </FlexContainer>
-                </View>
                 <View style={{
                     flex: 1,
                     rowGap: 5,
                     flexDirection: 'row',
                     alignItems: "flex-start"
                 }}>
+                    <FlexContainer>
+                        <RemoteIconButton size={buttonSize - 10}
+                                          icon={"home"}
+                                          action={"Go_To_Home_In_Media_Center"}
+                                          mode={"contained-tonal"}/>
+                    </FlexContainer>
+                    <FlexContainer flex={1}/>
                     <FlexContainer>
                         <IconButton
                             mode={"contained-tonal"}
