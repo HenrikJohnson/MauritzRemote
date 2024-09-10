@@ -45,16 +45,25 @@ export function ContentList(props: {queue: string}) {
         return <ContentItem queue={props.queue} item={itemProps.item} appContext={appContext}/>
     }
 
+    function setSortFiltered(sort?: string) {
+        if (sort) {
+            setSort(sort);
+        } else {
+            setRefreshing(true);
+            fetchContents(true);
+        }
+    }
+
     return (
         <View>
             <View style={{flexDirection: "row", columnGap: 2}}>
                 <TextInput style={{flex: 1}} placeholder={"Search"} onChangeText={setSearch} value={search}/>
                 <Dropdown
-                    label="Sort"
+                    label=" "
                     placeholder="Sort"
                     options={CRITERIA_OPTIONS}
                     value={sort}
-                    onSelect={setSort}
+                    onSelect={setSortFiltered}
                 />
             </View>
             <FlatList

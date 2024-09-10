@@ -11,12 +11,17 @@ export async function makeApiCall(appContext: AppContext, url: string, options?:
     }
     auth = encode("webapp:" + auth);
 
+    const method =  options?.method || "GET";
+    const fullUrl = "https://home.henrik.org/remote/" + url;
+
+    console.debug(`${method} ${fullUrl}`)
+
     try {
-        const response = await fetch("https://home.henrik.org/remote/" + url, {
+        const response = await fetch(fullUrl, {
             headers: {
                 Authorization: `Basic ${auth}`,
             },
-            method: options?.method || "GET"
+            method: method
         });
 
         if (!response.ok) {

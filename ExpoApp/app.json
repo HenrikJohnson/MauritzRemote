@@ -13,14 +13,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.underscoreresearch.MauritzJukebox"
+      "bundleIdentifier": "com.underscoreresearch.mauritzremote"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.underscoreresearch.MauritzJukebox",
+      "package": "com.underscoreresearch.mauritzremote",
       "versionCode": 1
     },
     "web": {
