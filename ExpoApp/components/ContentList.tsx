@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {MediaItem, query} from "../utils/Api";
 import {FlatList, Keyboard, ListRenderItemInfo, Pressable, View} from "react-native";
 import {ContentItem} from "./ContentItem";
-import {PaperProvider, TextInput, useTheme} from "react-native-paper";
+import {TextInput} from "react-native-paper";
 import {Dropdown, Option} from "react-native-paper-dropdown";
 import {useAppContent} from "./AppContex";
 
@@ -20,7 +20,6 @@ export function ContentList(props: {queue: string}) {
     const [sort, setSort] = useState("Entered" as string | undefined);
     const [refreshing, setRefreshing] = useState(false);
     const appContext = useAppContent();
-    const theme = useTheme();
 
     const [search, setSearch] = useState("")
 
@@ -55,34 +54,32 @@ export function ContentList(props: {queue: string}) {
     }
 
     return (
-        <PaperProvider theme={theme}>
-            <View>
-                <View style={{flexDirection: "row", columnGap: 2}}>
-                    <TextInput style={{flex: 1}} placeholder={"Search"} onChangeText={setSearch} value={search}/>
-                    <Dropdown
-                        label=" "
-                        placeholder="Sort"
-                        options={CRITERIA_OPTIONS}
-                        value={sort}
-                        onSelect={setSortFiltered}
-                    />
-                </View>
-                <FlatList
-                    data={data}
-                    renderItem={renderItem}
-                    onScrollBeginDrag={() => {
-                        Keyboard.dismiss();
-                    }}
-                    refreshing={refreshing}
-                    onRefresh={() => {
-                        setRefreshing(true);
-                        fetchContents(true);
-                    }}
-                    onEndReached={() => fetchContents(false)}
-                    onEndReachedThreshold={0.5}
-                    keyExtractor={(item: MediaItem) => String(item.itemId)}
+        <View>
+            <View style={{flexDirection: "row", columnGap: 2}}>
+                <TextInput style={{flex: 1}} placeholder={"Search"} onChangeText={setSearch} value={search}/>
+                <Dropdown
+                    label=" "
+                    placeholder="Sort"
+                    options={CRITERIA_OPTIONS}
+                    value={sort}
+                    onSelect={setSortFiltered}
                 />
             </View>
-        </PaperProvider>
+            <FlatList
+                data={data}
+                renderItem={renderItem}
+                onScrollBeginDrag={() => {
+                    Keyboard.dismiss();
+                }}
+                refreshing={refreshing}
+                onRefresh={() => {
+                    setRefreshing(true);
+                    fetchContents(true);
+                }}
+                onEndReached={() => fetchContents(false)}
+                onEndReachedThreshold={0.5}
+                keyExtractor={(item: MediaItem) => String(item.itemId)}
+            />
+        </View>
     )
 }
