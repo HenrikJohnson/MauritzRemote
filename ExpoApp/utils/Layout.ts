@@ -17,7 +17,7 @@ export function determineTextSizes(size: number) {
 }
 
 export function getScreenHeight() {
-    return Dimensions.get('window').height - (StatusBar.currentHeight ?? 0);
+    return Dimensions.get('window').height + (StatusBar.currentHeight ?? 0);
 }
 
 export function getScreenWidth() {
