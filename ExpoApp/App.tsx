@@ -26,14 +26,14 @@ export default function App() {
         materialLight: paperTheme
     });
 
-    return <PaperProvider theme={paperTheme}>
-        <AppContextProvider>
+    return <AppContextProvider>
+        <PaperProvider theme={paperTheme}>
             <KeyboardStaticView>
                 <NavigationContainer theme={navigationTheme.LightTheme}>
                     <AppNavigator/>
                 </NavigationContainer>
             </KeyboardStaticView>
             <StatusBar style="auto"/>
-        </AppContextProvider>
-    </PaperProvider>
+        </PaperProvider>
+    </AppContextProvider>
 }
