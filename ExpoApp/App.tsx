@@ -9,6 +9,7 @@ import {AppNavigator} from "./components/AppNavigator";
 import {AppContextProvider} from "./components/AppContex";
 import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
+import {RequireAuth} from "./components/RequireAuth";
 
 
 
@@ -29,9 +30,11 @@ export default function App() {
     return <AppContextProvider>
         <PaperProvider theme={paperTheme}>
             <KeyboardStaticView>
-                <NavigationContainer theme={navigationTheme.LightTheme}>
-                    <AppNavigator/>
-                </NavigationContainer>
+                <RequireAuth>
+                    <NavigationContainer theme={navigationTheme.LightTheme}>
+                        <AppNavigator/>
+                    </NavigationContainer>
+                </RequireAuth>
             </KeyboardStaticView>
             <StatusBar style="auto"/>
         </PaperProvider>

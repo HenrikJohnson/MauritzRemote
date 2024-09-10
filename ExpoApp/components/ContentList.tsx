@@ -1,24 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {MediaItem, query} from "../utils/Api";
-import {FlatList, Keyboard, ListRenderItemInfo, Pressable, View} from "react-native";
+import {FlatList, Keyboard, ListRenderItemInfo, View} from "react-native";
 import {ContentItem} from "./ContentItem";
 import {TextInput} from "react-native-paper";
-import {Dropdown, Option} from "react-native-paper-dropdown";
 import {useAppContent} from "./AppContex";
-
-const CRITERIA_OPTIONS : Option[] = [
-    "Entered",
-    "Toplist",
-    "Artist",
-    "Title",
-    "Last Played",
-    "Album"
-].map((value) => ({label: value, value: value}));
+import {ContentListSort} from "./ContentListSort";
 
 export function ContentList(props: {queue: string}) {
     const [data, setData] = useState([] as MediaItem[]);
-    const [sort, setSort] = useState("Entered" as string | undefined);
+    const [sort, setSort] = useState("Entered" as string);
     const [refreshing, setRefreshing] = useState(false);
+    const [endReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum] = useState(false);
     const appContext = useAppContent();
 
     const [search, setSearch] = useState("")
@@ -54,16 +46,10 @@ export function ContentList(props: {queue: string}) {
     }
 
     return (
-        <View>
+        <>
             <View style={{flexDirection: "row", columnGap: 2}}>
                 <TextInput style={{flex: 1}} placeholder={"Search"} onChangeText={setSearch} value={search}/>
-                <Dropdown
-                    label=" "
-                    placeholder="Sort"
-                    options={CRITERIA_OPTIONS}
-                    value={sort}
-                    onSelect={setSortFiltered}
-                />
+                <ContentListSort sort={sort} onSort={setSortFiltered}/>
             </View>
             <FlatList
                 data={data}
@@ -72,14 +58,21 @@ export function ContentList(props: {queue: string}) {
                     Keyboard.dismiss();
                 }}
                 refreshing={refreshing}
+                initialNumToRender={50}
+                onMomentumScrollBegin = {() => {setEndReachedCalledDuringMomentum(false);}}
                 onRefresh={() => {
                     setRefreshing(true);
                     fetchContents(true);
                 }}
-                onEndReached={() => fetchContents(false)}
-                onEndReachedThreshold={0.5}
+                onEndReached={() => {
+                    if (!endReachedCalledDuringMomentum) {
+                        fetchContents(false);
+                        setEndReachedCalledDuringMomentum(true);
+                    }
+                }}
+                onEndReachedThreshold={0.8}
                 keyExtractor={(item: MediaItem) => String(item.itemId)}
             />
-        </View>
+        </>
     )
 }

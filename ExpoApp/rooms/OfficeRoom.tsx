@@ -1,5 +1,4 @@
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
-import {RequireAuth} from "../components/RequireAuth";
 import MediaCenterIcon from "../assets/icons/mediacenter.svg";
 import CableIcon from "../assets/icons/cable.svg";
 import SwedishIcon from "../assets/icons/swedish.svg";
@@ -19,7 +18,7 @@ const Tab = createMaterialTopTabNavigator();
 
 export function OfficeRoom(props: {room?: string, mediaComponent?: React.ComponentType}) {
     const keyboard = useAppContent();
-    return <RequireAuth>
+    return <>
         <RoomNavigator screens={["Media", "Roku", "Swedish", "Games"]} room={props.room ?? "Office"}
                        onTabPress={(index) => {
                            let action = "Media_Center";
@@ -50,7 +49,7 @@ export function OfficeRoom(props: {room?: string, mediaComponent?: React.Compone
             }}/>
         </RoomNavigator>
         <PowerVolume width={getScreenWidth()} height={getScreenHeight()}/>
-    </RequireAuth>
+    </>
 }
 
 export function Zone2OfficeRoom() {

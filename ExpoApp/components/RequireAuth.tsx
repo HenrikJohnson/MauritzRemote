@@ -1,7 +1,7 @@
 import {
     getAuthenticated,
     getAuthenticationKey,
-    getRoom,
+    getRoom, initializeStorage,
     setAuthenticated,
     setAuthenticationKey
 } from "../utils/Storage";
@@ -15,7 +15,7 @@ export function RequireAuth(props:  {
     children: React.ReactNode
 }) {
     const [hasAuthed, setHasAuthed] = useState(getAuthenticated());
-    const [pending, setPending] = useState(!!getAuthenticationKey());
+    const [pending, setPending] = useState(true);
     const [apiKey, setApiKey] = useState(getAuthenticationKey());
     const [error, setError] = useState("");
     const theme = useTheme();
@@ -26,6 +26,8 @@ export function RequireAuth(props:  {
     }
 
     async function verifyAuth() {
+        await initializeStorage();
+
         try {
             const response = await makeApiCall(appContext, "room/" + getRoom(), {
                 auth: apiKey

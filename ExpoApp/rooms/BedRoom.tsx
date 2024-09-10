@@ -1,5 +1,4 @@
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
-import {RequireAuth} from "../components/RequireAuth";
 import CableIcon from "../assets/icons/cable.svg";
 import {RoomNavigator} from "../components/RoomNavigator";
 import {CableScreen} from "../screens/CableScreen";
@@ -14,7 +13,7 @@ const Tab = createMaterialTopTabNavigator();
 export function BedRoom() {
     const keyboard = useAppContent();
 
-    return <RequireAuth>
+    return <>
         <RoomNavigator screens={["Roku"]} room={"Cable"} onTabPress={(index) => {
             apiSend(keyboard, `Turn_Cable_On`);
         }}>
@@ -23,5 +22,5 @@ export function BedRoom() {
             }}/>
         </RoomNavigator>
         <PowerVolume width={getScreenWidth()} height={getScreenHeight()}/>
-    </RequireAuth>
+    </>
 }
