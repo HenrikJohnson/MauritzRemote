@@ -44,7 +44,7 @@ export class ContentItem extends PureComponent<ContentItemProps> {
             }
         </View>
 
-        if (this.props.disabled) {
+        if (this.props.disabled || this.props.isDragged) {
             return contents;
         }
 

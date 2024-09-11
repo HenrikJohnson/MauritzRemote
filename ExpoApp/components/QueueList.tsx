@@ -63,11 +63,13 @@ function DeletableContentItem(props: DeletableContentItemProps) {
 
 export function QueueList(props: {queue: string}) {
     const [data, setData] = useState([] as QueueItem[]);
+    const [refreshing, setRefreshing] = useState(false);
     const appContext = useAppContent();
 
     async function fetchContents() {
-        const newData = await queueContents(appContext, props.queue);
-        setData(newData);
+        setRefreshing(true);
+        setData(await queueContents(appContext, props.queue));
+        setRefreshing(false);
     }
 
     useEffect(() => {
@@ -78,6 +80,8 @@ export function QueueList(props: {queue: string}) {
     function renderItem(itemProps: ReorderableListRenderItemInfo<QueueItem>) {
         if (itemProps.index === 0)
             return <ContentItem item={itemProps.item} queue={props.queue} appContext={appContext}/>
+        else if (itemProps.isDragged)
+            return <ContentItem item={itemProps.item} queue={props.queue} appContext={appContext} isDragged={true}/>
         else
             return <DeletableContentItem item={itemProps.item} queue={props.queue} appContext={appContext}
                                          onLongPress={itemProps.drag}
@@ -89,30 +93,28 @@ export function QueueList(props: {queue: string}) {
                                          }}/>
     }
 
-    function handleReorder({fromIndex, toIndex}: ReorderableListReorderEvent) {
+    async function handleReorder({fromIndex, toIndex}: ReorderableListReorderEvent) {
         if (toIndex > 0 && toIndex != fromIndex) {
             const newData = [...data];
-            const item = newData[fromIndex].queueId;
-            const afterItem = newData[toIndex < fromIndex ? toIndex - 1 :  toIndex].queueId;
+            const item = newData[fromIndex];
+            const afterItem = newData[toIndex < fromIndex ? toIndex - 1 :  toIndex];
 
             try {
-                makeApiCall(appContext, "/queue/" + getRoom() + "/" + props.queue + "/" + item + "/" + afterItem, {
+                setRefreshing(true);
+                await makeApiCall(appContext, "queue/" + getRoom() + "/" + props.queue + "/" + item.queueId + "/" + afterItem.queueId, {
                     method: "PUT"
                 });
-
-                newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
-                setData(newData);
             } catch (e) {
             }
-        } else {
-            fetchContents();
         }
+        await fetchContents();
     }
 
     return (
         <GestureHandlerRootView>
             <ReorderableList
                 data={data}
+                refreshing={refreshing}
                 onReorder={handleReorder}
                 renderItem={renderItem}
                 keyExtractor={(item: QueueItem) => String(item.queueId)}

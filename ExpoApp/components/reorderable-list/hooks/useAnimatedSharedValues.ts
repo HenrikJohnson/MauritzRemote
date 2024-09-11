@@ -16,14 +16,17 @@ function useAnimatedSharedValues<T>(
     ref.current = current;
   }
 
+  if (size > ref.current.length) {
+    const current = [...ref.current];
+    for (let i = current.length; i < size; i++) {
+      current[i] = makeMutable(initFunc(i));
+    }
+    ref.current = current;
+  }
+
   useEffect(() => {
     const current = [...ref.current];
-    if (size > current.length) {
-      for (let i = current.length; i < size; i++) {
-        current[i] = makeMutable(initFunc(i));
-      }
-      ref.current = current;
-    } else if (shrink && size < current.length) {
+    if (shrink && size < current.length) {
       for (let i = size; i < current.length; i++) {
         cancelAnimation(current[i]);
       }

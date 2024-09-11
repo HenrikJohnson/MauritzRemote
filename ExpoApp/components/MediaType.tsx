@@ -41,17 +41,18 @@ export function MediaType(props: {
                 <View style={{
                     flex: 1,
                     rowGap: 5,
-                    flexDirection: 'row',
-                    alignItems: "flex-start"
+                    flexDirection: "row",
+                    justifyContent: "space-around",
                 }}>
-                    <FlexContainer>
+                    <FlexContainer/>
+                    <FlexContainer flex={10}>
                         <RemoteIconButton size={buttonSize - 10}
                                           icon={"home"}
                                           action={"Go_To_Home_In_Media_Center"}
                                           mode={"contained-tonal"}/>
                     </FlexContainer>
-                    <FlexContainer flex={1}/>
-                    <FlexContainer>
+                    <FlexContainer/>
+                    <FlexContainer flex={10}>
                         <IconButton
                             mode={"contained-tonal"}
                             icon={"playlist-play"}
@@ -61,8 +62,8 @@ export function MediaType(props: {
                             }}
                         />
                     </FlexContainer>
-                    <FlexContainer flex={1}/>
-                    <FlexContainer>
+                    <FlexContainer/>
+                    <FlexContainer flex={10}>
                         <IconButton
                             mode={"contained-tonal"}
                             icon={"bullhorn"}
@@ -72,7 +73,7 @@ export function MediaType(props: {
                             }}
                         />
                     </FlexContainer>
-                    <FlexContainer flex={1}/>
+                    <FlexContainer/>
                 </View>
                 <SegmentedButtons
                     value={currentQueue || "Music"}

@@ -161,7 +161,8 @@ const ReorderableList = <T,>(
 
   const enableDragged = useCallback(
     (enabled: boolean) => {
-      flatList.current.setNativeProps({scrollEnabled: !enabled});
+      if (flatList.current.setNativeProps)
+        flatList.current.setNativeProps({scrollEnabled: !enabled});
       setDragged(enabled);
     },
     [setDragged, flatList],
@@ -169,10 +170,15 @@ const ReorderableList = <T,>(
 
   const reorder = (fromIndex: number, toIndex: number) => {
     if (fromIndex !== toIndex) {
-      unstable_batchedUpdates(() => {
+      if (unstable_batchedUpdates) {
+        unstable_batchedUpdates(() => {
+          onReorder({fromIndex, toIndex});
+          enableDragged(false);
+        });
+      } else {
         onReorder({fromIndex, toIndex});
         enableDragged(false);
-      });
+      }
     } else {
       enableDragged(false);
     }
@@ -335,27 +341,23 @@ const ReorderableList = <T,>(
     },
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleItemLayout = useCallback(
-    memoize(
-      (index: number, onLayoutCell?: (e: LayoutChangeEvent) => void) =>
-        (e: LayoutChangeEvent) => {
-          if (itemOffsets.length > index) {
-            itemOffsets[index].value = {
-              offset: e.nativeEvent.layout.y,
-              length: e.nativeEvent.layout.height,
-            };
+      memoize(
+          (index: number, onLayoutCell?: (e: LayoutChangeEvent) => void) =>
+              (e: LayoutChangeEvent) => {
+                itemOffsets[index].value = {
+                  offset: e.nativeEvent.layout.y,
+                  length: e.nativeEvent.layout.height,
+                };
 
-            if (onLayoutCell) {
-              onLayoutCell(e);
-            }
-          }
-        },
-    ),
-    [itemOffsets],
+                if (onLayoutCell) {
+                  onLayoutCell(e);
+                }
+              },
+      ),
+      [itemOffsets, data]
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const drag = useCallback(
     memoize(
       (index: number) => () =>
@@ -364,7 +366,7 @@ const ReorderableList = <T,>(
 
           offsetY.value =
             startY.value -
-            (itemOffsets[index].value.offset - scrollOffset.value);
+            itemOffsets[index].value.offset - scrollOffset.value;
           draggedTranslateY.value = startY.value - offsetY.value;
           draggedIndex.value = index;
           draggedInfoIndex.value = index;
@@ -385,6 +387,7 @@ const ReorderableList = <T,>(
       state,
       itemOffsets,
       enableDragged,
+      data
     ],
   );
 
