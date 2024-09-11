@@ -3,8 +3,8 @@ import {GestureHandlerRootView, RectButton, Swipeable} from "react-native-gestur
 import {makeApiCall, queueContents, QueueItem} from "../utils/Api";
 import {Animated} from "react-native";
 import {ContentItem, ContentItemProps} from "./ContentItem";
-import ReorderableList, {ReorderableListRenderItemInfo, ReorderableListReorderEvent} from "react-native-reorderable-list";
-import {IconButton, Text, useTheme} from "react-native-paper";
+import ReorderableList, {ReorderableListRenderItemInfo, ReorderableListReorderEvent} from "./reorderable-list";
+import {IconButton, useTheme} from "react-native-paper";
 import {getRoom} from "../utils/Storage";
 import {useAppContent} from "./AppContex";
 
@@ -15,6 +15,8 @@ export interface DeletableContentItemProps extends ContentItemProps {
 
 function DeletableContentItem(props: DeletableContentItemProps) {
     const theme = useTheme();
+
+    const [dragging, setDragging] = useState(false)
 
     function renderRightActions(dragX: any) {
 
@@ -51,9 +53,10 @@ function DeletableContentItem(props: DeletableContentItemProps) {
         );
     }
 
-    return <Swipeable renderRightActions={(progress, dragX) => renderRightActions(dragX)}>
+    return <Swipeable renderRightActions={(progress, dragX) => renderRightActions(dragX)}
+                      onActivated={() => setDragging(true)} onEnded={() => () => setDragging(false)}>
         <ContentItem item={props.item} queue={props.queue} appContext={props.appContext}
-                     onLongPress={props.onLongPress} isDragged={props.isDragged}/>
+                     onLongPress={props.onLongPress} isDragged={props.isDragged} disabled={dragging}/>
     </Swipeable>
 }
 
@@ -77,10 +80,11 @@ export function QueueList(props: {queue: string}) {
             return <ContentItem item={itemProps.item} queue={props.queue} appContext={appContext}/>
         else
             return <DeletableContentItem item={itemProps.item} queue={props.queue} appContext={appContext}
+                                         onLongPress={itemProps.drag}
+                                         isDragged={itemProps.isDragged}
                                          onDelete={() => {
                                              const newData = [...data];
                                              newData.splice(itemProps.index, 1);
-                                             setData([]);
                                              setData(newData);
                                          }}/>
     }
