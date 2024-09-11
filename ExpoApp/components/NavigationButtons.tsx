@@ -137,7 +137,7 @@ export function NavigationButtons(props: {
                             </RemoteButton>
                         </FlexContainer>
                     </View>
-                    <IconButton style={{
+                    <IconButton mode={"contained-tonal"} style={{
                         position: "absolute",
                         bottom: -50,
                         left: 0,
