@@ -1,6 +1,6 @@
 import React, {useCallback, useRef, useState} from "react";
-import {View, Keyboard, Pressable} from "react-native";
-import {TextInput, Text, useTheme, Portal} from "react-native-paper";
+import {View, Keyboard} from "react-native";
+import {TextInput, useTheme, Button} from "react-native-paper";
 import {ContainerWithDimensions} from "./ContainerWithDimensions";
 
 const CRITERIA_OPTIONS = [
@@ -61,21 +61,20 @@ export function ContentListSort(props: {sort: string, onSort: (sort: string) => 
                     <View
                         style={{
                             elevation: 1,
+                            backgroundColor: theme.colors.onSecondary,
                             width: width,
                             top: height,
                             position: 'absolute'
                         }}
                     >
                         {
-                            CRITERIA_OPTIONS.map(item => <Pressable key={item} onPress={(e) => {
+                            CRITERIA_OPTIONS.map(item => <Button key={item} mode={"text"} contentStyle={{"alignSelf": "flex-start"}} onPress={(e) => {
                                     hidePicker(item);
                                     e.stopPropagation();
                                     ref?.current?.blur();
                                 }}>
-                                    <Text style={{backgroundColor: theme.colors.onSecondary, padding: 10}} variant={"titleMedium"}>
-                                        {item}
-                                    </Text>
-                                </Pressable>
+                                    {item}
+                                </Button>
                             )
                         }
                     </View>
