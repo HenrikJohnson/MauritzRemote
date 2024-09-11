@@ -29,13 +29,13 @@ export default function App() {
 
     return <AppContextProvider>
         <PaperProvider theme={paperTheme}>
-            <KeyboardStaticView>
-                <RequireAuth>
+            <RequireAuth>
+                <KeyboardStaticView>
                     <NavigationContainer theme={navigationTheme.LightTheme}>
                         <AppNavigator/>
                     </NavigationContainer>
-                </RequireAuth>
-            </KeyboardStaticView>
+                </KeyboardStaticView>
+            </RequireAuth>
             <StatusBar style="auto"/>
         </PaperProvider>
     </AppContextProvider>
