@@ -10,7 +10,7 @@ import {MediaCenterSettings} from "../components/MediaCenterSettings";
 
 export function MediaCenterScreen(props: { includeCompress?: boolean, room: string}) {
     return <ContainerWithDimensions style={{
-        flexDirection: 'column',
+        flexDirection: 'column-reverse',
         justifyContent: 'space-between',
         rowGap: 5,
         flex: 1,
@@ -19,6 +19,27 @@ export function MediaCenterScreen(props: { includeCompress?: boolean, room: stri
     }}>
         {({width, height}) => {
             return <>
+                <AdditionalPlayback width={width} height={height} postfix={"Media_Center"}/>
+                <BasicPlayback width={width} height={height} postfix={"Media_Center"}/>
+
+                <View style={{flex: 1}}/>
+
+                <View style={{
+                    flex: 2,
+                    width: "100%",
+                    justifyContent: "center",
+                }}>
+                    <MediaType style={{
+                        width: "70%",
+                        height: "100%",
+                        flexDirection: 'column',
+                        columnGap: 5,
+                    }}
+                               room={props.room}
+                               width={width}
+                               height={height}/>
+                </View>
+
                 <View style={{
                     flex: 2,
                     flexDirection: 'row',
@@ -44,25 +65,6 @@ export function MediaCenterScreen(props: { includeCompress?: boolean, room: stri
                                            "Show_Info_In_Media_Center",
                                            "Go_Back_In_Media_Center"]}/>
                 </View>
-                <View style={{
-                    flex: 2,
-                    width: "100%",
-                    justifyContent: "center",
-                }}>
-                    <MediaType style={{
-                        width: "70%",
-                        height: "100%",
-                        flexDirection: 'column',
-                        columnGap: 5,
-                    }}
-                               room={props.room}
-                               width={width}
-                               height={height}/>
-                </View>
-                <View style={{flex: 1}}/>
-
-                <BasicPlayback width={width} height={height} postfix={"Media_Center"}/>
-                <AdditionalPlayback width={width} height={height} postfix={"Media_Center"}/>
             </>;
         }}
     </ContainerWithDimensions>

@@ -9,7 +9,7 @@ import {BottomGameButtons, TopChannelButtons, TopGameButtons} from "../component
 
 export function GameScreen(props: { includeCompress?: boolean }) {
     return <ContainerWithDimensions style={{
-        flexDirection: 'column',
+        flexDirection: 'column-reverse',
         justifyContent: 'space-between',
         rowGap: 5,
         padding: 10,
@@ -17,6 +17,18 @@ export function GameScreen(props: { includeCompress?: boolean }) {
     }}>
         {({width, height}) => {
             return <>
+                <AdditionalPlayback width={width} height={height} postfix={"Media_Center"}/>
+                <BasicPlayback width={width} height={height} postfix={"Media_Center"}/>
+                <View style={{flex: 1}}/>
+                <View style={{
+                    flex: 2,
+                    flexDirection: 'row',
+                    columnGap: 5,
+                    width: "100%",
+                }}>
+                    <BottomGameButtons style={{flex: 1, width: "100%", height: "100%"}}/>
+                    <View style={{flex: 1}}/>
+                </View>
                 <View style={{
                     flex: 2,
                     flexDirection: 'row',
@@ -37,19 +49,6 @@ export function GameScreen(props: { includeCompress?: boolean }) {
                                            "Show_Info_In_Media_Center",
                                            "Go_Back_In_Media_Center"]}/>
                 </View>
-                <View style={{
-                    flex: 2,
-                    flexDirection: 'row',
-                    columnGap: 5,
-                    width: "100%",
-                }}>
-                    <BottomGameButtons style={{flex: 1, width: "100%", height: "100%"}}/>
-                    <View style={{flex: 1}}/>
-                </View>
-                <View style={{flex: 1}}/>
-
-                <BasicPlayback width={width} height={height} postfix={"Media_Center"}/>
-                <AdditionalPlayback width={width} height={height} postfix={"Media_Center"}/>
             </>;
         }}
     </ContainerWithDimensions>

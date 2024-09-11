@@ -9,7 +9,7 @@ import {BasicPlayback} from "../components/BasicPlayback";
 
 export function SwedishScreen(props: { includeCompress?: boolean }) {
     return <ContainerWithDimensions style={{
-        flexDirection: 'column',
+        flexDirection: 'column-reverse',
         justifyContent: 'space-between',
         rowGap: 5,
         padding: 10,
@@ -17,6 +17,15 @@ export function SwedishScreen(props: { includeCompress?: boolean }) {
     }}>
         {({width, height}) => {
             return <>
+                <BasicPlayback width={width} height={height} postfix={"AmazonTV"}/>
+                <View style={{flex: 1}}/>
+                <View style={{
+                    flex: 2,
+                    flexDirection: 'row',
+                    columnGap: 5,
+                    width: "100%",
+                }}>
+                </View>
                 <View style={{
                     flex: 2,
                     flexDirection: 'row',
@@ -33,16 +42,6 @@ export function SwedishScreen(props: { includeCompress?: boolean }) {
                                        additionalText={["Home", "Search", "Menu", "Back"]}
                                        additionalActions={["Go_To_Home_In_AmazonTV", "Search_In_AmazonTV", "Menu_In_AmazonTV", "Go_Back_In_AmazonTV"]}/>
                 </View>
-                <View style={{
-                    flex: 2,
-                    flexDirection: 'row',
-                    columnGap: 5,
-                    width: "100%",
-                }}>
-                </View>
-                <View style={{flex: 1}}/>
-
-                <BasicPlayback width={width} height={height} postfix={"AmazonTV"}/>
             </>;
         }}
     </ContainerWithDimensions>
