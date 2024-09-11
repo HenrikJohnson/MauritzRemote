@@ -46,7 +46,7 @@ export function ContentList(props: {queue: string}) {
     }
 
     return (
-        <View style={{flexDirection: "column-reverse"}}>
+        <View style={{flexDirection: "column-reverse", flex: 1}}>
             <FlatList
                 data={data}
                 renderItem={renderItem}

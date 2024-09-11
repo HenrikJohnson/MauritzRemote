@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {GestureHandlerRootView, RectButton, Swipeable} from "react-native-gesture-handler";
 import {makeApiCall, queueContents, QueueItem} from "../utils/Api";
-import {Animated} from "react-native";
+import {Animated, View} from "react-native";
 import {ContentItem, ContentItemProps} from "./ContentItem";
 import ReorderableList, {ReorderableListRenderItemInfo, ReorderableListReorderEvent} from "./reorderable-list";
 import {IconButton, useTheme} from "react-native-paper";
@@ -97,7 +97,7 @@ export function QueueList(props: {queue: string}) {
         if (toIndex > 0 && toIndex != fromIndex) {
             const newData = [...data];
             const item = newData[fromIndex];
-            const afterItem = newData[toIndex < fromIndex ? toIndex - 1 :  toIndex];
+            const afterItem = newData[toIndex < fromIndex ? toIndex - 1 : toIndex];
 
             try {
                 setRefreshing(true);
@@ -112,14 +112,17 @@ export function QueueList(props: {queue: string}) {
 
     return (
         <GestureHandlerRootView>
-            <ReorderableList
-                data={data}
-                refreshing={refreshing}
-                onReorder={handleReorder}
-                renderItem={renderItem}
-                keyExtractor={(item: QueueItem) => String(item.queueId)}
-                dragScale={1.025}
-            />
+            <View style={{flexDirection: "row", flex: 1}}>
+                <ReorderableList
+                    data={data}
+                    refreshing={refreshing}
+                    onReorder={handleReorder}
+                    renderItem={renderItem}
+                    containerStyle={{width: "100%"}}
+                    keyExtractor={(item: QueueItem) => String(item.queueId)}
+                    dragScale={1.025}
+                />
+            </View>
         </GestureHandlerRootView>
     );
-};
+}
