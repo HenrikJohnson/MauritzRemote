@@ -31,10 +31,15 @@ export function RemoteIconButton(props: {
             setActive((currentActive) => {
                 if (currentActive) {
                     const res = setTimeout(() => {
-                        const res = setInterval(() => {
-                            apiIdle(appContext, props.action);
-                        }, REPEAT_INTERVAL) as unknown;
-                        setIntervalId(res as number);
+                        setActive((currentActive) => {
+                            if (currentActive) {
+                                const res = setInterval(() => {
+                                    apiIdle(appContext, props.action);
+                                }, REPEAT_INTERVAL) as unknown;
+                                setIntervalId(res as number);
+                            }
+                            return currentActive;
+                        })
                     }, SECONDARY_DELAY) as unknown;
                     setTimeoutId(res as number);
                 }
@@ -45,8 +50,10 @@ export function RemoteIconButton(props: {
     }
 
     function stopSending() {
-        clearTimeout(timeoutId);
-        clearInterval(intervalId);
+        if (timeoutId >= 0)
+            clearTimeout(timeoutId);
+        if (intervalId >= 0)
+            clearInterval(intervalId);
 
         setTimeoutId(-1);
         setIntervalId(-1);
@@ -62,5 +69,6 @@ export function RemoteIconButton(props: {
         containerColor={props.containerColor}
         onPressIn={(e) => startSending()}
         onPressOut={(e) => stopSending()}
+        onPointerLeave={() => stopSending()}
         />
 }

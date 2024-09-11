@@ -29,10 +29,15 @@ export function RemoteButton(props: {
             setActive((currentActive) => {
                 if (currentActive) {
                     const res = setTimeout(() => {
-                        const res = setInterval(() => {
-                            apiIdle(appContext, props.action);
-                        }, REPEAT_INTERVAL) as unknown;
-                        setIntervalId(res as number);
+                        setActive((currentActive) => {
+                            if (currentActive) {
+                                const res = setInterval(() => {
+                                    apiIdle(appContext, props.action);
+                                }, REPEAT_INTERVAL) as unknown;
+                                setIntervalId(res as number);
+                            }
+                            return currentActive;
+                        })
                     }, SECONDARY_DELAY) as unknown;
                     setTimeoutId(res as number);
                 }
