@@ -43,8 +43,10 @@ export function RemoteButton(props: {
     }
 
     function stopSending() {
-        clearTimeout(timeoutId);
-        clearInterval(intervalId);
+        if (timeoutId >= 0)
+            clearTimeout(timeoutId);
+        if (intervalId >= 0)
+            clearInterval(intervalId);
 
         setTimeoutId(-1);
         setIntervalId(-1);
@@ -71,6 +73,7 @@ export function RemoteButton(props: {
         icon={props.icon}
         onPressIn={(e) => startSending()}
         onPressOut={(e) => stopSending()}
+        onPointerLeave={() => stopSending()}
         >
         {props.children}
     </Button>
