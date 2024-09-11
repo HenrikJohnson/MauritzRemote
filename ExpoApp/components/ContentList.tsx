@@ -46,11 +46,7 @@ export function ContentList(props: {queue: string}) {
     }
 
     return (
-        <>
-            <View style={{flexDirection: "row", columnGap: 2}}>
-                <TextInput style={{flex: 1}} placeholder={"Search"} onChangeText={setSearch} value={search}/>
-                <ContentListSort sort={sort} onSort={setSortFiltered}/>
-            </View>
+        <View style={{flexDirection: "column-reverse"}}>
             <FlatList
                 data={data}
                 renderItem={renderItem}
@@ -73,6 +69,10 @@ export function ContentList(props: {queue: string}) {
                 onEndReachedThreshold={0.8}
                 keyExtractor={(item: MediaItem) => String(item.itemId)}
             />
-        </>
+            <View style={{flexDirection: "row", columnGap: 2}}>
+                <TextInput style={{flex: 1}} placeholder={"Search"} onChangeText={setSearch} value={search}/>
+                <ContentListSort sort={sort} onSort={setSortFiltered}/>
+            </View>
+        </View>
     )
 }

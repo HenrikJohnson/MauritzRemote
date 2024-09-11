@@ -28,25 +28,29 @@ export function RequireAuth(props:  {
     async function verifyAuth() {
         await initializeStorage();
 
-        try {
-            const response = await makeApiCall(appContext, "room/" + getRoom(), {
-                auth: apiKey
-            });
-            if (response.ok) {
-                setAuthenticated(true);
-                setHasAuthed(true)
-                if (apiKey && apiKey !== getAuthenticationKey())
-                    setAuthenticationKey(apiKey);
-                return;
-            } else if (response.status === 401) {
-                setError("Failed to authenticate");
-                setPending(false);
-                return;
+        if (apiKey) {
+            try {
+                const response = await makeApiCall(appContext, "room/" + getRoom(), {
+                    auth: apiKey
+                });
+                if (response.ok) {
+                    setAuthenticated(true);
+                    setHasAuthed(true)
+                    if (apiKey && apiKey !== getAuthenticationKey())
+                        setAuthenticationKey(apiKey);
+                    return;
+                } else if (response.status === 401) {
+                    setError("Failed to authenticate");
+                    setPending(false);
+                    return;
+                }
+            } catch (e) {
             }
-        } catch (e) {
+            setError("Network error");
+            setTimeout(() => verifyAuth(), 1000);
+        } else {
+            setPending(false);
         }
-        setError("Network error");
-        setTimeout(() => verifyAuth(), 1000);
     }
 
     useEffect(() => {

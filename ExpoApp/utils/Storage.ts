@@ -1,30 +1,26 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MMKV } from 'react-native-mmkv'
 
 let authenticated = false;
-let room = "Livingroom";
-let auth = undefined as string | undefined;
+
+export const storage = new MMKV()
 
 export function getRoom() {
-    return room;
+    return storage.getString("room");
 }
 
 export async function initializeStorage() {
-    room = await AsyncStorage.getItem("room") ?? "Livingroom";
-    auth = await AsyncStorage.getItem("auth") ?? undefined;
 }
 
 export function setRoom(value: string) {
-    room = value;
-    AsyncStorage.setItem("room", value);
+    storage.set("room", value);
 }
 
 export function getAuthenticationKey() {
-    return auth;
+    return storage.getString("auth");
 }
 
 export function setAuthenticationKey(value: string) {
-    auth = value;
-    AsyncStorage.setItem("auth", value);
+    storage.set("auth", value);
 }
 
 export function getAuthenticated() {

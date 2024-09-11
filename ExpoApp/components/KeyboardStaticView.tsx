@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StatusBar, View} from 'react-native';
+import {Dimensions, Platform, StatusBar, View} from 'react-native';
 import RokuKeyboard from "./RokuKeyboard";
 import {useAppContent} from "./AppContex";
 import {Snackbar} from "react-native-paper";
@@ -8,14 +8,38 @@ import {getScreenHeight, getScreenWidth} from "../utils/Layout";
 export function KeyboardStaticView(props: {
     children: React.ReactNode
 }) {
+    const [dimensions, setDimensions]
+        = useState({width: 0, height: 0});
+
     const appContext = useAppContent();
+
+    useEffect(() => {
+        const subscription = Dimensions.addEventListener('change', () => {
+            setDimensions({
+                width: 0, height: 0
+            });
+        });
+
+        return () => {
+            subscription.remove();
+        }
+    }, []);
+
 
     return (
         <>
             <View
+                onLayout={event => {
+                    if (dimensions.width < event.nativeEvent.layout.width || dimensions.height < event.nativeEvent.layout.height) {
+                        setDimensions({
+                            width: event.nativeEvent.layout.width,
+                            height: event.nativeEvent.layout.height,
+                        })
+                    }
+                }}
                 style={{
-                    height: getScreenHeight(),
-                    width: getScreenWidth()
+                    height: Platform.OS == "web" ? (dimensions.height > 0 ? dimensions.height : "100%") : getScreenHeight(),
+                    width: Platform.OS == "web" ? (dimensions.width > 0 ? dimensions.width : "100%") : getScreenHeight()
                 }}
                 {...props}>
             </View>

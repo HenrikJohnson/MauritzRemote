@@ -22,7 +22,7 @@ export const ContainerWithDimensions: React.FC<
             onLayout={event =>
                 setDimensions({
                     width: event.nativeEvent.layout.width,
-                    height: event.nativeEvent.layout.height,
+                    height: event.nativeEvent.layout.height
                 })
             }
             {...props}>
