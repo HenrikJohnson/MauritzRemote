@@ -39,7 +39,7 @@ export function KeyboardStaticView(props: {
                 }}
                 style={{
                     height: Platform.OS == "web" ? (dimensions.height > 0 ? dimensions.height : "100%") : getScreenHeight(),
-                    width: Platform.OS == "web" ? (dimensions.width > 0 ? dimensions.width : "100%") : getScreenHeight()
+                    width: Platform.OS == "web" ? (dimensions.width > 0 ? dimensions.width : "100%") : getScreenWidth()
                 }}
                 {...props}>
             </View>

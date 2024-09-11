@@ -1,21 +1,70 @@
 import React, {useEffect, useState} from "react";
-import {GestureHandlerRootView, RectButton, RefreshControl, Swipeable} from "react-native-gesture-handler";
-import {makeApiCall, MediaItem, queueContents, QueueItem} from "../utils/Api";
-import {Animated, Pressable} from "react-native";
-import {ContentItem} from "./ContentItem";
+import {GestureHandlerRootView, RectButton, Swipeable} from "react-native-gesture-handler";
+import {makeApiCall, queueContents, QueueItem} from "../utils/Api";
+import {Animated} from "react-native";
+import {ContentItem, ContentItemProps} from "./ContentItem";
 import ReorderableList, {ReorderableListRenderItemInfo, ReorderableListReorderEvent} from "react-native-reorderable-list";
-import {IconButton, useTheme} from "react-native-paper";
+import {IconButton, Text, useTheme} from "react-native-paper";
 import {getRoom} from "../utils/Storage";
 import {useAppContent} from "./AppContex";
 
+export interface DeletableContentItemProps extends ContentItemProps {
+    item: QueueItem,
+    onDelete: () => void
+}
+
+function DeletableContentItem(props: DeletableContentItemProps) {
+    const theme = useTheme();
+
+    function renderRightActions(dragX: any) {
+
+        async function deleteQueueItem() {
+            try {
+                props.onDelete();
+                await makeApiCall(props.appContext, "/queue/" + getRoom() + "/" + props.queue + "/" + props.item.queueId, {
+                    method: "DELETE"
+                });
+            } catch (e) {
+            }
+        }
+
+        return (
+            <Animated.View
+                style={{
+                    justifyContent: 'center',
+                    alignItems: 'center', opacity: 0.7
+                }}>
+                <RectButton
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}
+                    onPress={() => deleteQueueItem()}>
+                    <IconButton size={40} icon={"delete"}
+                                containerColor={theme.colors.errorContainer} iconColor={theme.colors.error}
+                                onPress={() => deleteQueueItem()}
+                    />
+                </RectButton>
+            </Animated.View>
+        );
+    }
+
+    return <Swipeable renderRightActions={(progress, dragX) => renderRightActions(dragX)}>
+        <ContentItem item={props.item} queue={props.queue} appContext={props.appContext}
+                     onLongPress={props.onLongPress} isDragged={props.isDragged}/>
+    </Swipeable>
+}
+
+
 export function QueueList(props: {queue: string}) {
     const [data, setData] = useState([] as QueueItem[]);
-    const theme = useTheme();
     const appContext = useAppContent();
 
     async function fetchContents() {
-        setData([]);
-        setData(await queueContents(appContext, props.queue));
+        const newData = await queueContents(appContext, props.queue);
+        setData(newData);
     }
 
     useEffect(() => {
@@ -23,62 +72,17 @@ export function QueueList(props: {queue: string}) {
     }, [props.queue, appContext.queueState]);
 
 
-    async function selectItem(item: MediaItem) {
-        try {
-            await makeApiCall(appContext, `queue/${getRoom()}/${props.queue}/${item.itemId}`, {
-                method: "POST"
-            });
-            appContext.setNotification(`Selected ${item.artist} - ${item.title}`)
-            appContext.setQueueState(appContext.queueState + 1);
-        } catch (e) {
-        }
-    }
-
     function renderItem(itemProps: ReorderableListRenderItemInfo<QueueItem>) {
-        function renderRightActions(dragX: any) {
-
-            async function deleteQueueItem() {
-                try {
-                    makeApiCall(appContext, "/queue/" + getRoom() + "/" + props.queue + "/" + itemProps.item.queueId, {
-                        method: "DELETE"
-                    });
-                    const newData = [...data];
-                    newData.splice(itemProps.index, 1);
-                    setData(newData);
-                } catch (e) {
-                }
-            }
-
-            return (
-                <Animated.View
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center', opacity: 0.7
-                    }}>
-                    <RectButton
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                        onPress={() => deleteQueueItem()}>
-                        <IconButton size={40} icon={"delete"}
-                                    containerColor={theme.colors.errorContainer} iconColor={theme.colors.error}
-                                    onPress={() => deleteQueueItem()}
-                        />
-                    </RectButton>
-                </Animated.View>
-            );
-        }
-
         if (itemProps.index === 0)
             return <ContentItem item={itemProps.item} queue={props.queue} appContext={appContext}/>
         else
-            return <Swipeable renderRightActions={(progress, dragX) => renderRightActions(dragX)}>
-                <ContentItem item={itemProps.item} queue={props.queue} appContext={appContext}
-                             onLongPress={itemProps.drag} isDragged={itemProps.isDragged}/>
-            </Swipeable>
+            return <DeletableContentItem item={itemProps.item} queue={props.queue} appContext={appContext}
+                                         onDelete={() => {
+                                             const newData = [...data];
+                                             newData.splice(itemProps.index, 1);
+                                             setData([]);
+                                             setData(newData);
+                                         }}/>
     }
 
     function handleReorder({fromIndex, toIndex}: ReorderableListReorderEvent) {
