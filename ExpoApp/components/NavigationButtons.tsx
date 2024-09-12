@@ -27,9 +27,6 @@ export function NavigationButtons(props: {
             let {textSize, largeText} = determineTextSizes(size);
             const buttonSize = size / 8;
 
-            const topMargin = (height - originalSize) * scale;
-            const leftMargin = (width - originalSize) * scale;
-
             return <>
                 <View style={{
                     flexDirection: 'column',
@@ -136,14 +133,6 @@ export function NavigationButtons(props: {
                             </RemoteButton>
                         </FlexContainer>
                     </View>
-                    <IconButton mode={"contained-tonal"} style={{
-                        position: "absolute",
-                        bottom: -50,
-                        left: 0,
-                        zIndex: 100
-                    }} icon={appContext.expandedNavigation ? "arrow-top-right" : "arrow-bottom-left"}
-                                onPress={() => appContext.setExpandedNavigation(!appContext.expandedNavigation)}
-                    />
                 </View>
             </>
         }}

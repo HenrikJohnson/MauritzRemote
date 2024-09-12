@@ -1,6 +1,6 @@
 import {getRoom, setRoom} from "../utils/Storage";
-import {Platform, StyleSheet, Text, View} from "react-native";
-import {IconButton} from "react-native-paper";
+import {Platform, StyleSheet, View} from "react-native";
+import {Checkbox, IconButton, Text} from "react-native-paper";
 import {LivingRoom} from "../rooms/LivingRoom";
 import LivingRoomIcon from "../assets/icons/livingroom.svg";
 import {OfficeRoom, Zone2OfficeRoom} from "../rooms/OfficeRoom";
@@ -16,19 +16,36 @@ import {QueueManagement} from "./QueueManagement";
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props: any) {
+    const appContext = useAppContent();
+
     return (
         <DrawerContentScrollView{...props}
                                 contentContainerStyle={{
                                     paddingTop: 0,
+                                    justifyContent: 'space-between',
+                                    height: '100%'
                                 }}>
-            <View
-                style={styles.navigationHeader}
-            >
-                <Text style={styles.navigationHeaderText}>
-                    Room
+            <View>
+                <View
+                    style={styles.navigationHeader}
+                >
+                    <Text style={styles.navigationHeaderText}>
+                        Room
+                    </Text>
+                </View>
+                <DrawerItemList {...props} />
+            </View>
+            <View style={{flexDirection: "row", alignItems: "center", padding: 8}}>
+                <Checkbox
+                    status={appContext.expandedNavigation ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                        appContext.setExpandedNavigation(!appContext.expandedNavigation);
+                    }}
+                />
+                <Text style={{fontSize: 18}}>
+                    Large Navigation
                 </Text>
             </View>
-            <DrawerItemList {...props} />
         </DrawerContentScrollView>
     );
 }
