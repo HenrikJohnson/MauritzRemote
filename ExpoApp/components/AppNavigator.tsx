@@ -43,7 +43,7 @@ function CustomDrawerContent(props: any) {
                     }}
                 />
                 <Text style={{fontSize: 18}}>
-                    Large Navigation
+                    Large navigation
                 </Text>
             </View>
         </DrawerContentScrollView>
