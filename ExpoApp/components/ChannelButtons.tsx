@@ -67,7 +67,7 @@ export function TopChannelButtons(props: {
 }) {
     return <ContainerWithDimensions style={props.style}>
         {({width, height}) => {
-            const size = Math.min(width * 3, height);
+            const size = Math.min(width, height);
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={AppleIcon} action={"Go_To_Apple_In_Cable"}/>
