@@ -8,6 +8,7 @@ import React, {useState} from "react";
 import {FlexContainer} from "./FlexContainer";
 import {RemoteIconButton} from "./RemoteIconButton";
 import {determineTextSizes} from "../utils/Layout";
+import {useAppContent} from "./AppContex";
 
 export function NavigationButtons(props: {
     postFix: string,
@@ -16,20 +17,18 @@ export function NavigationButtons(props: {
     style?: StyleProp<ViewStyle>
 }) {
     const theme = useTheme();
-    const [expanded, setExpanded] = useState(false);
+    const appContext = useAppContent();
 
     return <ContainerWithDimensions style={props.style}>
         {({width, height}) => {
             const originalSize = Math.min(width, height);
-            const scale = expanded ? 1.5 : 1.0;
+            const scale = appContext.expandedNavigation ? 1.5 : 1.0;
             const size = originalSize * scale;
             let {textSize, largeText} = determineTextSizes(size);
             const buttonSize = size / 8;
 
             const topMargin = (height - originalSize) * scale;
             const leftMargin = (width - originalSize) * scale;
-
-            console.log(topMargin, leftMargin);
 
             return <>
                 <View style={{
@@ -41,7 +40,7 @@ export function NavigationButtons(props: {
                     position: "absolute",
                     height: size,
                     width: size,
-                    top: expanded ? 0 : (height - originalSize) / 2,
+                    top: appContext.expandedNavigation ? 0 : (height - originalSize) / 2,
                     left: originalSize - size
                 }}>
                     <View style={
@@ -142,8 +141,8 @@ export function NavigationButtons(props: {
                         bottom: -50,
                         left: 0,
                         zIndex: 100
-                    }} icon={expanded ? "arrow-top-right" : "arrow-bottom-left"}
-                                onPress={() => setExpanded(!expanded)}
+                    }} icon={appContext.expandedNavigation ? "arrow-top-right" : "arrow-bottom-left"}
+                                onPress={() => appContext.setExpandedNavigation(!appContext.expandedNavigation)}
                     />
                 </View>
             </>

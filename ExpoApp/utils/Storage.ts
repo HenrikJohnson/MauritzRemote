@@ -11,6 +11,14 @@ export function getRoom() {
 export async function initializeStorage() {
 }
 
+export function setExpanded(value: boolean) {
+    storage.set("expanded", value);
+}
+
+export function getExpanded() {
+    return !!storage.getBoolean("expanded");
+}
+
 export function setRoom(value: string) {
     storage.set("room", value);
 }

@@ -1,10 +1,12 @@
 import {View} from "react-native";
 import {NavigationButtons} from "../components/NavigationButtons";
-import {BottomChannelButtons, SwedishChannelButtons, TopChannelButtons} from "../components/ChannelButtons";
+import {
+    BottomSwedishChannelButtons,
+    TopSwedishChannelButtons
+} from "../components/ChannelButtons";
 import {ContainerWithDimensions} from "../components/ContainerWithDimensions";
 
 import React from "react";
-import {PowerVolume} from "../components/PowerVolume";
 import {BasicPlayback} from "../components/BasicPlayback";
 
 export function SwedishScreen(props: { includeCompress?: boolean }) {
@@ -25,6 +27,8 @@ export function SwedishScreen(props: { includeCompress?: boolean }) {
                     columnGap: 5,
                     width: "100%",
                 }}>
+                    <BottomSwedishChannelButtons style={{flex: 1, width: "100%", height: "100%"}}/>
+                    <View style={{flex: 1}}/>
                 </View>
                 <View style={{
                     flex: 2,
@@ -32,7 +36,7 @@ export function SwedishScreen(props: { includeCompress?: boolean }) {
                     columnGap: 5,
                     width: "100%"
                 }}>
-                    <SwedishChannelButtons style={{flex: 1, width: "100%", height: "100%"}}/>
+                    <TopSwedishChannelButtons style={{flex: 1, width: "100%", height: "100%"}}/>
                     <NavigationButtons style={{
                         height: "100%",
                         flex: 1,

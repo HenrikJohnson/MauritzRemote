@@ -1,9 +1,12 @@
 import React, {createContext, useState} from "react";
+import {getExpanded, setExpanded} from "../utils/Storage";
 
 export interface AppContext {
     keyboardView?: string;
     setKeyboardView: (view?: string) => void;
     notification?: string;
+    expandedNavigation: boolean;
+    setExpandedNavigation: (expanded: boolean) => void;
     setNotification: (notification?: string) => void;
     queueState: number,
     setQueueState: (state: number) => void;
@@ -23,6 +26,12 @@ export function AppContextProvider(props: {
     const [notification, setNotification]
         = useState(undefined as string | undefined);
     const [queueState, setQueueState] = useState(1);
+    const [expandedNavigation, setExpandedNavigation] = useState(() => getExpanded());
+
+    function setExpandedNavigationPersist(val: boolean) {
+        setExpanded(val);
+        setExpandedNavigation(!expandedNavigation);
+    }
 
     return (
         <appContext.Provider value={{
@@ -31,7 +40,9 @@ export function AppContextProvider(props: {
             notification: notification,
             setNotification: setNotification,
             queueState: queueState,
-            setQueueState: setQueueState
+            setQueueState: setQueueState,
+            expandedNavigation: expandedNavigation,
+            setExpandedNavigation: setExpandedNavigationPersist
         }}>
             {props.children}
         </appContext.Provider>

@@ -71,7 +71,7 @@ export function TopChannelButtons(props: {
                     <ChannelIcon size={size} icon={PlexIcon} alignItems={"flex-end"} action={"Go_To_Plex_In_Cable"}/>
                 </RowOfButtons>
                 <RowOfButtons>
-                    <ChannelIcon size={size} icon={AmazonIcon} alignItems={"flex-start"} action={"Go_To_Amazon_In_Cable"}/>
+                    <ChannelIcon size={size} icon={DisneyIcon} alignItems={"flex-start"} action={"Go_To_Disney_In_Cable"}/>
                     <ChannelIcon size={size} icon={ParamountIcon} alignItems={"flex-end"} action={"Go_To_Paramount_In_Cable"}/>
                 </RowOfButtons>
             </ColumnOfButtons>
@@ -88,18 +88,18 @@ export function BottomChannelButtons(props: {
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={NetflixIcon} alignItems={"flex-start"} action={"Go_To_Netflix_In_Cable"}/>
-                    <ChannelIcon size={size} icon={DisneyIcon} alignItems={"flex-end"} action={"Go_To_Disney_In_Cable"}/>
+                    <ChannelIcon size={size} icon={AppleIcon} alignItems={"flex-end"} action={"Go_To_Apple_In_Cable"}/>
                 </RowOfButtons>
                 <RowOfButtons>
-                    <ChannelIcon size={size} icon={HboIcon} alignItems={"flex-start"} action={"Go_To_HBO_In_Cable"}/>
-                    <ChannelIcon size={size} icon={AppleIcon} alignItems={"flex-end"} action={"Go_To_Apple_In_Cable"}/>
+                    <ChannelIcon size={size} icon={AmazonIcon} alignItems={"flex-start"} action={"Go_To_Amazon_In_Cable"}/>
+                    <ChannelIcon size={size} icon={HboIcon} alignItems={"flex-end"} action={"Go_To_HBO_In_Cable"}/>
                 </RowOfButtons>
             </ColumnOfButtons>
         }}
     </ContainerWithDimensions>
 }
 
-export function SwedishChannelButtons(props: {
+export function BottomSwedishChannelButtons(props: {
     style?: StyleProp<ViewStyle>,
 }) {
     return <ContainerWithDimensions style={props.style}>
@@ -108,11 +108,31 @@ export function SwedishChannelButtons(props: {
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={NetflixIcon} alignItems={"flex-start"} action={"Go_To_Netflix_In_AmazonTV"}/>
-                    <ChannelIcon size={size} icon={SvtPlayIcon} alignItems={"flex-end"} action={"Go_To_SVTPlay_In_Cable"}/>
+                    <FlexContainer/>
                 </RowOfButtons>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={AmazonIcon} alignItems={"flex-start"} action={"Go_To_Amazon_In_Cable"}/>
-                    <ChannelIcon size={size} icon={DisneyIcon} alignItems={"flex-end"} action={"Go_To_Disney_In_Cable"}/>
+                    <FlexContainer/>
+                </RowOfButtons>
+            </ColumnOfButtons>
+        }}
+    </ContainerWithDimensions>
+}
+
+export function TopSwedishChannelButtons(props: {
+    style?: StyleProp<ViewStyle>,
+}) {
+    return <ContainerWithDimensions style={props.style}>
+        {({width, height}) => {
+            const size = Math.min(width, height);
+            return <ColumnOfButtons size={size}>
+                <RowOfButtons>
+                    <ChannelIcon size={size} icon={SvtPlayIcon} alignItems={"flex-start"} action={"Go_To_SVTPlay_In_Cable"}/>
+                    <FlexContainer/>
+                </RowOfButtons>
+                <RowOfButtons>
+                    <ChannelIcon size={size} icon={DisneyIcon} alignItems={"flex-start"} action={"Go_To_Disney_In_Cable"}/>
+                    <FlexContainer/>
                 </RowOfButtons>
             </ColumnOfButtons>
         }}
@@ -127,12 +147,12 @@ export function TopGameButtons(props: {
             const size = Math.min(width, height);
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
-                    <ChannelIcon size={size} icon={XBoxIcon} alignItems={"flex-start"} action={"Go_To_Xbox_In_Game"}/>
-                    <ChannelIcon size={size} icon={SwitchIcon} alignItems={"flex-end"} action={"Go_To_Playstation_In_Game"}/>
+                    <ChannelIcon size={size} icon={SwitchIcon} alignItems={"flex-start"} action={"Go_To_Playstation_In_Game"}/>
+                    <FlexContainer/>
                 </RowOfButtons>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={WiiIcon} alignItems={"flex-start"} action={"Go_To_Wii_In_Game"}/>
-                    <ChannelIcon size={size} icon={GamingPCIcon} alignItems={"flex-end"} action={"Go_To_PC_In_Game"}/>
+                    <FlexContainer/>
                 </RowOfButtons>
             </ColumnOfButtons>
         }}
@@ -151,7 +171,8 @@ export function BottomGameButtons(props: {
                     <ChannelIcon size={size} icon={VCSecondIcon} alignItems={"flex-end"} action={"Go_To_VC_Secondary_In_Game"}/>
                 </RowOfButtons>
                 <RowOfButtons>
-                    <View/>
+                    <ChannelIcon size={size} icon={GamingPCIcon} alignItems={"flex-start"} action={"Go_To_PC_In_Game"}/>
+                    <ChannelIcon size={size} icon={XBoxIcon} alignItems={"flex-end"} action={"Go_To_Xbox_In_Game"}/>
                 </RowOfButtons>
             </ColumnOfButtons>
         }}
