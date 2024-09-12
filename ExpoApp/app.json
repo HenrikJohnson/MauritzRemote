@@ -11,6 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "platforms": ["ios", "android", "web"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.underscoreresearch.mauritzremote"
@@ -27,9 +28,6 @@
       "favicon": "./assets/favicon.png",
       "output": "single",
       "bundler": "metro"
-    },
-    "experiments": {
-      "baseUrl": "/homeremote"
     },
     "extra": {
       "eas": {
