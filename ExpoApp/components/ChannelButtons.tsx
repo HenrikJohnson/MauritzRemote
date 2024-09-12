@@ -11,6 +11,8 @@ import PlexIcon from "../assets/icons/plex.svg";
 import AmazonIcon from "../assets/icons/amazon_video.svg";
 import ParamountIcon from "../assets/icons/paramount.svg";
 import AppleIcon from "../assets/icons/apple.svg";
+import MasterclassIcon from "../assets/icons/masterclass.svg";
+import PeacockIcon from "../assets/icons/peacock.svg";
 import HboIcon from "../assets/icons/hbo.svg";
 import DisneyIcon from "../assets/icons/disney.svg";
 import NetflixIcon from "../assets/icons/netflix.svg";
@@ -24,11 +26,11 @@ import VCSecondIcon from "../assets/icons/webcam2.svg";
 import {RemoteIconButton} from "./RemoteIconButton";
 import {useTheme} from "react-native-paper";
 
-export function ColumnOfButtons(props: {children: React.ReactNode, size: number}) {
+export function ColumnOfButtons(props: {children: React.ReactNode, size: number, alignSelf?: "flex-start" | "flex-end"}) {
     return <View style={{
         flexDirection: 'column',
         justifyContent: 'space-between',
-        alignSelf: "flex-end",
+        alignSelf: props.alignSelf ?? "flex-end",
         rowGap: 5,
         width: props.size,
         height: "100%"
@@ -48,13 +50,13 @@ export function RowOfButtons(props: {children: React.ReactNode}) {
     </View>
 }
 
-function ChannelIcon(props: { size: number, action: string, alignItems: "flex-start" | "flex-end", icon: FC<SvgProps> }) {
+function ChannelIcon(props: { size: number, action: string, alignItems: "flex-start" | "flex-end", icon: FC<SvgProps>, flex?: number}) {
     const buttonSize = props.size / 3;
     const iconSize = props.size / 3.5;
 
     const theme = useTheme();
 
-    return <FlexContainer alignItems={props.alignItems}>
+    return <FlexContainer alignItems={props.alignItems} flex={props.flex}>
         <RemoteIconButton mode={"outlined"} containerColor={theme.colors.outline} size={buttonSize} action={props.action} icon={() => <props.icon width={iconSize} height={iconSize}/> }/>
     </FlexContainer>;
 }
@@ -64,7 +66,7 @@ export function TopChannelButtons(props: {
 }) {
     return <ContainerWithDimensions style={props.style}>
         {({width, height}) => {
-            const size = Math.min(width, height);
+            const size = Math.min(width * 3, height);
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={AppleIcon} alignItems={"flex-start"} action={"Go_To_Apple_In_Cable"}/>
@@ -93,6 +95,26 @@ export function BottomChannelButtons(props: {
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={AmazonIcon} alignItems={"flex-start"} action={"Go_To_Amazon_In_Cable"}/>
                     <ChannelIcon size={size} icon={HboIcon} alignItems={"flex-end"} action={"Go_To_HBO_In_Cable"}/>
+                </RowOfButtons>
+            </ColumnOfButtons>
+        }}
+    </ContainerWithDimensions>
+}
+
+export function RightChannelButtons(props: {
+    style?: StyleProp<ViewStyle>,
+}) {
+    return <ContainerWithDimensions style={props.style}>
+        {({width, height}) => {
+            const size = Math.min(width, height);
+            return <ColumnOfButtons size={size} alignSelf={"flex-start"}>
+                <RowOfButtons>
+                    <ChannelIcon flex={6} size={size} icon={MasterclassIcon} alignItems={"flex-end"} action={"Go_To_Masterclass_In_Cable"}/>
+                    <FlexContainer flex={5}/>
+                </RowOfButtons>
+                <RowOfButtons>
+                    <ChannelIcon flex={6} size={size} icon={PeacockIcon} alignItems={"flex-end"} action={"Go_To_Peacock_In_Cable"}/>
+                    <FlexContainer flex={5}/>
                 </RowOfButtons>
             </ColumnOfButtons>
         }}

@@ -1,6 +1,6 @@
 import {View} from "react-native";
 import {NavigationButtons} from "../components/NavigationButtons";
-import {BottomChannelButtons, TopChannelButtons} from "../components/ChannelButtons";
+import {BottomChannelButtons, RightChannelButtons, TopChannelButtons} from "../components/ChannelButtons";
 import {ContainerWithDimensions} from "../components/ContainerWithDimensions";
 import React from "react";
 import {BasicPlayback} from "../components/BasicPlayback";
@@ -46,7 +46,7 @@ export function CableScreen() {
                         width: "100%",
                     }}>
                         <BottomChannelButtons style={{flex: 1, width: "100%", height: "100%"}}/>
-                        <View style={{flex: 1}}/>
+                        <RightChannelButtons style={{flex: 1, width: "100%", height: "100%"}}/>
                     </View>
 
                     <View style={{
