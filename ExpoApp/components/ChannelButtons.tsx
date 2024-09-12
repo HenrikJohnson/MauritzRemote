@@ -67,7 +67,7 @@ export function TopChannelButtons(props: {
             const size = Math.min(width, height);
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
-                    <ChannelIcon size={size} icon={HuluIcon} alignItems={"flex-start"} action={"Go_To_Hulu_In_Cable"}/>
+                    <ChannelIcon size={size} icon={AppleIcon} alignItems={"flex-start"} action={"Go_To_Apple_In_Cable"}/>
                     <ChannelIcon size={size} icon={PlexIcon} alignItems={"flex-end"} action={"Go_To_Plex_In_Cable"}/>
                 </RowOfButtons>
                 <RowOfButtons>
@@ -88,7 +88,7 @@ export function BottomChannelButtons(props: {
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={NetflixIcon} alignItems={"flex-start"} action={"Go_To_Netflix_In_Cable"}/>
-                    <ChannelIcon size={size} icon={AppleIcon} alignItems={"flex-end"} action={"Go_To_Apple_In_Cable"}/>
+                    <ChannelIcon size={size} icon={HuluIcon} alignItems={"flex-end"} action={"Go_To_Hulu_In_Cable"}/>
                 </RowOfButtons>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={AmazonIcon} alignItems={"flex-start"} action={"Go_To_Amazon_In_Cable"}/>
