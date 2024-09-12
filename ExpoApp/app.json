@@ -28,6 +28,9 @@
       "output": "single",
       "bundler": "metro"
     },
+    "experiments": {
+      "baseUrl": "/homeremote"
+    },
     "extra": {
       "eas": {
         "projectId": "1ecb6896-0c57-4b86-b58a-598e60faa473"

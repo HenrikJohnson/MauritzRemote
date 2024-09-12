@@ -11,8 +11,6 @@ import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
 import {RequireAuth} from "./components/RequireAuth";
 
-
-
 export default function App() {
 
     const colorScheme = useColorScheme();
