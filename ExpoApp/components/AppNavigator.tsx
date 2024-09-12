@@ -1,6 +1,6 @@
 import {getRoom, setRoom} from "../utils/Storage";
 import {Platform, StyleSheet, View} from "react-native";
-import {Checkbox, IconButton, Text} from "react-native-paper";
+import {Checkbox, IconButton, Switch, Text} from "react-native-paper";
 import {LivingRoom} from "../rooms/LivingRoom";
 import LivingRoomIcon from "../assets/icons/livingroom.svg";
 import {OfficeRoom, Zone2OfficeRoom} from "../rooms/OfficeRoom";
@@ -29,22 +29,22 @@ function CustomDrawerContent(props: any) {
                 <View
                     style={styles.navigationHeader}
                 >
-                    <Text style={styles.navigationHeaderText}>
+                    <Text style={styles.navigationHeaderText} variant={"titleLarge"}>
                         Room
                     </Text>
                 </View>
                 <DrawerItemList {...props} />
             </View>
-            <View style={{flexDirection: "row", alignItems: "center", padding: 8}}>
-                <Checkbox
-                    status={appContext.expandedNavigation ? 'checked' : 'unchecked'}
-                    onPress={() => {
+            <View style={{flexDirection: "row", alignItems: "center", padding: 8, paddingBottom: 32, columnGap: 8}}>
+                <Text variant={"titleMedium"}>
+                    Large navigation
+                </Text>
+                <Switch
+                    value={appContext.expandedNavigation}
+                    onChange={(value) => {
                         appContext.setExpandedNavigation(!appContext.expandedNavigation);
                     }}
                 />
-                <Text style={{fontSize: 18}}>
-                    Large navigation
-                </Text>
             </View>
         </DrawerContentScrollView>
     );
@@ -66,7 +66,7 @@ export function AppNavigator() {
                           }}
                           screenOptions={({navigation}) => ({
                               drawerStyle: {
-                                  width: Platform.OS === "web" ? 300 : 180,
+                                  width: Platform.OS === "web" ? 300 : 200,
                               },
                               drawerLabelStyle: {
                                   marginLeft: -16,
@@ -106,5 +106,5 @@ const styles = StyleSheet.create({
         justifyContent: Platform.OS === "android" ? 'flex-end' : 'center',
         paddingBottom: Platform.OS === "android" ? 10 : 0,
     },
-    navigationHeaderText: {color: 'white', fontSize: 18}
+    navigationHeaderText: {color: 'white'}
 });
