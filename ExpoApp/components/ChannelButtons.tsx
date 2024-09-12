@@ -76,7 +76,7 @@ export function TopChannelButtons(props: {
                 </RowOfButtons>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={DisneyIcon} action={"Go_To_Disney_In_Cable"}/>
-                    <ChannelIcon size={size} icon={ParamountIcon} action={"Go_To_Paramount_In_Cable"}/>
+                    <ChannelIcon size={size} icon={HuluIcon} action={"Go_To_Hulu_In_Cable"}/>
                     <FlexContainer flex={2}/>
                 </RowOfButtons>
             </ColumnOfButtons>
@@ -93,7 +93,7 @@ export function BottomChannelButtons(props: {
             return <ColumnOfButtons size={size}>
                 <RowOfButtons>
                     <ChannelIcon size={size} icon={NetflixIcon} action={"Go_To_Netflix_In_Cable"}/>
-                    <ChannelIcon size={size} icon={HuluIcon} action={"Go_To_Hulu_In_Cable"}/>
+                    <ChannelIcon size={size} icon={ParamountIcon} action={"Go_To_Paramount_In_Cable"}/>
                     <ChannelIcon size={size} icon={MasterclassIcon} action={"Go_To_Masterclass_In_Cable"}/>
                     <FlexContainer/>
                 </RowOfButtons>
