@@ -34,5 +34,8 @@
         "projectId": "1ecb6896-0c57-4b86-b58a-598e60faa473"
       }
     }
+  },
+  "experiments": {
+    "baseUrl": "/homeremote"
   }
 }
