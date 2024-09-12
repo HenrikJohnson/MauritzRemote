@@ -3,7 +3,7 @@ import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 import {ContainerWithDimensions} from "./ContainerWithDimensions";
 import React, {useEffect, useState} from "react";
 
-import {Icon, SegmentedButtons, IconButton} from "react-native-paper";
+import {Icon, SegmentedButtons, IconButton, useTheme} from "react-native-paper";
 import {RemoteIconButton} from "./RemoteIconButton";
 import {FlexContainer} from "./FlexContainer";
 import {activeQueue, apiSend} from "../utils/Api";
@@ -19,6 +19,7 @@ export function MediaType(props: {
     const [currentQueue, setCurrentQueue] = useState(undefined as string | undefined);
     const buttonSize = Math.min((props.width - 20) / 6, props.height / 8);
     const appContext = useAppContent();
+    const theme = useTheme();
 
     async function fectchCurrentQueue() {
         setCurrentQueue(await activeQueue(appContext, props.room) || "Tv");
@@ -55,6 +56,7 @@ export function MediaType(props: {
                     <FlexContainer flex={10}>
                         <IconButton
                             mode={"contained-tonal"}
+                            containerColor={theme.colors.secondaryContainer}
                             icon={"playlist-play"}
                             size={buttonSize - 10}
                             onPress={() => {
@@ -67,6 +69,7 @@ export function MediaType(props: {
                         <IconButton
                             mode={"contained-tonal"}
                             icon={"bullhorn"}
+                            containerColor={theme.colors.secondaryContainer}
                             size={buttonSize - 10}
                             onPress={() => {
                                 appContext.setKeyboardView("Contents" + currentQueue);

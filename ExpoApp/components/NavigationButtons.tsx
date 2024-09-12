@@ -1,10 +1,10 @@
 import {View} from "react-native";
 import {RemoteButton} from "./RemoteButton";
-import {Text, Icon, useTheme, IconButton, Portal} from "react-native-paper";
+import {Text, useTheme} from "react-native-paper";
 import {ContainerWithDimensions} from "./ContainerWithDimensions";
 import {StyleProp} from "react-native/Libraries/StyleSheet/StyleSheet";
 import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
-import React, {useState} from "react";
+import React from "react";
 import {FlexContainer} from "./FlexContainer";
 import {RemoteIconButton} from "./RemoteIconButton";
 import {determineTextSizes} from "../utils/Layout";
@@ -56,9 +56,7 @@ export function NavigationButtons(props: {
                             </RemoteButton>
                         </FlexContainer>
                         <FlexContainer flex={2}>
-                            <RemoteButton action={"Go_Up_In_" + props.postFix}>
-                                <Icon source={"chevron-up"} size={buttonSize}/>
-                            </RemoteButton>
+                            <RemoteIconButton icon={"chevron-up"} mode={"contained"} size={buttonSize} action={"Go_Up_In_" + props.postFix}/>
                         </FlexContainer>
                         <FlexContainer flex={3}>
                             <RemoteButton action={props.additionalActions[1]} contentStyle={{
@@ -77,9 +75,7 @@ export function NavigationButtons(props: {
                         }
                     }>
                         <FlexContainer flex={4}>
-                            <RemoteButton action={"Go_Left_In_" + props.postFix}>
-                                <Icon source={"chevron-left"} size={buttonSize}/>
-                            </RemoteButton>
+                            <RemoteIconButton icon={"chevron-left"} mode={"contained"} size={buttonSize} action={"Go_Left_In_" + props.postFix}/>
                         </FlexContainer>
                         <FlexContainer flex={4}>
                             <ContainerWithDimensions style={{
@@ -93,16 +89,13 @@ export function NavigationButtons(props: {
                                 {({width, height}) => {
                                     return <RemoteIconButton size={Math.min(width, height)}
                                                              action={"Select_In_" + props.postFix}
-                                                             mode={"contained"}
-                                                             containerColor={theme.colors.onSecondary}
+                                                             mode={"contained-tonal"}
                                                              icon={() => <Text variant={largeText}>OK</Text>}/>
                                 }}
                             </ContainerWithDimensions>
                         </FlexContainer>
                         <FlexContainer flex={4}>
-                            <RemoteButton action={"Go_Right_In_" + props.postFix}>
-                                <Icon source={"chevron-right"} size={buttonSize}/>
-                            </RemoteButton>
+                            <RemoteIconButton icon={"chevron-right"} mode={"contained"} size={buttonSize} action={"Go_Right_In_" + props.postFix}/>
                         </FlexContainer>
                     </View>
                     <View style={
@@ -121,9 +114,7 @@ export function NavigationButtons(props: {
                             </RemoteButton>
                         </FlexContainer>
                         <FlexContainer flex={2}>
-                            <RemoteButton action={"Go_Down_In_" + props.postFix}>
-                                <Icon source={"chevron-down"} size={buttonSize}/>
-                            </RemoteButton>
+                            <RemoteIconButton icon={"chevron-down"} mode={"contained"} size={buttonSize} action={"Go_Down_In_" + props.postFix}/>
                         </FlexContainer>
                         <FlexContainer flex={3}>
                             <RemoteButton action={props.additionalActions[3]} contentStyle={{

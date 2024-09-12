@@ -1,9 +1,10 @@
 import {RemoteIconButton} from "./RemoteIconButton";
 import {RemoteButton} from "./RemoteButton";
-import {Icon, Text} from "react-native-paper"
+import {Icon, Text, useTheme} from "react-native-paper"
 
 export function AdditionalPlayback(props: { width: number, height: number, postfix: string}) {
     const buttonSize = Math.min((props.width - 20) / 6, props.height / 8);
+    const theme = useTheme();
 
     return <>
         <RemoteIconButton style={{
@@ -16,7 +17,7 @@ export function AdditionalPlayback(props: { width: number, height: number, postf
                           action={"Go_To_Next_In_" + props.postfix}
                           mode={"contained-tonal"}/>
 
-        <RemoteButton contentStyle={{
+        <RemoteButton color={theme.colors.secondaryContainer} contentStyle={{
             width: buttonSize,
             height: buttonSize * 2 / 3
         }} style={{

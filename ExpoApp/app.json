@@ -2,7 +2,7 @@
   "expo": {
     "name": "Home Remote",
     "slug": "MauritzRemote",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -22,7 +22,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.underscoreresearch.mauritzremote",
-      "versionCode": 50
+      "versionCode": 51
     },
     "web": {
       "favicon": "./assets/favicon.png",

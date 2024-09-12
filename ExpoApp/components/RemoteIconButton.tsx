@@ -1,5 +1,5 @@
 import React from "react";
-import {IconButton} from "react-native-paper";
+import {IconButton, useTheme} from "react-native-paper";
 import {apiIdle, apiSend} from "../utils/Api";
 import {StyleProp} from "react-native/Libraries/StyleSheet/StyleSheet";
 import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
@@ -24,6 +24,7 @@ export function RemoteIconButton(props: {
     const [timeoutId, setTimeoutId] = React.useState(-1);
     const [intervalId, setIntervalId] = React.useState(-1);
     const [active, setActive] = React.useState(false);
+    const theme = useTheme();
 
     function startSending() {
         setTimeout(() => {
@@ -66,7 +67,7 @@ export function RemoteIconButton(props: {
         size={props.size}
         style={props.style}
         iconColor={props.iconColor}
-        containerColor={props.containerColor}
+        containerColor={props.containerColor ?? theme.colors.secondaryContainer}
         onPressIn={(e) => startSending()}
         onPressOut={(e) => stopSending()}
         onPointerLeave={() => stopSending()}
