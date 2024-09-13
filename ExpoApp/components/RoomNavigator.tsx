@@ -1,11 +1,10 @@
 import {ActivityIndicator, useTheme} from "react-native-paper";
-import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {currentRoomPage, disableButtons, enableButtons, setRoomPage} from "../utils/Api";
-import {Animated, View} from "react-native";
+import {View} from "react-native";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import {useAppContent} from "./AppContex";
 import {getRoom} from "../utils/Storage";
-import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 import {FadeInView} from "./FadeInView";
 
 const Tab = createMaterialTopTabNavigator();
