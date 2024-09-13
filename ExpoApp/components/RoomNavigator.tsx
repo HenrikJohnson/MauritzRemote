@@ -23,7 +23,7 @@ export function RoomNavigator(props: {
         useState(undefined as string | undefined);
 
     async function fetchCurrentPage() {
-        setPage(await currentRoomPage(appContext, props.room));
+        setPage(Math.max(await currentRoomPage(appContext, props.room), 0));
     }
 
     async function roomPageChanged(index: number) {

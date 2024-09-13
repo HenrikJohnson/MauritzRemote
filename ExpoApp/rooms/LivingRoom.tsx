@@ -8,9 +8,10 @@ import {LivingRoomMediaCenterScreen} from "../screens/MediaCenterScreen";
 import {CompressSwedishScreen} from "../screens/SwedishScreen";
 import {apiSend} from "../utils/Api";
 import {PowerVolume} from "../components/PowerVolume";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {getScreenHeight, getScreenWidth} from "../utils/Layout";
 import {useAppContent} from "../components/AppContex";
+import {Dimensions} from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -41,6 +42,6 @@ export function LivingRoom() {
                 tabBarIcon: (props) => <SwedishIcon width={32} height={32} fill={props.color}/>
             }}/>
         </RoomNavigator>
-        <PowerVolume width={getScreenWidth()} height={getScreenHeight()} includeCompress={true}/>
+        <PowerVolume includeCompress={true}/>
     </>
 }

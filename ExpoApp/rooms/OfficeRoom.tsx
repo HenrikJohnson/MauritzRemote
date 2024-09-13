@@ -7,17 +7,19 @@ import {RoomNavigator} from "../components/RoomNavigator";
 import {CableScreen} from "../screens/CableScreen";
 import {apiSend} from "../utils/Api";
 import {SwedishScreen} from "../screens/SwedishScreen";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {PowerVolume} from "../components/PowerVolume";
 import {GameScreen} from "../screens/GameScreen";
 import {OfficeMediaCenterScreen, Zone2MediaCenterScreen} from "../screens/MediaCenterScreen";
 import {getScreenHeight, getScreenWidth} from "../utils/Layout";
 import {useAppContent} from "../components/AppContex";
+import {Dimensions} from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
 export function OfficeRoom(props: { room?: string, mediaComponent?: React.ComponentType }) {
     const keyboard = useAppContent();
+
     return <>
         <RoomNavigator screens={["Media", "Roku", "Swedish", "Games"]} room={props.room ?? "Office"}
                        onTabPress={(index) => {
@@ -48,7 +50,7 @@ export function OfficeRoom(props: { room?: string, mediaComponent?: React.Compon
                 tabBarIcon: (props) => <GameIcon width={32} height={32} fill={props.color}/>
             }}/>
         </RoomNavigator>
-        <PowerVolume width={getScreenWidth()} height={getScreenHeight()}/>
+        <PowerVolume/>
     </>
 }
 

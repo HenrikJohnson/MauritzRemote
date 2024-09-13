@@ -4,9 +4,10 @@ import {RoomNavigator} from "../components/RoomNavigator";
 import {CableScreen} from "../screens/CableScreen";
 import {apiSend} from "../utils/Api";
 import {PowerVolume} from "../components/PowerVolume";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {getScreenHeight, getScreenWidth} from "../utils/Layout";
 import {useAppContent} from "../components/AppContex";
+import {Dimensions} from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,6 +22,6 @@ export function BedRoom() {
                 tabBarIcon: (props) => <CableIcon width={32} height={32} fill={props.color}/>
             }}/>
         </RoomNavigator>
-        <PowerVolume width={getScreenWidth()} height={getScreenHeight()}/>
+        <PowerVolume/>
     </>
 }

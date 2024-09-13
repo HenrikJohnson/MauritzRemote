@@ -2,15 +2,33 @@ import {useTheme} from "react-native-paper";
 import PowerOffIcon from "../assets/icons/power_off.svg";
 import {RemoteIconButton} from "./RemoteIconButton";
 import {useAppContent} from "./AppContex";
+import {useEffect, useState} from "react";
+import {getScreenHeight, getScreenWidth} from "../utils/Layout";
+import {Dimensions} from "react-native";
 
-export function PowerVolume(props: { width: number, height: number, includeCompress?: boolean }) {
+export function PowerVolume(props: { includeCompress?: boolean }) {
     const theme = useTheme();
     const appContext = useAppContent();
 
-    const navigationSize = (Math.min(props.width / 2, 2 * props.height / 5) + 20) *
-        (appContext.expandedNavigation ? 1.5 : 1.0);
+    const [dimensions, setDimensions] = useState(() => {
+        return { width: getScreenWidth(), height: getScreenHeight() }
+    });
 
-    const buttonSize = Math.min(Math.min((props.height - navigationSize) / 5, props.width / 5), 130);
+    useEffect(() => {
+        const subscription = Dimensions.addEventListener(
+            'change',
+            ({window, screen}) => {
+                setDimensions({ width: getScreenWidth(), height: getScreenHeight()});
+            },
+        );
+        return () => subscription?.remove();
+    }, []);
+
+    const navigationSize = (Math.min(dimensions.width / 2, 2 * dimensions.height / 5) * (appContext.expandedNavigation ? 1.5 : 1.0) + 20);
+
+    const buttonSize = Math.min(Math.min((dimensions.height - navigationSize) / 5 - 20, dimensions.width / 5), 130);
+
+    console.log(dimensions, navigationSize, buttonSize);
 
     return <>
         <RemoteIconButton style={{
