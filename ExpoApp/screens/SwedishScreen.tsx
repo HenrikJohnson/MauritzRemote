@@ -16,8 +16,8 @@ export function SwedishScreen(props: { includeCompress?: boolean }) {
     }}>
         {({width, height}) => {
             return <>
-                <BasicPlayback width={width} height={height} postfix={"AmazonTV"}/>
                 <View style={{flex: 1}}/>
+                <BasicPlayback width={width} height={height} postfix={"AmazonTV"}/>
                 <View style={{
                     flex: 2,
                     flexDirection: 'row',

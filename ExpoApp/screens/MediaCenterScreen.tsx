@@ -19,10 +19,10 @@ export function MediaCenterScreen(props: { includeCompress?: boolean, room: stri
     }}>
         {({width, height}) => {
             return <>
+                <View style={{flex: 1}}/>
+
                 <AdditionalPlayback width={width} height={height} postfix={"Media_Center"}/>
                 <BasicPlayback width={width} height={height} postfix={"Media_Center"}/>
-
-                <View style={{flex: 1}}/>
 
                 <View style={{
                     flex: 2,

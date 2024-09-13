@@ -22,6 +22,8 @@ export function CableScreen() {
             const buttonSize = Math.min(Math.min((width - 20) / 6, height / 8), 140);
 
             return <>
+                <View style={{flex: 1}}/>
+
                 <IconButton
                     mode={"contained-tonal"}
                     icon={"keyboard"}
@@ -38,8 +40,6 @@ export function CableScreen() {
                 />
 
                 <BasicPlayback width={width} height={height} postfix={"Cable"}/>
-
-                <View style={{flex: 1}}/>
 
                 <View style={{
                     flex: 2,

@@ -17,9 +17,9 @@ export function GameScreen(props: { includeCompress?: boolean }) {
     }}>
         {({width, height}) => {
             return <>
+                <View style={{flex: 1}}/>
                 <AdditionalPlayback width={width} height={height} postfix={"Media_Center"}/>
                 <BasicPlayback width={width} height={height} postfix={"Media_Center"}/>
-                <View style={{flex: 1}}/>
                 <View style={{
                     flex: 2,
                     flexDirection: 'row',
