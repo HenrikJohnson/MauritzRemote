@@ -5,7 +5,7 @@ import {ContainerWithDimensions} from "../components/ContainerWithDimensions";
 import React from "react";
 import {BasicPlayback} from "../components/BasicPlayback";
 import {AdditionalPlayback} from "../components/AdditionalPlayback";
-import {BottomGameButtons, TopChannelButtons, TopGameButtons} from "../components/ChannelButtons";
+import {BottomGameButtons, TopGameButtons} from "../components/ChannelButtons";
 
 export function GameScreen(props: { includeCompress?: boolean }) {
     return <ContainerWithDimensions style={{

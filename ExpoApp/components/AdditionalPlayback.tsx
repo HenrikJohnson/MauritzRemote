@@ -2,7 +2,7 @@ import {RemoteIconButton} from "./RemoteIconButton";
 import {RemoteButton} from "./RemoteButton";
 import {Icon, Text, useTheme} from "react-native-paper"
 
-export function AdditionalPlayback(props: { width: number, height: number, postfix: string}) {
+export function AdditionalPlayback(props: { width: number, height: number, postfix: string }) {
     const buttonSize = Math.min(Math.min((props.width - 20) / 6, props.height / 8), 150);
 
     const theme = useTheme();
@@ -26,7 +26,7 @@ export function AdditionalPlayback(props: { width: number, height: number, postf
             left: 10,
             bottom: 10 + buttonSize + 30,
         }}
-                      icon={() => <Icon source={"undo"} size={buttonSize/3}/>}
+                      icon={() => <Icon source={"undo"} size={buttonSize / 3}/>}
                       action={"Step_Back_In_" + props.postfix}
                       mode={"contained-tonal"}>
             <Text variant={"labelSmall"}>-30s</Text>
@@ -41,7 +41,7 @@ export function AdditionalPlayback(props: { width: number, height: number, postf
             left: 10 + (buttonSize + 10) * 2,
             bottom: 10 + buttonSize + 30,
         }}
-                      icon={() => <Icon source={"redo"} size={buttonSize/3}/>}
+                      icon={() => <Icon source={"redo"} size={buttonSize / 3}/>}
                       action={"Step_Forward_In_" + props.postfix}
                       mode={"contained-tonal"}>
             <Text variant={"labelSmall"}>+30s</Text>

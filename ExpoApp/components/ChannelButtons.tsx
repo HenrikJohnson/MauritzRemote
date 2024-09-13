@@ -26,7 +26,11 @@ import VCSecondIcon from "../assets/icons/webcam2.svg";
 import {RemoteIconButton} from "./RemoteIconButton";
 import {useTheme} from "react-native-paper";
 
-export function ColumnOfButtons(props: {children: React.ReactNode, size: number, alignSelf?: "flex-start" | "flex-end"}) {
+export function ColumnOfButtons(props: {
+    children: React.ReactNode,
+    size: number,
+    alignSelf?: "flex-start" | "flex-end"
+}) {
     return <View style={{
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -40,7 +44,7 @@ export function ColumnOfButtons(props: {children: React.ReactNode, size: number,
     </View>
 }
 
-export function RowOfButtons(props: {children: React.ReactNode}) {
+export function RowOfButtons(props: { children: React.ReactNode }) {
     return <View style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -51,14 +55,15 @@ export function RowOfButtons(props: {children: React.ReactNode}) {
     </View>
 }
 
-function ChannelIcon(props: { size: number, action: string, icon: FC<SvgProps>, flex?: number}) {
+function ChannelIcon(props: { size: number, action: string, icon: FC<SvgProps>, flex?: number }) {
     const buttonSize = props.size / 3;
     const iconSize = props.size / 3.5;
 
     const theme = useTheme();
 
     return <FlexContainer flex={props.flex}>
-        <RemoteIconButton mode={"outlined"} containerColor={theme.colors.outline} size={buttonSize} action={props.action} icon={() => <props.icon width={iconSize} height={iconSize}/> }/>
+        <RemoteIconButton mode={"outlined"} containerColor={theme.colors.outline} size={buttonSize}
+                          action={props.action} icon={() => <props.icon width={iconSize} height={iconSize}/>}/>
     </FlexContainer>;
 }
 

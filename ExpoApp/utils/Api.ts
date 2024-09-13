@@ -1,17 +1,18 @@
 import {getAuthenticationKey, getRoom} from "./Storage";
-import { encode } from 'base-64';
+import {encode} from 'base-64';
 import {AppContext} from "../components/AppContex";
 
 export async function makeApiCall(appContext: AppContext, url: string, options?: {
     method?: string,
-    auth?: string}) {
+    auth?: string
+}) {
     let auth = options?.auth;
     if (!auth) {
         auth = getAuthenticationKey();
     }
     auth = encode("webapp:" + auth);
 
-    const method =  options?.method || "GET";
+    const method = options?.method || "GET";
     const fullUrl = "https://home.henrik.org/remote/" + url;
 
     console.debug(`${method} ${fullUrl}`)
@@ -90,11 +91,11 @@ export async function apiIdle(appContext: AppContext, action: string) {
 }
 
 export interface MediaItem {
-    itemId : string;
+    itemId: string;
     artist: string;
     album?: string;
     title?: string;
-    duration? : number;
+    duration?: number;
     played?: number;
     voted?: number;
     trackNumber?: number;
@@ -107,7 +108,7 @@ export interface QueueItem extends MediaItem {
     queueId: number;
 }
 
-export async function queueContents(appContext: AppContext, queue: string) : Promise<QueueItem[]>{
+export async function queueContents(appContext: AppContext, queue: string): Promise<QueueItem[]> {
     try {
         const response = await makeApiCall(appContext, "queue/" + getRoom() + "/" + queue);
 
@@ -121,7 +122,7 @@ export async function query(appContext: AppContext,
                             queue: string,
                             type: string,
                             criteria: string,
-                            offset: number, size: number) : Promise<MediaItem[]> {
+                            offset: number, size: number): Promise<MediaItem[]> {
     try {
         const response = await makeApiCall(appContext, "search/" + queue + "/" + type.replace(" ", "") + "/"
             + encodeURIComponent(criteria) + "?offset=" + offset + "&size=" + size);

@@ -8,7 +8,7 @@ import {AdditionalPlayback} from "../components/AdditionalPlayback";
 import {MediaType} from "../components/MediaType";
 import {MediaCenterSettings} from "../components/MediaCenterSettings";
 
-export function MediaCenterScreen(props: { includeCompress?: boolean, room: string}) {
+export function MediaCenterScreen(props: { includeCompress?: boolean, room: string }) {
     return <ContainerWithDimensions style={{
         flexDirection: 'column-reverse',
         justifyContent: 'space-between',

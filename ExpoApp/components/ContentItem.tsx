@@ -4,7 +4,6 @@ import {Icon, Text} from "react-native-paper";
 import React, {PureComponent} from "react";
 import {getRoom} from "../utils/Storage";
 import {AppContext} from "./AppContex";
-import {GestureResponderEvent} from "react-native/Libraries/Types/CoreEventTypes";
 
 function fixTitle(title?: string) {
     return (title ?? "").replace(/^Episode /, "");
@@ -33,7 +32,8 @@ export class ContentItem extends PureComponent<ContentItemProps> {
     }
 
     render() {
-        const contents = <View style={{flexDirection: "row", padding: 5, height: 85, opacity: this.props.isDragged ? 0.7 : 1.0}}>
+        const contents = <View
+            style={{flexDirection: "row", padding: 5, height: 85, opacity: this.props.isDragged ? 0.7 : 1.0}}>
             <View style={{flex: 1, marginRight: 5, justifyContent: "space-around"}}>
                 <Text variant={"labelLarge"}>{this.props.item.artist}</Text>
                 <Text variant={"labelMedium"}>{fixTitle(this.props.item.title)}</Text>

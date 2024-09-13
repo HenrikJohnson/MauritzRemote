@@ -43,7 +43,7 @@ export function RoomNavigator(props: {
     if (page >= 0) {
         let tabName = props.screens[page];
 
-        return <Tab.Navigator initialRouteName={tabName} screenListeners={({ navigation }) => ({
+        return <Tab.Navigator initialRouteName={tabName} screenListeners={({navigation}) => ({
             swipeStart: (e) => {
                 disableButtons();
             },
@@ -52,7 +52,7 @@ export function RoomNavigator(props: {
             },
             tabPress: (e) => {
                 if (e.target === (lastRoom ?? navigation.getState()?.routes[page].key)) {
-                    const index = navigation.getState()?.routes.findIndex((route : any) => route.key === e.target);
+                    const index = navigation.getState()?.routes.findIndex((route: any) => route.key === e.target);
                     if (index >= 0) {
                         roomPageChanged(index);
                         if (props.onTabPress) {

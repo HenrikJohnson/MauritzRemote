@@ -61,7 +61,7 @@ function DeletableContentItem(props: DeletableContentItemProps) {
 }
 
 
-export function QueueList(props: {queue: string}) {
+export function QueueList(props: { queue: string }) {
     const [data, setData] = useState([] as QueueItem[]);
     const [refreshing, setRefreshing] = useState(false);
     const appContext = useAppContent();

@@ -11,7 +11,7 @@ const SECONDARY_DELAY = 300;
 const REPEAT_INTERVAL = 50;
 
 export function RemoteButton(props: {
-    children : React.ReactNode, action: string, size?: number,
+    children: React.ReactNode, action: string, size?: number,
     style?: StyleProp<ViewStyle>,
     contentStyle?: StyleProp<ViewStyle>,
     mode?: "elevated" | "outlined" | "contained-tonal" | "contained" | "text",
@@ -59,10 +59,10 @@ export function RemoteButton(props: {
     }
 
     const styles: any = {
-        ...(props.style??{} as any), display: 'flex', justifyContent: 'center', alignItems: 'center'
+        ...(props.style ?? {} as any), display: 'flex', justifyContent: 'center', alignItems: 'center'
     };
     const contentStyle: any = {
-        ...(props.contentStyle??{} as any)
+        ...(props.contentStyle ?? {} as any)
     };
     if (props.size) {
         contentStyle.width = props.size;
@@ -79,7 +79,7 @@ export function RemoteButton(props: {
         onPressIn={(e) => startSending()}
         onPressOut={(e) => stopSending()}
         onPointerLeave={() => stopSending()}
-        >
+    >
         {props.children}
     </Button>
 }

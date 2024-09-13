@@ -1,6 +1,6 @@
 import {RemoteIconButton} from "./RemoteIconButton";
 
-export function BasicPlayback(props: { width: number, height: number, postfix: string}) {
+export function BasicPlayback(props: { width: number, height: number, postfix: string }) {
     const buttonSize = Math.min(Math.min((props.width - 20) / 6, props.height / 8), 150);
 
     return <>

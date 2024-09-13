@@ -1,9 +1,6 @@
 import {View} from "react-native";
 import {NavigationButtons} from "../components/NavigationButtons";
-import {
-    BottomSwedishChannelButtons,
-    TopSwedishChannelButtons
-} from "../components/ChannelButtons";
+import {BottomSwedishChannelButtons, TopSwedishChannelButtons} from "../components/ChannelButtons";
 import {ContainerWithDimensions} from "../components/ContainerWithDimensions";
 
 import React from "react";

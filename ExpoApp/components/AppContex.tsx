@@ -16,7 +16,7 @@ export interface AppContext {
 
 const appContext = createContext({} as AppContext);
 
-export function useAppContent() : AppContext {
+export function useAppContent(): AppContext {
     return React.useContext(appContext);
 }
 

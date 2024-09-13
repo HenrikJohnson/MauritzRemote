@@ -1,6 +1,6 @@
 import {View} from "react-native";
 import {Text} from "react-native-paper";
-import { ContainerWithDimensions } from "./ContainerWithDimensions";
+import {ContainerWithDimensions} from "./ContainerWithDimensions";
 import {StyleProp} from "react-native/Libraries/StyleSheet/StyleSheet";
 import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 import {RemoteButton} from "./RemoteButton";

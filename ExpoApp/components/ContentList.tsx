@@ -6,7 +6,7 @@ import {TextInput} from "react-native-paper";
 import {useAppContent} from "./AppContex";
 import {ContentListSort} from "./ContentListSort";
 
-export function ContentList(props: {queue: string}) {
+export function ContentList(props: { queue: string }) {
     const [data, setData] = useState([] as MediaItem[]);
     const [sort, setSort] = useState("Entered" as string);
     const [refreshing, setRefreshing] = useState(false);
@@ -55,7 +55,9 @@ export function ContentList(props: {queue: string}) {
                 }}
                 refreshing={refreshing}
                 initialNumToRender={50}
-                onMomentumScrollBegin = {() => {setEndReachedCalledDuringMomentum(false);}}
+                onMomentumScrollBegin={() => {
+                    setEndReachedCalledDuringMomentum(false);
+                }}
                 onRefresh={() => {
                     setRefreshing(true);
                     fetchContents(true);

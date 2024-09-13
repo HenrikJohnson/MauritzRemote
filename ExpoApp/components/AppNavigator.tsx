@@ -8,7 +8,7 @@ import OfficeIcon from "../assets/icons/office.svg";
 import Zone2Icon from "../assets/icons/zone2.svg";
 import {BedRoom} from "../rooms/BedRoom";
 import BedRoomIcon from "../assets/icons/bedroom.svg";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {createDrawerNavigator, DrawerContentScrollView, DrawerItemList} from "@react-navigation/drawer";
 import {useAppContent} from "./AppContex";
 import {QueueManagement} from "./QueueManagement";

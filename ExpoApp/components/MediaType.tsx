@@ -3,7 +3,7 @@ import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 import {ContainerWithDimensions} from "./ContainerWithDimensions";
 import React, {useEffect, useState} from "react";
 
-import {Icon, SegmentedButtons, IconButton, useTheme} from "react-native-paper";
+import {Icon, IconButton, SegmentedButtons, useTheme} from "react-native-paper";
 import {RemoteIconButton} from "./RemoteIconButton";
 import {FlexContainer} from "./FlexContainer";
 import {activeQueue, apiSend} from "../utils/Api";
@@ -31,7 +31,7 @@ export function MediaType(props: {
 
     return <ContainerWithDimensions style={props.style}>
         {({width, height}) => {
-            const buttonStyle : StyleProp<ViewStyle> = {
+            const buttonStyle: StyleProp<ViewStyle> = {
                 height: height / 4,
                 justifyContent: "center",
             };
@@ -102,7 +102,7 @@ export function MediaType(props: {
                         }
                     ]} onValueChange={(e) => {
                     if (currentQueue === e)
-                        switch(e) {
+                        switch (e) {
                             case "Music":
                                 apiSend(appContext, "Play_Music_In_Media_Center");
                                 break;

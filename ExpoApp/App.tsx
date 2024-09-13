@@ -1,6 +1,4 @@
-import {
-    useColorScheme,
-} from 'react-native';
+import {useColorScheme,} from 'react-native';
 import {adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider} from "react-native-paper";
 import {KeyboardStaticView} from "./components/KeyboardStaticView";
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Platform, StatusBar, View} from 'react-native';
+import {Dimensions, Platform, View} from 'react-native';
 import RokuKeyboard from "./RokuKeyboard";
 import {useAppContent} from "./AppContex";
 import {Snackbar} from "react-native-paper";
@@ -43,7 +43,7 @@ export function KeyboardStaticView(props: {
                 }}
                 {...props}>
             </View>
-            { appContext.keyboardView === "roku" &&
+            {appContext.keyboardView === "roku" &&
                 <RokuKeyboard/>
             }
             <Snackbar
@@ -55,7 +55,7 @@ export function KeyboardStaticView(props: {
                         appContext.setNotification(undefined)
                     },
                 }}>
-                {appContext.notification??""}
+                {appContext.notification ?? ""}
             </Snackbar>
         </>
     );

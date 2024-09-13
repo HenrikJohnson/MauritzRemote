@@ -1,6 +1,6 @@
 import React, {useCallback, useRef, useState} from "react";
-import {View, Keyboard} from "react-native";
-import {TextInput, useTheme, Button} from "react-native-paper";
+import {Keyboard, View} from "react-native";
+import {Button, TextInput, useTheme} from "react-native-paper";
 import {ContainerWithDimensions} from "./ContainerWithDimensions";
 
 const CRITERIA_OPTIONS = [
@@ -12,7 +12,7 @@ const CRITERIA_OPTIONS = [
     "Album"
 ];
 
-export function ContentListSort(props: {sort: string, onSort: (sort: string) => void}) {
+export function ContentListSort(props: { sort: string, onSort: (sort: string) => void }) {
     const [userinput, setUserinput] = useState(props.sort);
     const [show, setShow] = useState(false);
     const ref = useRef<View>();
@@ -35,7 +35,7 @@ export function ContentListSort(props: {sort: string, onSort: (sort: string) => 
     );
 
     const hidePicker = useCallback(
-        (item : string) => {
+        (item: string) => {
             setShow(false)
             props.onSort(item)
         },
@@ -68,11 +68,13 @@ export function ContentListSort(props: {sort: string, onSort: (sort: string) => 
                         }}
                     >
                         {
-                            CRITERIA_OPTIONS.map(item => <Button key={item} mode={"text"} contentStyle={{"alignSelf": "flex-start"}} onPress={(e) => {
-                                    hidePicker(item);
-                                    e.stopPropagation();
-                                    ref?.current?.blur();
-                                }}>
+                            CRITERIA_OPTIONS.map(item => <Button key={item} mode={"text"}
+                                                                 contentStyle={{"alignSelf": "flex-start"}}
+                                                                 onPress={(e) => {
+                                                                     hidePicker(item);
+                                                                     e.stopPropagation();
+                                                                     ref?.current?.blur();
+                                                                 }}>
                                     {item}
                                 </Button>
                             )

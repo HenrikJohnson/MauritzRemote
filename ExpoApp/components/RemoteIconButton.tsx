@@ -11,7 +11,7 @@ const SECONDARY_DELAY = 300;
 const REPEAT_INTERVAL = 50;
 
 export function RemoteIconButton(props: {
-    icon : IconSource,
+    icon: IconSource,
     action: string,
     size?: number,
     style?: StyleProp<ViewStyle>,
@@ -71,5 +71,5 @@ export function RemoteIconButton(props: {
         onPressIn={(e) => startSending()}
         onPressOut={(e) => stopSending()}
         onPointerLeave={() => stopSending()}
-        />
+    />
 }

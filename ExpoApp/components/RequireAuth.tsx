@@ -1,17 +1,18 @@
 import {
     getAuthenticated,
     getAuthenticationKey,
-    getRoom, initializeStorage,
+    getRoom,
+    initializeStorage,
     setAuthenticated,
     setAuthenticationKey
 } from "../utils/Storage";
 import {useEffect, useState} from "react";
 import {View} from "react-native";
-import {ActivityIndicator, TextInput, Button, Text, Dialog, Portal, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Button, Dialog, Portal, Text, TextInput, useTheme} from 'react-native-paper';
 import {makeApiCall} from "../utils/Api";
 import {useAppContent} from "./AppContex";
 
-export function RequireAuth(props:  {
+export function RequireAuth(props: {
     children: React.ReactNode
 }) {
     const [hasAuthed, setHasAuthed] = useState(getAuthenticated());
@@ -80,8 +81,8 @@ export function RequireAuth(props:  {
                             <Dialog.Title>Provide API key</Dialog.Title>
                             <Dialog.Content>
                                 <TextInput
-                                label={"API key"} value={apiKey}
-                                onChangeText={(text) => setApiKey(text)}/>
+                                    label={"API key"} value={apiKey}
+                                    onChangeText={(text) => setApiKey(text)}/>
                             </Dialog.Content>
                             <Dialog.Actions>
                                 <Button onPress={submitAuth}>OK</Button>

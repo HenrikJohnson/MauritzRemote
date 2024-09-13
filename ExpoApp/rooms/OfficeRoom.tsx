@@ -16,7 +16,7 @@ import {useAppContent} from "../components/AppContex";
 
 const Tab = createMaterialTopTabNavigator();
 
-export function OfficeRoom(props: {room?: string, mediaComponent?: React.ComponentType}) {
+export function OfficeRoom(props: { room?: string, mediaComponent?: React.ComponentType }) {
     const keyboard = useAppContent();
     return <>
         <RoomNavigator screens={["Media", "Roku", "Swedish", "Games"]} room={props.room ?? "Office"}
