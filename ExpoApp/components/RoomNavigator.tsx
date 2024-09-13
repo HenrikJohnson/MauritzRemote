@@ -4,6 +4,7 @@ import {currentRoomPage, disableButtons, enableButtons, setRoomPage} from "../ut
 import {View} from "react-native";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import {useAppContent} from "./AppContex";
+import {getRoom} from "../utils/Storage";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -34,8 +35,10 @@ export function RoomNavigator(props: {
     }
 
     useEffect(() => {
-        fetchCurrentPage();
-    }, []);
+        if (getRoom() === props.room) {
+            fetchCurrentPage();
+        }
+    }, [appContext.refreshToken]);
 
     if (page >= 0) {
         let tabName = props.screens[page];

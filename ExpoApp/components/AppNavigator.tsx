@@ -1,6 +1,6 @@
 import {getRoom, setRoom} from "../utils/Storage";
-import {Platform, StyleSheet, View} from "react-native";
-import {Checkbox, IconButton, Switch, Text} from "react-native-paper";
+import {AppState, Platform, StyleSheet, View} from "react-native";
+import {IconButton, Switch, Text} from "react-native-paper";
 import {LivingRoom} from "../rooms/LivingRoom";
 import LivingRoomIcon from "../assets/icons/livingroom.svg";
 import {OfficeRoom, Zone2OfficeRoom} from "../rooms/OfficeRoom";
@@ -8,7 +8,7 @@ import OfficeIcon from "../assets/icons/office.svg";
 import Zone2Icon from "../assets/icons/zone2.svg";
 import {BedRoom} from "../rooms/BedRoom";
 import BedRoomIcon from "../assets/icons/bedroom.svg";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {createDrawerNavigator, DrawerContentScrollView, DrawerItemList} from "@react-navigation/drawer";
 import {useAppContent} from "./AppContex";
 import {QueueManagement} from "./QueueManagement";
@@ -53,6 +53,15 @@ function CustomDrawerContent(props: any) {
 export function AppNavigator() {
     const appContext = useAppContent();
 
+    useEffect(() => {
+        const subscription = AppState.addEventListener('change',
+            state => {
+                if (state === "active")
+                    appContext.updateRefreshToken();
+            });
+        return () => subscription.remove();
+    }, []);
+
     return <>
         <Drawer.Navigator initialRouteName={getRoom()} drawerContent={CustomDrawerContent}
                           screenListeners={{
@@ -61,6 +70,7 @@ export function AppNavigator() {
                                   if (newCurrentRoom && getRoom() !== newCurrentRoom) {
                                       setRoom(newCurrentRoom);
                                       appContext.setKeyboardView(undefined);
+                                      appContext.updateRefreshToken();
                                   }
                               }
                           }}

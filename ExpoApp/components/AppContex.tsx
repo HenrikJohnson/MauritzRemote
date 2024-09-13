@@ -9,7 +9,9 @@ export interface AppContext {
     setExpandedNavigation: (expanded: boolean) => void;
     setNotification: (notification?: string) => void;
     queueState: number,
-    setQueueState: (state: number) => void;
+    setQueueState: (state: number) => void,
+    refreshToken: number,
+    updateRefreshToken: () => void
 }
 
 const appContext = createContext({} as AppContext);
@@ -26,6 +28,7 @@ export function AppContextProvider(props: {
     const [notification, setNotification]
         = useState(undefined as string | undefined);
     const [queueState, setQueueState] = useState(1);
+    const [refreshToken, setRefreshToken] = useState(1);
     const [expandedNavigation, setExpandedNavigation] = useState(() => getExpanded());
 
     function setExpandedNavigationPersist(val: boolean) {
@@ -42,7 +45,9 @@ export function AppContextProvider(props: {
             queueState: queueState,
             setQueueState: setQueueState,
             expandedNavigation: expandedNavigation,
-            setExpandedNavigation: setExpandedNavigationPersist
+            setExpandedNavigation: setExpandedNavigationPersist,
+            refreshToken: refreshToken,
+            updateRefreshToken: () => setRefreshToken((oldValue) => oldValue + 1)
         }}>
             {props.children}
         </appContext.Provider>
