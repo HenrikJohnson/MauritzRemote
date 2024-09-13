@@ -63,7 +63,8 @@ export function AppNavigator() {
     }, []);
 
     return <>
-        <Drawer.Navigator initialRouteName={getRoom()} drawerContent={CustomDrawerContent}
+        <Drawer.Navigator initialRouteName={getRoom()}
+                          drawerContent={CustomDrawerContent}
                           screenListeners={{
                               state: (e) => {
                                   const newCurrentRoom = e.data.state.routeNames[e.data.state.index];

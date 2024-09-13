@@ -19,19 +19,16 @@ export function RoomNavigator(props: {
     const appContext = useAppContent();
 
     const [page, setPage] = useState(props.screens.length > 1 ? -1 : 0);
-    const [lastRoom, setLastRoom] =
-        useState(undefined as string | undefined);
 
     async function fetchCurrentPage() {
-        setPage(await currentRoomPage(appContext, props.room));
+        const newPage = await currentRoomPage(appContext, props.room);
+        if (page !== newPage) {
+            setPage(newPage);
+        }
     }
 
     async function roomPageChanged(index: number) {
-        if (index !== page) {
-            setPage(index);
-            appContext.setKeyboardView(undefined);
-            await setRoomPage(appContext, index, props.room);
-        }
+        await setRoomPage(appContext, index, props.room);
     }
 
     useEffect(() => {
@@ -40,27 +37,37 @@ export function RoomNavigator(props: {
         }
     }, [appContext.refreshToken]);
 
+    useEffect(() => {
+        if (getRoom() !== props.room && page >= 0) {
+            setPage(-1);
+        }
+    });
+
+    console.log("RoomNavigator", props.room, page);
+
     if (page >= 0) {
         let tabName = props.screens[page];
 
-        return <Tab.Navigator initialRouteName={tabName} screenListeners={({navigation}) => ({
+        return <Tab.Navigator keyboardDismissMode={"on-drag"} initialRouteName={tabName} screenListeners={({navigation}) => ({
             swipeStart: (e) => {
                 disableButtons();
             },
             swipeEnd: (e) => {
                 enableButtons();
             },
+            state: () => {
+                const index = navigation.getState()?.index ?? 0;
+                setPage(index);
+            },
             tabPress: (e) => {
-                if (e.target === (lastRoom ?? navigation.getState()?.routes[page].key)) {
-                    const index = navigation.getState()?.routes.findIndex((route: any) => route.key === e.target);
-                    if (index >= 0) {
-                        roomPageChanged(index);
-                        if (props.onTabPress) {
-                            props.onTabPress(index);
-                        }
+                const index = navigation.getState()?.routes.findIndex((route: any) => route.key === e.target);
+                if (index == page) {
+                    roomPageChanged(index);
+                    if (props.onTabPress) {
+                        props.onTabPress(index);
                     }
                 }
-                setLastRoom(e.target);
+                setPage(index);
             }
         })}>
             {props.children}
