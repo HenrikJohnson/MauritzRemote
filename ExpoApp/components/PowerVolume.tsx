@@ -24,7 +24,7 @@ export function PowerVolume(props: { includeCompress?: boolean }) {
         return () => subscription?.remove();
     }, []);
 
-    const navigationSize = (Math.min(dimensions.width / 2, 2 * dimensions.height / 5) * (appContext.expandedNavigation ? 1.5 : 1.0) + 20);
+    const navigationSize = (Math.min(dimensions.width / 2, 2 * dimensions.height / 5 - 50)) * (appContext.expandedNavigation ? 1.5 : 1.0) + 20;
 
     const buttonSize = Math.min(Math.min((dimensions.height - navigationSize) / 5 - 20, dimensions.width / 5), 130);
 
