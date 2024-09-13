@@ -55,10 +55,10 @@ export function NavigationButtons(props: {
                                 <Text variant={textSize}>{props.additionalText[0]}</Text>
                             </RemoteButton>
                         </FlexContainer>
-                        <FlexContainer flex={2}>
-                            <RemoteIconButton icon={"chevron-up"} mode={"contained"} size={buttonSize}
+                        <View style={{flex: 1, flexDirection: "column", alignItems: "center", top: -10}}>
+                            <RemoteIconButton icon={"chevron-up"} mode={"contained"} size={buttonSize * 1.5}
                                               action={"Go_Up_In_" + props.postFix}/>
-                        </FlexContainer>
+                        </View>
                         <FlexContainer flex={3}>
                             <RemoteButton action={props.additionalActions[1]} contentStyle={{
                                 width: size * 3 / 9
@@ -75,10 +75,10 @@ export function NavigationButtons(props: {
                             flex: 3,
                         }
                     }>
-                        <FlexContainer flex={4}>
-                            <RemoteIconButton icon={"chevron-left"} mode={"contained"} size={buttonSize}
+                        <View style={{flex: 4, flexDirection: "row", alignItems: "center"}}>
+                            <RemoteIconButton icon={"chevron-left"} mode={"contained"} size={buttonSize * 1.5}
                                               action={"Go_Left_In_" + props.postFix}/>
-                        </FlexContainer>
+                        </View>
                         <FlexContainer flex={4}>
                             <ContainerWithDimensions style={{
                                 height: "100%",
@@ -98,10 +98,10 @@ export function NavigationButtons(props: {
                                 }}
                             </ContainerWithDimensions>
                         </FlexContainer>
-                        <FlexContainer flex={4}>
-                            <RemoteIconButton icon={"chevron-right"} mode={"contained"} size={buttonSize}
+                        <View style={{flex: 4, flexDirection: "row-reverse", alignItems: "center"}}>
+                            <RemoteIconButton icon={"chevron-right"} mode={"contained"} size={buttonSize * 1.5}
                                               action={"Go_Right_In_" + props.postFix}/>
-                        </FlexContainer>
+                        </View>
                     </View>
                     <View style={
                         {
@@ -118,10 +118,10 @@ export function NavigationButtons(props: {
                                 <Text variant={textSize}>{props.additionalText[2]}</Text>
                             </RemoteButton>
                         </FlexContainer>
-                        <FlexContainer flex={2}>
-                            <RemoteIconButton icon={"chevron-down"} mode={"contained"} size={buttonSize}
+                        <View style={{flex: 1, flexDirection: "column-reverse", alignItems: "center", bottom: -10}}>
+                            <RemoteIconButton icon={"chevron-down"} mode={"contained"} size={buttonSize * 1.5}
                                               action={"Go_Down_In_" + props.postFix}/>
-                        </FlexContainer>
+                        </View>
                         <FlexContainer flex={3}>
                             <RemoteButton action={props.additionalActions[3]} contentStyle={{
                                 width: size * 3 / 9

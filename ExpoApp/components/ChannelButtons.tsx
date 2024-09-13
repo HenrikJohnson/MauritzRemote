@@ -62,7 +62,7 @@ function ChannelIcon(props: { size: number, action: string, icon: FC<SvgProps>, 
     const theme = useTheme();
 
     return <FlexContainer flex={props.flex}>
-        <RemoteIconButton mode={"outlined"} containerColor={theme.colors.outline} size={buttonSize}
+        <RemoteIconButton mode={"outlined"} containerColor={theme.colors.tertiaryContainer} size={buttonSize}
                           action={props.action} icon={() => <props.icon width={iconSize} height={iconSize}/>}/>
     </FlexContainer>;
 }

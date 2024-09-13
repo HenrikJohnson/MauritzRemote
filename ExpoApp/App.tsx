@@ -9,6 +9,9 @@ import {DefaultTheme, NavigationContainer} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
 import {RequireAuth} from "./components/RequireAuth";
 
+MD3DarkTheme.colors.tertiaryContainer = "#555";
+MD3LightTheme.colors.tertiaryContainer = "#999";
+
 export default function App() {
 
     const colorScheme = useColorScheme();
