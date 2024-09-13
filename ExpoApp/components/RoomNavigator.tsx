@@ -43,8 +43,6 @@ export function RoomNavigator(props: {
         }
     });
 
-    console.log("RoomNavigator", props.room, page);
-
     if (page >= 0) {
         let tabName = props.screens[page];
 
