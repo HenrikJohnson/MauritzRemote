@@ -1,6 +1,6 @@
 import {makeApiCall, MediaItem} from "../utils/Api";
 import {Pressable, View} from "react-native";
-import {Icon, Text} from "react-native-paper";
+import {Icon, MD3Theme, Text, useTheme} from "react-native-paper";
 import React, {PureComponent} from "react";
 import {getRoom} from "../utils/Storage";
 import {AppContext} from "./AppContex";
@@ -12,6 +12,7 @@ function fixTitle(title?: string) {
 export interface ContentItemProps {
     item: MediaItem,
     appContext: AppContext,
+    theme: MD3Theme,
     disabled?: boolean,
     queue: string,
     onLongPress?: (() => void) | undefined,
@@ -33,7 +34,9 @@ export class ContentItem extends PureComponent<ContentItemProps> {
 
     render() {
         const contents = <View
-            style={{flexDirection: "row", padding: 5, height: 85, opacity: this.props.isDragged ? 0.7 : 1.0}}>
+            style={{flexDirection: "row", padding: 5, height: 85,
+                backgroundColor: (this.props.item.played??0) > 0 ? this.props.theme.colors.background : this.props.theme.colors.surfaceVariant,
+                opacity: this.props.isDragged ? 0.7 : 1.0}}>
             <View style={{flex: 1, marginRight: 5, justifyContent: "space-around"}}>
                 <Text variant={"labelLarge"}>{this.props.item.artist}</Text>
                 <Text variant={"labelMedium"}>{fixTitle(this.props.item.title)}</Text>

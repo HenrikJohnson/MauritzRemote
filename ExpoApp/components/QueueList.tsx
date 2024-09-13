@@ -14,8 +14,6 @@ export interface DeletableContentItemProps extends ContentItemProps {
 }
 
 function DeletableContentItem(props: DeletableContentItemProps) {
-    const theme = useTheme();
-
     const [dragging, setDragging] = useState(false)
 
     function renderRightActions(dragX: any) {
@@ -45,7 +43,7 @@ function DeletableContentItem(props: DeletableContentItemProps) {
                     }}
                     onPress={() => deleteQueueItem()}>
                     <IconButton size={40} icon={"delete"}
-                                containerColor={theme.colors.errorContainer} iconColor={theme.colors.error}
+                                containerColor={props.theme.colors.errorContainer} iconColor={props.theme.colors.error}
                                 onPress={() => deleteQueueItem()}
                     />
                 </RectButton>
@@ -55,7 +53,7 @@ function DeletableContentItem(props: DeletableContentItemProps) {
 
     return <Swipeable renderRightActions={(progress, dragX) => renderRightActions(dragX)}
                       onActivated={() => setDragging(true)} onEnded={() => () => setDragging(false)}>
-        <ContentItem item={props.item} queue={props.queue} appContext={props.appContext}
+        <ContentItem theme={props.theme} item={props.item} queue={props.queue} appContext={props.appContext}
                      onLongPress={props.onLongPress} isDragged={props.isDragged} disabled={dragging}/>
     </Swipeable>
 }
@@ -65,6 +63,7 @@ export function QueueList(props: { queue: string }) {
     const [data, setData] = useState([] as QueueItem[]);
     const [refreshing, setRefreshing] = useState(false);
     const appContext = useAppContent();
+    const theme = useTheme();
 
     async function fetchContents() {
         setRefreshing(true);
@@ -79,11 +78,11 @@ export function QueueList(props: { queue: string }) {
 
     function renderItem(itemProps: ReorderableListRenderItemInfo<QueueItem>) {
         if (itemProps.index === 0)
-            return <ContentItem item={itemProps.item} queue={props.queue} appContext={appContext}/>
+            return <ContentItem theme={theme} item={itemProps.item} queue={props.queue} appContext={appContext}/>
         else if (itemProps.isDragged)
-            return <ContentItem item={itemProps.item} queue={props.queue} appContext={appContext} isDragged={true}/>
+            return <ContentItem theme={theme} item={itemProps.item} queue={props.queue} appContext={appContext} isDragged={true}/>
         else
-            return <DeletableContentItem item={itemProps.item} queue={props.queue} appContext={appContext}
+            return <DeletableContentItem theme={theme} item={itemProps.item} queue={props.queue} appContext={appContext}
                                          onLongPress={itemProps.drag}
                                          isDragged={itemProps.isDragged}
                                          onDelete={() => {
