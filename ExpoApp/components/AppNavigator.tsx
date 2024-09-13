@@ -71,7 +71,6 @@ export function AppNavigator() {
                                   if (newCurrentRoom && getRoom() !== newCurrentRoom) {
                                       setRoom(newCurrentRoom);
                                       appContext.setKeyboardView(undefined);
-                                      appContext.updateRefreshToken();
                                   }
                               }
                           }}

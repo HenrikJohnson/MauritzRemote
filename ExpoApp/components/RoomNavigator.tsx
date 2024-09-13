@@ -33,6 +33,7 @@ export function RoomNavigator(props: {
 
     useEffect(() => {
         if (getRoom() === props.room && props.screens.length > 1) {
+            setPage(-1);
             fetchCurrentPage();
         }
     }, [appContext.refreshToken]);
