@@ -19,6 +19,7 @@
     "@react-navigation/native": "^6.1.18",
     "@seznam/compose-react-refs": "^1.0.6",
     "base-64": "^1.0.0",
+    "color": "^4.2.3",
     "expo": "~51.0.28",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/base-64": "^1.0.2",
+    "@types/color": "^3.0.6",
     "@types/react": "~18.2.79",
     "@types/react-native-sortable-list": "^0.0.14",
     "react-native-svg-transformer": "^1.5.0",

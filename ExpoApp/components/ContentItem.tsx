@@ -1,9 +1,10 @@
-import {makeApiCall, MediaItem} from "../utils/Api";
+import {makeApiCall, MediaItem, QueueItem} from "../utils/Api";
 import {Pressable, View} from "react-native";
 import {Icon, MD3Theme, Text, useTheme} from "react-native-paper";
 import React, {PureComponent} from "react";
 import {getRoom} from "../utils/Storage";
 import {AppContext} from "./AppContex";
+import Color from "color";
 
 function fixTitle(title?: string) {
     return (title ?? "").replace(/^Episode /, "");
@@ -17,6 +18,16 @@ export interface ContentItemProps {
     queue: string,
     onLongPress?: (() => void) | undefined,
     isDragged?: boolean | undefined
+}
+
+function calculateBackgroundColor(item: MediaItem, theme: MD3Theme) {
+    if (!(item as QueueItem).queueId && (item.played??0) == 0) {
+        const color = Color(theme.colors.background);
+        if (color.luminosity() > 0.5)
+            return "#f7f3f6";
+        return "#242327";
+    }
+    return theme.colors.background;
 }
 
 export class ContentItem extends PureComponent<ContentItemProps> {
@@ -33,9 +44,11 @@ export class ContentItem extends PureComponent<ContentItemProps> {
     }
 
     render() {
+        const backgroundColor = calculateBackgroundColor(this.props.item, this.props.theme);
+
         const contents = <View
             style={{flexDirection: "row", padding: 5, height: 85,
-                backgroundColor: (this.props.item.played??0) > 0 ? this.props.theme.colors.background : this.props.theme.colors.surfaceVariant,
+                backgroundColor: backgroundColor,
                 opacity: this.props.isDragged ? 0.7 : 1.0}}>
             <View style={{flex: 1, marginRight: 5, justifyContent: "space-around"}}>
                 <Text variant={"labelLarge"}>{this.props.item.artist}</Text>
