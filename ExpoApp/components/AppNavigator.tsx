@@ -35,7 +35,7 @@ function CustomDrawerContent(props: any) {
                 </View>
                 <DrawerItemList {...props} />
             </View>
-            <View style={{flexDirection: "row", alignItems: "center", padding: 8, paddingBottom: 32, columnGap: 8}}>
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 8, paddingBottom: 32, columnGap: 8}}>
                 <Text variant={"titleMedium"}>
                     Large navigation
                 </Text>
