@@ -1,13 +1,16 @@
 import {useTheme} from "react-native-paper";
 import PowerOffIcon from "../assets/icons/power_off.svg";
 import {RemoteIconButton} from "./RemoteIconButton";
+import {useAppContent} from "./AppContex";
 
 export function PowerVolume(props: { width: number, height: number, includeCompress?: boolean }) {
     const theme = useTheme();
+    const appContext = useAppContent();
 
-    const navigationSize = (Math.min(props.width / 2, 2 * props.height / 5) - 20);
+    const navigationSize = (Math.min(props.width / 2, 2 * props.height / 5) + 20) *
+        (appContext.expandedNavigation ? 1.5 : 1.0);
 
-    const buttonSize = Math.min(Math.min((props.height - navigationSize) / 5, props.width / 5), 150);
+    const buttonSize = Math.min(Math.min((props.height - navigationSize) / 5, props.width / 5), 130);
 
     return <>
         <RemoteIconButton style={{
