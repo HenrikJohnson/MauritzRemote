@@ -28,8 +28,6 @@ export function PowerVolume(props: { includeCompress?: boolean }) {
 
     const buttonSize = Math.min(Math.min((dimensions.height - navigationSize) / 5 - 20, dimensions.width / 5), 130);
 
-    console.log(dimensions, navigationSize, buttonSize);
-
     return <>
         <RemoteIconButton style={{
             position: 'absolute',

@@ -18,12 +18,12 @@ export function RoomNavigator(props: {
     const theme = useTheme();
     const appContext = useAppContent();
 
-    const [page, setPage] = useState(-1);
+    const [page, setPage] = useState(props.screens.length > 1 ? -1 : 0);
     const [lastRoom, setLastRoom] =
         useState(undefined as string | undefined);
 
     async function fetchCurrentPage() {
-        setPage(Math.max(await currentRoomPage(appContext, props.room), 0));
+        setPage(await currentRoomPage(appContext, props.room));
     }
 
     async function roomPageChanged(index: number) {
@@ -35,7 +35,7 @@ export function RoomNavigator(props: {
     }
 
     useEffect(() => {
-        if (getRoom() === props.room) {
+        if (getRoom() === props.room && props.screens.length > 1) {
             fetchCurrentPage();
         }
     }, [appContext.refreshToken]);
