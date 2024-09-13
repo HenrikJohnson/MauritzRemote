@@ -90,7 +90,9 @@ export function NavigationButtons(props: {
                                     return <RemoteIconButton size={Math.min(width, height)}
                                                              action={"Select_In_" + props.postFix}
                                                              mode={"contained-tonal"}
-                                                             icon={() => <Text variant={largeText}>OK</Text>}/>
+                                                             icon={() => <Text style={{
+                                                                 color: theme.colors.secondary
+                                                             }} variant={largeText}>OK</Text>}/>
                                 }}
                             </ContainerWithDimensions>
                         </FlexContainer>
