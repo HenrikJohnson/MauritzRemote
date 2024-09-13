@@ -4,11 +4,12 @@ import {BottomChannelButtons, TopChannelButtons} from "../components/ChannelButt
 import {ContainerWithDimensions} from "../components/ContainerWithDimensions";
 import React from "react";
 import {BasicPlayback} from "../components/BasicPlayback";
-import {IconButton} from "react-native-paper";
+import {IconButton, useTheme} from "react-native-paper";
 import {useAppContent} from "../components/AppContex";
 
 export function CableScreen() {
     const keyboard = useAppContent();
+    const theme = useTheme();
 
     return <ContainerWithDimensions style={{
             flexDirection: 'column-reverse',
@@ -24,6 +25,7 @@ export function CableScreen() {
                     <IconButton
                         mode={"contained-tonal"}
                         icon={"keyboard"}
+                        containerColor={theme.colors.secondaryContainer}
                         size={buttonSize - 10}
                         style={{
                             position: 'absolute',

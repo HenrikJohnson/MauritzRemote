@@ -3,7 +3,8 @@ import {RemoteButton} from "./RemoteButton";
 import {Icon, Text, useTheme} from "react-native-paper"
 
 export function AdditionalPlayback(props: { width: number, height: number, postfix: string}) {
-    const buttonSize = Math.min((props.width - 20) / 6, props.height / 8);
+    const buttonSize = Math.min(Math.min((props.width - 20) / 6, props.height / 8), 150);
+
     const theme = useTheme();
 
     return <>

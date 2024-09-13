@@ -41,7 +41,7 @@ function CustomDrawerContent(props: any) {
                 </Text>
                 <Switch
                     value={appContext.expandedNavigation}
-                    onChange={(value) => {
+                    onValueChange={(value) => {
                         appContext.setExpandedNavigation(!appContext.expandedNavigation);
                     }}
                 />

@@ -1,5 +1,4 @@
-import {Icon, useTheme} from "react-native-paper";
-import {RemoteButton} from "./RemoteButton";
+import {useTheme} from "react-native-paper";
 import PowerOffIcon from "../assets/icons/power_off.svg";
 import {RemoteIconButton} from "./RemoteIconButton";
 
@@ -8,7 +7,7 @@ export function PowerVolume(props: { width: number, height: number, includeCompr
 
     const navigationSize = (Math.min(props.width / 2, 2 * props.height / 5) - 20);
 
-    const buttonSize = Math.min((props.height - navigationSize) / 5, props.width / 5);
+    const buttonSize = Math.min(Math.min((props.height - navigationSize) / 5, props.width / 5), 150);
 
     return <>
         <RemoteIconButton style={{
@@ -40,15 +39,16 @@ export function PowerVolume(props: { width: number, height: number, includeCompr
                           action={"Mute"}
                           icon={"volume-mute"}/>
 
-        <RemoteIconButton style={{
-            position: 'absolute',
-            right: buttonSize * 2 / 3 + 10,
-            bottom: 10 + buttonSize * 4 / 3 + 10,
-            display: props.includeCompress ? 'flex' : 'none',
-        }}
-                          size={buttonSize * 2 / 3 - 10}
-                          action={"DRC"}
-                          icon={"arrow-collapse-vertical"}/>
+        { props.includeCompress &&
+            <RemoteIconButton style={{
+                position: 'absolute',
+                right: buttonSize * 2 / 3 + 10,
+                bottom: 10 + buttonSize * 4 / 3 + 10,
+            }}
+                              size={buttonSize * 2 / 3 - 10}
+                              action={"DRC"}
+                              icon={"arrow-collapse-vertical"}/>
+        }
 
         <RemoteIconButton style={{
             position: 'absolute',
