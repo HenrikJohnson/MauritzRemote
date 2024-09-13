@@ -7,7 +7,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "build": "eas build --profile preview --platform android --local --non-interactive && eas build --profile preview --platform ios --local --non-interactive",
+    "build": "eas build --profile preview --platform android --local --non-interactive && eas build --profile preview --platform ios --local --non-interactive && eas build --platform android --local --non-interactive",
     "cloudbuild": "eas build --profile preview --platform ios --non-interactive && eas build --platform android --non-interactive",
     "webexport": "expo export -p web"
   },
