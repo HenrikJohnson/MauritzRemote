@@ -70,6 +70,7 @@ export function AppNavigator() {
                                   const newCurrentRoom = e.data.state.routeNames[e.data.state.index];
                                   if (newCurrentRoom && getRoom() !== newCurrentRoom) {
                                       setRoom(newCurrentRoom);
+                                      appContext.updateRefreshToken();
                                       appContext.setKeyboardView(undefined);
                                   }
                               }
