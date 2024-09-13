@@ -19,7 +19,7 @@ export function CableScreen() {
         height: "100%",
     }}>
         {({width, height}) => {
-            const buttonSize = Math.min(Math.min((width - 20) / 6, height / 8), 120);
+            const buttonSize = Math.min(Math.min((width - 20) / 6, height / 8), 140);
 
             return <>
                 <IconButton

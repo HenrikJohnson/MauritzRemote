@@ -38,7 +38,7 @@ export function NavigationButtons(props: {
                     height: size,
                     width: size,
                     top: appContext.expandedNavigation ? 0 : (height - originalSize) / 2,
-                    left: originalSize - size
+                    left: size < width ? 0 : originalSize - size
                 }}>
                     <View style={
                         {
