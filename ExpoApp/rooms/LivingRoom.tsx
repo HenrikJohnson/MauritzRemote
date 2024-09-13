@@ -8,10 +8,8 @@ import {LivingRoomMediaCenterScreen} from "../screens/MediaCenterScreen";
 import {CompressSwedishScreen} from "../screens/SwedishScreen";
 import {apiSend} from "../utils/Api";
 import {PowerVolume} from "../components/PowerVolume";
-import React, {useEffect, useState} from "react";
-import {getScreenHeight, getScreenWidth} from "../utils/Layout";
+import React from "react";
 import {useAppContent} from "../components/AppContex";
-import {Dimensions} from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 

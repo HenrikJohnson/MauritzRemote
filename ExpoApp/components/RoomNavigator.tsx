@@ -1,12 +1,37 @@
 import {ActivityIndicator, useTheme} from "react-native-paper";
-import React, {useEffect, useState} from "react";
+import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
 import {currentRoomPage, disableButtons, enableButtons, setRoomPage} from "../utils/Api";
-import {View} from "react-native";
+import {Animated, View} from "react-native";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import {useAppContent} from "./AppContex";
 import {getRoom} from "../utils/Storage";
+import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 
 const Tab = createMaterialTopTabNavigator();
+
+type FadeInViewProps = PropsWithChildren<{style: ViewStyle}>;
+
+export function FadeInView(props : FadeInViewProps) {
+    const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
+
+    useEffect(() => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+        }).start();
+    }, [fadeAnim]);
+
+    return (
+        <Animated.View // Special animatable View
+            style={{
+                ...props.style,
+                opacity: fadeAnim, // Bind opacity to animated value
+            }}>
+            {props.children}
+        </Animated.View>
+    );
+};
 
 export function RoomNavigator(props: {
     children?: React.ReactNode,
@@ -43,30 +68,32 @@ export function RoomNavigator(props: {
     if (page >= 0) {
         let tabName = props.screens[page];
 
-        return <Tab.Navigator keyboardDismissMode={"on-drag"} initialRouteName={tabName} screenListeners={({navigation}) => ({
-            swipeStart: (e) => {
-                disableButtons();
-            },
-            swipeEnd: (e) => {
-                enableButtons();
-            },
-            state: () => {
-                const index = navigation.getState()?.index ?? 0;
-                setPage(index);
-            },
-            tabPress: (e) => {
-                const index = navigation.getState()?.routes.findIndex((route: any) => route.key === e.target);
-                if (index == page) {
-                    roomPageChanged(index);
-                    if (props.onTabPress) {
-                        props.onTabPress(index);
+        return <FadeInView style={{ width: "100%", height: "100%"}}>
+            <Tab.Navigator keyboardDismissMode={"on-drag"} initialRouteName={tabName} screenListeners={({navigation}) => ({
+                swipeStart: (e) => {
+                    disableButtons();
+                },
+                swipeEnd: (e) => {
+                    enableButtons();
+                },
+                state: () => {
+                    const index = navigation.getState()?.index ?? 0;
+                    setPage(index);
+                },
+                tabPress: (e) => {
+                    const index = navigation.getState()?.routes.findIndex((route: any) => route.key === e.target);
+                    if (index == page) {
+                        roomPageChanged(index);
+                        if (props.onTabPress) {
+                            props.onTabPress(index);
+                        }
                     }
+                    setPage(index);
                 }
-                setPage(index);
-            }
-        })}>
-            {props.children}
-        </Tab.Navigator>
+            })}>
+                {props.children}
+            </Tab.Navigator>
+        </FadeInView>
     } else {
         return <View style={{
             backgroundColor: theme.colors.background,

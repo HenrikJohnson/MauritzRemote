@@ -9,14 +9,20 @@ export function KeyboardStaticView(props: {
     children: React.ReactNode
 }) {
     const [dimensions, setDimensions]
-        = useState({width: 0, height: 0});
+        = useState(() => {
+            if (Platform.OS == "web") {
+                return {width: 0, height: 0}
+            }
+            return {width: getScreenWidth(), height: getScreenHeight()}
+    });
 
     const appContext = useAppContent();
 
     useEffect(() => {
         const subscription = Dimensions.addEventListener('change', () => {
             setDimensions({
-                width: 0, height: 0
+                width: Platform.OS == "web" ? 0 : getScreenWidth(),
+                height: Platform.OS == "web" ? 0 : getScreenHeight()
             });
         });
 
@@ -30,7 +36,7 @@ export function KeyboardStaticView(props: {
         <>
             <View
                 onLayout={event => {
-                    if (dimensions.width < event.nativeEvent.layout.width || dimensions.height < event.nativeEvent.layout.height) {
+                    if (Platform.OS == "web" && (dimensions.width < event.nativeEvent.layout.width || dimensions.height < event.nativeEvent.layout.height)) {
                         setDimensions({
                             width: event.nativeEvent.layout.width,
                             height: event.nativeEvent.layout.height,
@@ -38,8 +44,8 @@ export function KeyboardStaticView(props: {
                     }
                 }}
                 style={{
-                    height: Platform.OS == "web" ? (dimensions.height > 0 ? dimensions.height : "100%") : getScreenHeight(),
-                    width: Platform.OS == "web" ? (dimensions.width > 0 ? dimensions.width : "100%") : getScreenWidth()
+                    height: dimensions.height > 0 ? dimensions.height : "100%",
+                    width: dimensions.width > 0 ? dimensions.width : "100%"
                 }}
                 {...props}>
             </View>
