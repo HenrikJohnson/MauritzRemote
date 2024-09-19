@@ -9,10 +9,10 @@ namespace RemoteServer.Controllers
     [Route("remote/find")]
     public class FindController: Controller
     {
-        private IConfigurationManager configurationManager;
+        private IRemoteConfigurationManager configurationManager;
         private IRemoteManager remoteManager;
 
-        public FindController(IConfigurationManager configurationManager, IRemoteManager remoteManager)
+        public FindController(IRemoteConfigurationManager configurationManager, IRemoteManager remoteManager)
         {
             this.configurationManager = configurationManager;
             this.remoteManager = remoteManager;

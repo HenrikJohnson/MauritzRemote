@@ -17,7 +17,7 @@ namespace RemoteServer.Remotes
     {
         public class Factory : IRemoteTargetFactory
         {
-            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
                 return new TelnetRemote(options["Host"], Int32.Parse(options["Port"]), loggerFactory, config);
             }
@@ -28,12 +28,12 @@ namespace RemoteServer.Remotes
         private object connectionLock = new object();
         private TcpClient client;
         private NetworkStream socket;
-        private IConfigurationManager config;
+        private IRemoteConfigurationManager config;
         private ILogger logger;
         private CancellationTokenSource tokenSource;
         private const int TimeoutMillis = 5000;
 
-        public TelnetRemote(String hostname, int port, ILoggerFactory loggerFactory, IConfigurationManager config)
+        public TelnetRemote(String hostname, int port, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
         {
             this.hostname = hostname;
             this.port = port;
@@ -171,7 +171,7 @@ namespace RemoteServer.Remotes
                         if (await ProcessTelnetBytes(incomingData, offset))
                             offset++;
                     }
-                    catch (IOException exc)
+                    catch (IOException)
                     {
                         await reconnectAsync();
                         offset = 0;

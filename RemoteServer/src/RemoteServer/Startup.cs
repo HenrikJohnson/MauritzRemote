@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using RemoteServer.Config;
 using RemoteServer.Library;
 using RemoteServer.Remotes;
-using Microsoft.Extensions.Logging;
 
 namespace RemoteServer
 {
@@ -31,7 +30,7 @@ namespace RemoteServer
                 options.AddPolicy(name: "Anybody",
                                   builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
             });
-            services.AddSingleton<IConfigurationManager, Config.ConfigurationManager>();
+            services.AddSingleton<IRemoteConfigurationManager, RemoteConfigurationManager>();
             services.AddSingleton<IRemoteManager, RemoteManager>();
 
             services.AddTransient<ILibraryRepository, JukeboxLibraryRepository>();

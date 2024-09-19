@@ -6,9 +6,9 @@ namespace RemoteServer.Controllers
     [Route("remote")]
     public class ConfigController : Controller
     {
-        private IConfigurationManager configManager;
+        private IRemoteConfigurationManager configManager;
 
-        public ConfigController(IConfigurationManager configManager)
+        public ConfigController(IRemoteConfigurationManager configManager)
         {
             this.configManager = configManager;
         }

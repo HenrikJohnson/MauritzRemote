@@ -9,9 +9,9 @@ namespace RemoteServer.Controllers
     [Route("remote/input")]
     public class InputController: Controller
     {
-        private IConfigurationManager configurationManager;
+        private IRemoteConfigurationManager configurationManager;
 
-        public InputController(IConfigurationManager configurationManager)
+        public InputController(IRemoteConfigurationManager configurationManager)
         {
             this.configurationManager = configurationManager;
         }

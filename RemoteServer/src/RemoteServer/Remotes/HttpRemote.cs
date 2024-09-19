@@ -12,7 +12,7 @@ namespace RemoteServer.Remotes
     {
         public class Factory : IRemoteTargetFactory
         {
-            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
                 return new HttpRemote(options["BaseUrl"], loggerFactory, config);
             }
@@ -21,9 +21,9 @@ namespace RemoteServer.Remotes
         private ILogger logger;
 
         private String baseUrl;
-        private IConfigurationManager config;
+        private IRemoteConfigurationManager config;
 
-        public HttpRemote(string baseUrl, ILoggerFactory loggerFactory, IConfigurationManager config)
+        public HttpRemote(string baseUrl, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
         {
             logger = loggerFactory.CreateLogger<HttpRemote>();
             this.baseUrl = baseUrl;

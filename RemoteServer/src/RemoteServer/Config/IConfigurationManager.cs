@@ -4,7 +4,7 @@ using RemoteServer.Remotes;
 
 namespace RemoteServer.Config
 {
-    public interface IConfigurationManager
+    public interface IRemoteConfigurationManager
     {
         IRemoteTarget getRemote(string remote);
         string getCommandData(string name);

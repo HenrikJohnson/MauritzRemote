@@ -10,7 +10,7 @@ namespace RemoteServer.Remotes
     {
         public new class Factory : IRemoteTargetFactory
         {
-            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
                 return new RokuRemote(options["BaseUrl"], options["Category"], options["SelectDevice"], loggerFactory, config);
             }
@@ -28,7 +28,7 @@ namespace RemoteServer.Remotes
             private set;
         }
 
-        public RokuRemote(string baseUrl, string category, string selectDevice, ILoggerFactory loggerFactory, IConfigurationManager config)
+        public RokuRemote(string baseUrl, string category, string selectDevice, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             : base(baseUrl, loggerFactory, config)
         {
             Category = category;
@@ -37,13 +37,13 @@ namespace RemoteServer.Remotes
 
         public async Task sendSearchAsync(string command)
         {
-            await sendCommandAsync("POST", "/search/browse?title=" + Uri.EscapeUriString(command) + "&launch=true");
+            await sendCommandAsync("POST", "/search/browse?title=" + Uri.EscapeDataString(command) + "&launch=true");
         }
 
         public async Task sendKeyboardInputAsync(string command)
         {
             foreach (Char c in command)
-                await sendCommandAsync("POST", "/keypress/Lit_" + Uri.EscapeUriString(c + ""));
+                await sendCommandAsync("POST", "/keypress/Lit_" + Uri.EscapeDataString(c + ""));
         }
     }
 }

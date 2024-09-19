@@ -15,7 +15,7 @@ namespace RemoteServer.Remotes
     {
         public class Factory : IRemoteTargetFactory
         {
-            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
                 return new GlobalCacheRemote(options["Host"], Int32.Parse(options["Port"]), options["Device"], loggerFactory, config);
             }
@@ -27,10 +27,10 @@ namespace RemoteServer.Remotes
         private ushort commandIndex;
         private TcpClient client;
         private NetworkStream socket;
-        private IConfigurationManager config;
+        private IRemoteConfigurationManager config;
         private ILogger logger;
 
-        public GlobalCacheRemote(String hostname, int port, String device, ILoggerFactory loggerFactory, IConfigurationManager config)
+        public GlobalCacheRemote(String hostname, int port, String device, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
         {
             this.hostname = hostname;
             this.port = port;

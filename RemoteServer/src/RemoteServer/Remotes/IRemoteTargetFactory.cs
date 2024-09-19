@@ -7,6 +7,6 @@ namespace RemoteServer.Remotes
 {
     public interface IRemoteTargetFactory
     {
-        IRemoteTarget createTarget(Dictionary<String, String> options, ILoggerFactory loggerFactory, IConfigurationManager config);
+        IRemoteTarget createTarget(Dictionary<String, String> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config);
     }
 }

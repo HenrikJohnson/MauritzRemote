@@ -112,7 +112,7 @@ namespace RemoteServer.Library
             }
         }
 
-        private readonly IConfigurationManager configurationManager;
+        private readonly IRemoteConfigurationManager configurationManager;
 
         private async Task<List<QueueItem>> GenerateQueue(MySqlConnection mysqlConnection, String room, LibraryQueue queue)
         {
@@ -164,7 +164,7 @@ namespace RemoteServer.Library
         }
 
 
-        public JukeboxLibraryRepository(IConfigurationManager configurationManager, ILoggerFactory loggerFactory)
+        public JukeboxLibraryRepository(IRemoteConfigurationManager configurationManager, ILoggerFactory loggerFactory)
         {
             this.configurationManager = configurationManager;
         }
@@ -186,16 +186,16 @@ namespace RemoteServer.Library
                 String id = songId.Substring(1);
                 request =
                     WebRequest.CreateHttp(JukeboxUrl + "action.php?SEL=" + Int32.Parse(id) + "&AUTH_USER=" +
-                                          Uri.EscapeUriString(JukeboxUser) + "&AUTH_PWD=" +
-                                          Uri.EscapeUriString(JukeboxPassword));
+                                          Uri.EscapeDataString(JukeboxUser) + "&AUTH_PWD=" +
+                                          Uri.EscapeDataString(JukeboxPassword));
             }
             else if (songId.StartsWith("A"))
             {
                 String id = songId.Substring(1);
                 request =
                     WebRequest.CreateHttp(JukeboxUrl + "action.php?SELPRG=" + Int32.Parse(id) + "&AUTH_USER=" +
-                                          Uri.EscapeUriString(JukeboxUser) + "&AUTH_PWD=" +
-                                          Uri.EscapeUriString(JukeboxPassword));
+                                          Uri.EscapeDataString(JukeboxUser) + "&AUTH_PWD=" +
+                                          Uri.EscapeDataString(JukeboxPassword));
             }
             else
             {
@@ -228,8 +228,8 @@ namespace RemoteServer.Library
         {
             HttpWebRequest request =
                 WebRequest.CreateHttp(JukeboxUrl+ "action.php?REMOVE=" + queueId + "&AUTH_USER=" +
-                                      Uri.EscapeUriString(JukeboxUser) + "&AUTH_PWD=" +
-                                      Uri.EscapeUriString(JukeboxPassword));
+                                      Uri.EscapeDataString(JukeboxUser) + "&AUTH_PWD=" +
+                                      Uri.EscapeDataString(JukeboxPassword));
 
             request.Method = "GET";
             request.CookieContainer = new CookieContainer();

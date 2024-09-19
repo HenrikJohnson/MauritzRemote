@@ -10,12 +10,12 @@ namespace RemoteServer.Remotes
 {
     public class RemoteManager : IRemoteManager
     {
-        private IConfigurationManager configurationManager;
+        private IRemoteConfigurationManager configurationManager;
         private Dictionary<IRemoteTarget, Task<String>> activeTasks = new Dictionary<IRemoteTarget, Task<string>>();
         private ILogger logger;
         private object lck = new Object();
 
-        public RemoteManager(IConfigurationManager configurationManager, ILoggerFactory loggerFactory)
+        public RemoteManager(IRemoteConfigurationManager configurationManager, ILoggerFactory loggerFactory)
         {
             this.configurationManager = configurationManager;
             this.logger = loggerFactory.CreateLogger<RemoteManager>();

@@ -12,7 +12,7 @@ namespace RemoteServer.Remotes
     {
         public class Factory : IRemoteTargetFactory
         {
-            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
                 return new EventClientRemote(options["Host"], Int32.Parse(options["Port"]), loggerFactory);
             }

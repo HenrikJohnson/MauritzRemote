@@ -34,12 +34,20 @@ export function RemoteButton(props: {
                                 const res = setInterval(() => {
                                     apiIdle(appContext, props.action);
                                 }, REPEAT_INTERVAL) as unknown;
-                                setIntervalId(res as number);
+                                setIntervalId((oldValue) => {
+                                    if (oldValue >= 0)
+                                        clearInterval(oldValue);
+                                    return res as number;
+                                });
                             }
                             return currentActive;
                         })
                     }, SECONDARY_DELAY) as unknown;
-                    setTimeoutId(res as number);
+                    setTimeoutId((oldValue) => {
+                        if (oldValue >= 0)
+                            clearTimeout(oldValue);
+                        return res as number
+                    });
                 }
                 return currentActive;
             })

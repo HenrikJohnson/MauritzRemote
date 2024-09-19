@@ -12,7 +12,7 @@ namespace RemoteServer.Remotes
     {
         public class Factory : IRemoteTargetFactory
         {
-            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IConfigurationManager config)
+            public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
                 return new ProcessRemote(options["Command"], options["ArgumentPrefix"], loggerFactory.CreateLogger<ProcessRemote>(), config);
             }
@@ -21,9 +21,9 @@ namespace RemoteServer.Remotes
         private readonly string command;
         private readonly string argumentPrefix;
         private readonly ILogger logger;
-        private readonly IConfigurationManager config;
+        private readonly IRemoteConfigurationManager config;
 
-        public ProcessRemote(String command, string argumentPrefix, ILogger logger, IConfigurationManager config)
+        public ProcessRemote(String command, string argumentPrefix, ILogger logger, IRemoteConfigurationManager config)
         {
             this.command = command;
             this.argumentPrefix = argumentPrefix;

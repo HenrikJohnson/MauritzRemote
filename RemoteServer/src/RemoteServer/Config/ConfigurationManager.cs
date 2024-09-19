@@ -11,7 +11,7 @@ using RemoteServer.Remotes;
 
 namespace RemoteServer.Config
 {
-    public class ConfigurationManager : IConfigurationManager
+    public class RemoteConfigurationManager : IRemoteConfigurationManager
     {
         private String configFile;
         private DateTime timetamp;
@@ -22,7 +22,7 @@ namespace RemoteServer.Config
         private static Dictionary<String, IRemoteTargetFactory> remoteTypes = new Dictionary<string, IRemoteTargetFactory>();
         private ILoggerFactory loggerFactory;
 
-        static ConfigurationManager()
+        static RemoteConfigurationManager()
         {
             remoteTypes["GlobalCache"] = new GlobalCacheRemote.Factory();
             remoteTypes["Telnet"] = new TelnetRemote.Factory();
@@ -31,15 +31,14 @@ namespace RemoteServer.Config
             remoteTypes["HTTP"] = new HttpRemote.Factory();
             remoteTypes["ROKU"] = new RokuRemote.Factory();
             remoteTypes["EventClient"] = new EventClientRemote.Factory();
-            remoteTypes["Panasonic"] = new PanasonicRemote.Factory();
             remoteTypes["Process"] = new ProcessRemote.Factory();
         }
 
-        public ConfigurationManager(IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public RemoteConfigurationManager(IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             this.configFile = Path.Combine(env.ContentRootPath, "remotes.json");
             this.loggerFactory = loggerFactory;
-            this.logger = loggerFactory.CreateLogger<ConfigurationManager>();
+            this.logger = loggerFactory.CreateLogger<RemoteConfigurationManager>();
             Config.GetType();
         }
 
