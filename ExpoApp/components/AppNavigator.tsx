@@ -112,7 +112,7 @@ export function AppNavigator() {
 const styles = StyleSheet.create({
     navigationHeader: {
         backgroundColor: '#5700f5',
-        height: Platform.OS === "android" ? 80 : 40,
+        height: Platform.OS === "web" ? 40 : 80,
         alignItems: 'center',
         justifyContent: Platform.OS === "android" ? 'flex-end' : 'center',
         paddingBottom: Platform.OS === "android" ? 10 : 0,
