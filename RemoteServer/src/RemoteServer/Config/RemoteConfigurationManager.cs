@@ -14,6 +14,7 @@ namespace RemoteServer.Config
     public class RemoteConfigurationManager : IRemoteConfigurationManager
     {
         private String configFile;
+        private String stateFile;
         private DateTime timetamp;
         private DateTime lastCheck;
         private RootConfig config;
@@ -21,6 +22,7 @@ namespace RemoteServer.Config
         private Dictionary<String, IRemoteTarget> remotes;
         private static Dictionary<String, IRemoteTargetFactory> remoteTypes = new Dictionary<string, IRemoteTargetFactory>();
         private ILoggerFactory loggerFactory;
+        private Dictionary<String, String> state;
 
         static RemoteConfigurationManager()
         {
@@ -37,9 +39,43 @@ namespace RemoteServer.Config
         public RemoteConfigurationManager(IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             this.configFile = Path.Combine(env.ContentRootPath, "remotes.json");
+            this.stateFile = Path.Combine(env.ContentRootPath, "state.json");
             this.loggerFactory = loggerFactory;
             this.logger = loggerFactory.CreateLogger<RemoteConfigurationManager>();
+            try
+            {
+                if (File.Exists(this.stateFile))
+                    state = JsonConvert.DeserializeObject<Dictionary<String, String>>(File.ReadAllText(this.stateFile));
+                else
+                    state = new Dictionary<String, String>();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(null, ex, "Failed to restore state");
+                state = new Dictionary<String, String>();
+            }
             Config.GetType();
+        }
+
+        public void PutState(String key, String value)
+        {
+            state[key] = value;
+            try
+            {
+                File.WriteAllText(this.stateFile, JsonConvert.SerializeObject(state));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(null, ex, "Failed to save state");
+            }
+        }
+
+        public String GetState(String key)
+        {
+            String result;
+            if (state.TryGetValue(key, out result))
+                return result;
+            return null;
         }
 
         public String configJson(long version)

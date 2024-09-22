@@ -1,29 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using RemoteServer.Config;
+using RemoteServer.Remotes;
 
 namespace RemoteServer.Controllers
 {
     [Route("remote/room")]
     public class RoomController : Controller
     {
-        private static Dictionary<String, int> roomPages = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        private static String STATE_PREFIX = "Room/";
+
+        IRemoteConfigurationManager configurationManager;
+
+        public RoomController(IRemoteConfigurationManager configurationManager)
+        {
+            this.configurationManager = configurationManager;
+        }
 
         // GET api/values/5
         [HttpGet("{room}")]
         public IActionResult Get(String room)
         {
-            int index;
-            if (!roomPages.TryGetValue(room, out index))
-                index = 0;
+            String value = configurationManager.GetState(STATE_PREFIX + room);
+            int intVal = 0;
+            if (value != null)
+                int.TryParse(value, out intVal);
 
-            return Content(index.ToString());
+            return Content(intVal.ToString());
         }
 
         [HttpPut("{room}/{index}")]
         public IActionResult Put(String room, int index)
         {
-            roomPages[room] = index;
+            configurationManager.PutState(STATE_PREFIX + room.ToString(), index.ToString());
             return Content("ÖK");
         }
     }

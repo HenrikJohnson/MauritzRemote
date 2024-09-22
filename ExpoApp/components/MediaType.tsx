@@ -86,31 +86,38 @@ export function MediaType(props: {
                             icon: () => <Icon size={iconSize} source={"music"}/>,
                             value: "Music",
                             style: buttonStyle,
-                            disabled: currentQueue === undefined
+                            disabled: currentQueue === undefined,
+                            onPress: () => {
+                                apiSend(appContext, "Play_Music_In_Media_Center");
+                            }
                         },
                         {
                             icon: () => <Icon size={iconSize} source={"movie-open"}/>,
                             value: "Movie",
                             style: buttonStyle,
-                            disabled: currentQueue === undefined
+                            disabled: currentQueue === undefined,
+                            onPress: () => {
+                                apiSend(appContext, "Play_Movies_In_Media_Center");
+                            }
                         },
                         {
                             icon: () => <Icon size={iconSize} source={"television"}/>,
                             value: "Tv",
                             style: buttonStyle,
-                            disabled: currentQueue === undefined
+                            disabled: currentQueue === undefined,
+                            onPress: () => {
+                                apiSend(appContext, "Play_TV_In_Media_Center");
+                            }
                         }
-                    ]} onValueChange={(e) => {
+                    ]}
+                    onValueChange={(e) => {
                     if (currentQueue === e)
                         switch (e) {
                             case "Music":
-                                apiSend(appContext, "Play_Music_In_Media_Center");
                                 break;
                             case "Movie":
-                                apiSend(appContext, "Play_Movies_In_Media_Center");
                                 break;
                             case "Tv":
-                                apiSend(appContext, "Play_TV_In_Media_Center");
                                 break;
                         }
                     else

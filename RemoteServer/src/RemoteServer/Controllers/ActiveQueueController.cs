@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using RemoteServer.Config;
 using RemoteServer.Library;
 
 namespace RemoteServer.Controllers
@@ -8,17 +8,22 @@ namespace RemoteServer.Controllers
     [Route("remote/activequeue")]
     public class ActiveQueueController : Controller
     {
-        private static Dictionary<String, LibraryQueue> queueMap = new Dictionary<string, LibraryQueue>(StringComparer.OrdinalIgnoreCase);
+        private static String STATE_PREFIX = "Queue/";
 
-        // GET api/values/5
+        IRemoteConfigurationManager configurationManager;
+
+        public ActiveQueueController(IRemoteConfigurationManager configurationManager)
+        {
+            this.configurationManager = configurationManager;
+        }
+
         [HttpGet("{room}")]
         public IActionResult Get(String room)
         {
-            LibraryQueue index;
-            if (!queueMap.TryGetValue(room, out index))
-            {
-                index = LibraryQueue.Tv;
-            }
+            String queue = configurationManager.GetState(STATE_PREFIX + room);
+            LibraryQueue index = LibraryQueue.Tv;
+            if (queue != null)
+                Enum.TryParse(queue, out index);
 
             return Content(index.ToString());
         }
@@ -26,7 +31,7 @@ namespace RemoteServer.Controllers
         [HttpPut("{room}/{index}")]
         public IActionResult Put(String room, LibraryQueue index)
         {
-            queueMap[room] = index;
+            configurationManager.PutState(STATE_PREFIX + room, index.ToString());
             return Content("ÖK");
         }
     }

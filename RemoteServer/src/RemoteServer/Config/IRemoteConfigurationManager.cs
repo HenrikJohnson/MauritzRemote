@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RemoteServer.Remotes;
 
 namespace RemoteServer.Config
@@ -27,5 +29,7 @@ namespace RemoteServer.Config
         {
             get;
         }
+        void PutState(String key, String value);
+        String GetState(String key);
     }
 }
