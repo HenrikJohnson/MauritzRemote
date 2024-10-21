@@ -10,7 +10,7 @@ export function KeyboardStaticView(props: {
 }) {
     const [dimensions, setDimensions]
         = useState(() => {
-            if (Platform.OS == "web") {
+            if (Platform.OS !== "ios") {
                 return {width: 0, height: 0}
             }
             return {width: getScreenWidth(), height: getScreenHeight()}
@@ -21,8 +21,8 @@ export function KeyboardStaticView(props: {
     useEffect(() => {
         const subscription = Dimensions.addEventListener('change', () => {
             setDimensions({
-                width: Platform.OS == "web" ? 0 : getScreenWidth(),
-                height: Platform.OS == "web" ? 0 : getScreenHeight()
+                width: Platform.OS !== "ios" ? 0 : getScreenWidth(),
+                height: Platform.OS !== "ios"? 0 : getScreenHeight()
             });
         });
 
@@ -36,7 +36,7 @@ export function KeyboardStaticView(props: {
         <>
             <View
                 onLayout={event => {
-                    if (Platform.OS == "web" && (dimensions.width < event.nativeEvent.layout.width || dimensions.height < event.nativeEvent.layout.height)) {
+                    if (Platform.OS !== "ios" && (dimensions.width < event.nativeEvent.layout.width || dimensions.height < event.nativeEvent.layout.height)) {
                         setDimensions({
                             width: event.nativeEvent.layout.width,
                             height: event.nativeEvent.layout.height,
