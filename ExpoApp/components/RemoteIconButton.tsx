@@ -5,6 +5,7 @@ import {StyleProp} from "react-native/Libraries/StyleSheet/StyleSheet";
 import {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
 import {IconSource} from "react-native-paper/lib/typescript/components/Icon";
 import {useAppContent} from "./AppContex";
+import {startSendingAction, stopSendingAction} from "../utils/RepeatingButton";
 
 const INITIAL_DELAY = 200;
 const SECONDARY_DELAY = 300;
@@ -21,52 +22,14 @@ export function RemoteIconButton(props: {
     color?: string
 }) {
     const appContext = useAppContent();
-    const [timeoutId, setTimeoutId] = React.useState(-1);
-    const [intervalId, setIntervalId] = React.useState(-1);
-    const [active, setActive] = React.useState(false);
     const theme = useTheme();
 
     function startSending() {
-        setTimeout(() => {
-            apiSend(appContext, props.action);
-            setActive((currentActive) => {
-                if (currentActive) {
-                    const res = setTimeout(() => {
-                        setActive((currentActive) => {
-                            if (currentActive) {
-                                const res = setInterval(() => {
-                                    apiIdle(appContext, props.action);
-                                }, REPEAT_INTERVAL) as unknown;
-                                setIntervalId((oldValue) => {
-                                    if (oldValue >= 0)
-                                        clearInterval(oldValue);
-                                    return res as number;
-                                });
-                            }
-                            return currentActive;
-                        })
-                    }, SECONDARY_DELAY) as unknown;
-                    setTimeoutId((oldValue) => {
-                        if (oldValue >= 0)
-                            clearTimeout(oldValue);
-                        return res as number
-                    });
-                }
-                return currentActive;
-            })
-        }, INITIAL_DELAY);
-        setActive(true);
+        startSendingAction(appContext, props.action);
     }
 
     function stopSending() {
-        if (timeoutId >= 0)
-            clearTimeout(timeoutId);
-        if (intervalId >= 0)
-            clearInterval(intervalId);
-
-        setTimeoutId(-1);
-        setIntervalId(-1);
-        setActive(false);
+        stopSendingAction(appContext, props.action);
     }
 
     return <IconButton
