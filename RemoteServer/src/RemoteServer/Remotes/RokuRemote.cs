@@ -42,8 +42,13 @@ namespace RemoteServer.Remotes
 
         public async Task sendKeyboardInputAsync(string command)
         {
-            foreach (Char c in command)
-                await sendCommandAsync("POST", "/keypress/Lit_" + Uri.EscapeDataString(c + ""));
+            if (command == null)
+                await sendCommandAsync("POST", "/keypress/Lit_" + Uri.EscapeDataString(" "));
+            else
+            {
+                foreach (Char c in command)
+                    await sendCommandAsync("POST", "/keypress/Lit_" + Uri.EscapeDataString(c + ""));
+            }
         }
     }
 }

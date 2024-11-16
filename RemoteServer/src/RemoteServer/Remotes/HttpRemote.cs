@@ -60,7 +60,9 @@ namespace RemoteServer.Remotes
         {
             Uri uri = new Uri(baseUrl + commandData);
 
-            logger.LogInformation(new EventId(2), "{0} {1} ({2})", method, commandData, uri);
+            String logEntry = String.Format("{0} {1} ({2})", method, commandData, uri);
+
+            logger.LogInformation(new EventId(2), logEntry);
 
             HttpWebRequest request = WebRequest.CreateHttp(uri);
             request.Method = method;
@@ -70,14 +72,14 @@ namespace RemoteServer.Remotes
                 request.Credentials = new NetworkCredential(uri.UserInfo.Substring(0, ind), uri.UserInfo.Substring(ind + 1));
             }
 
-            Task<String> call = MakeCall(request, uri);
+            Task<String> call = MakeCall(request, uri, logEntry);
             await Task.WhenAny(call, Task.Delay(1000));
             if (call.IsCompleted)
                 return call.Result;
             return "TIMEOUT";
         }
 
-        private async Task<String> MakeCall(HttpWebRequest request, Uri uri)
+        private async Task<String> MakeCall(HttpWebRequest request, Uri uri, String logEntry)
         {
             try
             {
@@ -95,7 +97,7 @@ namespace RemoteServer.Remotes
             }
             catch (Exception exc)
             {
-                logger.LogError(new EventId(1), exc, "Failed to execute request");
+                logger.LogError(new EventId(1), exc, "Failed to execute request: {0}", logEntry);
             }
 
             return "ERROR";
