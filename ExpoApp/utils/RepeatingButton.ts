@@ -6,7 +6,7 @@ const SECONDARY_DELAY = 300;
 const REPEAT_INTERVAL = 50;
 
 let repeatingAction : string | undefined = undefined;
-let nextActionId = 0;
+let currentActionId = 0;
 let currentTimerId = -1;
 let currentIntervalId = -1;
 
@@ -18,24 +18,24 @@ function stopSending() {
 
     currentTimerId = -1;
     currentIntervalId = -1;
-    nextActionId++;
+    currentActionId++;
     repeatingAction = undefined;
 }
 
 export function startSendingAction(appContext: AppContext, action: string) {
     console.log("startSendingAction", action);
     stopSending();
-    let currentActionId = ++nextActionId;
+    let thisActionId = ++currentActionId;
     repeatingAction = action;
 
     setTimeout(() => {
         apiSend(appContext, action);
 
-        if (nextActionId === currentActionId && currentTimerId < 0) {
+        if (currentActionId === thisActionId && currentTimerId < 0) {
             currentTimerId = setTimeout(() => {
-                if (nextActionId === currentActionId && currentIntervalId < 0) {
+                if (currentActionId === thisActionId && currentIntervalId < 0) {
                     currentIntervalId = setInterval(() => {
-                        if (nextActionId === currentActionId) {
+                        if (currentActionId === thisActionId) {
                             apiIdle(appContext, action);
                         }
                     }, REPEAT_INTERVAL) as unknown as number;
@@ -46,8 +46,8 @@ export function startSendingAction(appContext: AppContext, action: string) {
 }
 
 export function stopSendingAction(appContext: AppContext, action: string) {
-    console.log("stopSendingAction", action);
     if (repeatingAction === action) {
+        console.log("stopSendingAction", action);
         stopSending();
     }
 }
