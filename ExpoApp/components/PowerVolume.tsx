@@ -32,7 +32,7 @@ export function PowerVolume(props: { includeCompress?: boolean }) {
         <RemoteIconButton style={{
             position: 'absolute',
             right: 0,
-            bottom: 10 + (buttonSize + 10) * 3,
+            bottom: 26 + (buttonSize + 10) * 3,
         }}
                           size={buttonSize - 10}
                           action={"Increase_Volume"}
@@ -42,7 +42,7 @@ export function PowerVolume(props: { includeCompress?: boolean }) {
         <RemoteIconButton style={{
             position: 'absolute',
             right: 0,
-            bottom: 10 + (buttonSize + 10) * 2,
+            bottom: 26 + (buttonSize + 10) * 2,
         }}
                           size={buttonSize - 10}
                           action={"Decrease_Volume"}
@@ -52,7 +52,7 @@ export function PowerVolume(props: { includeCompress?: boolean }) {
         <RemoteIconButton style={{
             position: 'absolute',
             right: 0,
-            bottom: 10 + buttonSize * 4 / 3 + 10,
+            bottom: 26 + buttonSize * 4 / 3 + 10,
         }}
                           size={buttonSize * 2 / 3 - 10}
                           action={"Mute"}
@@ -62,7 +62,7 @@ export function PowerVolume(props: { includeCompress?: boolean }) {
             <RemoteIconButton style={{
                 position: 'absolute',
                 right: buttonSize * 2 / 3 + 10,
-                bottom: 10 + buttonSize * 4 / 3 + 10,
+                bottom: 26 + buttonSize * 4 / 3 + 10,
             }}
                               size={buttonSize * 2 / 3 - 10}
                               action={"DRC"}
@@ -72,7 +72,7 @@ export function PowerVolume(props: { includeCompress?: boolean }) {
         <RemoteIconButton style={{
             position: 'absolute',
             right: 0,
-            bottom: 10,
+            bottom: 26,
         }}
                           color={theme.colors.error}
                           size={buttonSize - 10}

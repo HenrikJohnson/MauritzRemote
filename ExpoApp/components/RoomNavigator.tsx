@@ -44,7 +44,7 @@ export function RoomNavigator(props: {
     if (page >= 0) {
         let tabName = props.screens[page];
 
-        return <FadeInView style={{ width: "100%", height: "100%"}}>
+        return <FadeInView style={{ width: "100%", height: "100%", paddingBottom: 16}}>
             <Tab.Navigator keyboardDismissMode={"on-drag"} initialRouteName={tabName} screenListeners={({navigation}) => ({
                 swipeStart: (e) => {
                     disableButtons();
