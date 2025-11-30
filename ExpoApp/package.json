@@ -45,6 +45,7 @@
     "@types/color": "^3.0.6",
     "@types/react": "~18.2.79",
     "@types/react-native-sortable-list": "^0.0.14",
+    "eas-cli": "^16.18.0",
     "react-native-svg-transformer": "^1.5.0",
     "typescript": "5.3.3"
   },

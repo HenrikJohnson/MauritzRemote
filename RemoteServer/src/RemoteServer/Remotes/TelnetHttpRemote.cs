@@ -12,7 +12,7 @@ namespace RemoteServer.Remotes
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
-                return new TelnetHttpRemote(options["Host"], Int32.Parse(options["Port"]), options["BaseUrl"], loggerFactory, config);
+                return new TelnetHttpRemote(options["Host"], Int32.Parse(options["Port"]), options["BaseUrl"], options["CommandPrefix"], loggerFactory, config);
             }
         }
 
@@ -21,10 +21,10 @@ namespace RemoteServer.Remotes
         private DateTime lastFailure = DateTime.MinValue;
         private int failureTimeout = 60 * 5;
 
-        public TelnetHttpRemote(String hostname, int port, String url, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
-            : base(hostname, port, loggerFactory, config)
+        public TelnetHttpRemote(String hostname, int port, String url, String commandPrefix, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
+            : base(hostname, port, commandPrefix, loggerFactory, config)
         {
-            fallbackRemote = new HttpRemote(url, loggerFactory, config);
+            fallbackRemote = new HttpRemote(url, commandPrefix, loggerFactory, config);
             logger = loggerFactory.CreateLogger<TelnetHttpRemote>();
         }
 

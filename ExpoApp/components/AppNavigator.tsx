@@ -1,6 +1,6 @@
 import {getRoom, setRoom} from "../utils/Storage";
 import {AppState, Platform, StyleSheet, View} from "react-native";
-import {IconButton, Switch, Text} from "react-native-paper";
+import {IconButton, Switch, Text, useTheme} from "react-native-paper";
 import {LivingRoom} from "../rooms/LivingRoom";
 import LivingRoomIcon from "../assets/icons/livingroom.svg";
 import {OfficeRoom, Zone2OfficeRoom} from "../rooms/OfficeRoom";
@@ -52,6 +52,7 @@ function CustomDrawerContent(props: any) {
 
 export function AppNavigator() {
     const appContext = useAppContent();
+    const theme = useTheme();
 
     useEffect(() => {
         const subscription = AppState.addEventListener('change',
@@ -100,6 +101,7 @@ export function AppNavigator() {
                 drawerIcon: (props) => <BedRoomIcon width={props.size} height={props.size} fill={props.color}/>
             }}/>
         </Drawer.Navigator>
+        <View style={{height: 30, backgroundColor: theme.colors.background}}/>
         {(appContext.keyboardView === "Tv" || appContext.keyboardView === "Movie" || appContext.keyboardView === "Music") &&
             <QueueManagement defaultQueue={appContext.keyboardView} initialRoute={"Queue"}/>
         }

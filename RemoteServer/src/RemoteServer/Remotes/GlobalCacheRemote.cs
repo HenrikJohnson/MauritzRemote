@@ -17,7 +17,7 @@ namespace RemoteServer.Remotes
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
-                return new GlobalCacheRemote(options["Host"], Int32.Parse(options["Port"]), options["Device"], loggerFactory, config);
+                return new GlobalCacheRemote(options["Host"], Int32.Parse(options["Port"]), options["Device"], options["CommandPrefix"], loggerFactory, config);
             }
         }
 
@@ -25,17 +25,19 @@ namespace RemoteServer.Remotes
         private int port;
         private String device;
         private ushort commandIndex;
+        private String commandPrefix;
         private TcpClient client;
         private NetworkStream socket;
         private IRemoteConfigurationManager config;
         private ILogger logger;
 
-        public GlobalCacheRemote(String hostname, int port, String device, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
+        public GlobalCacheRemote(String hostname, int port, String device, String commandPrefix, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
         {
             this.hostname = hostname;
             this.port = port;
             this.device = device;
             this.config = config;
+            this.commandPrefix = commandPrefix;
 
             this.logger = loggerFactory.CreateLogger<GlobalCacheRemote>();
         }
@@ -106,7 +108,7 @@ namespace RemoteServer.Remotes
             String cis = commandIndex.ToString(CultureInfo.InvariantCulture);
             commandIndex++;
 
-            String commandData = config.getCommandData(command);
+            String commandData = config.getCommandData(commandPrefix, command);
 
             byte[] data = Encoding.UTF8.GetBytes("sendir," + device + "," + cis + "," + commandData + "\r\n");
             await socket.WriteAsync(data, 0, data.Length);

@@ -14,7 +14,7 @@ namespace RemoteServer.Remotes
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
-                return new ProcessRemote(options["Command"], options["ArgumentPrefix"], loggerFactory.CreateLogger<ProcessRemote>(), config);
+                return new ProcessRemote(options["Command"], options["ArgumentPrefix"], options["CommandPrefix"], loggerFactory.CreateLogger<ProcessRemote>(), config);
             }
         }
 
@@ -22,18 +22,20 @@ namespace RemoteServer.Remotes
         private readonly string argumentPrefix;
         private readonly ILogger logger;
         private readonly IRemoteConfigurationManager config;
+        private readonly string commandPrefix;
 
-        public ProcessRemote(String command, string argumentPrefix, ILogger logger, IRemoteConfigurationManager config)
+        public ProcessRemote(String command, string argumentPrefix, string commandPrefix, ILogger logger, IRemoteConfigurationManager config)
         {
             this.command = command;
             this.argumentPrefix = argumentPrefix;
             this.logger = logger;
             this.config = config;
+            this.commandPrefix = commandPrefix;
         }
 
         private Process createProcess(string arguments)
         {
-            String commandData = config.getCommandData(arguments);
+            String commandData = config.getCommandData(commandPrefix, arguments);
 
             Process process = new Process();
             process.StartInfo.FileName = command;

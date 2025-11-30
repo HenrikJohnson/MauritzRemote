@@ -19,7 +19,7 @@ namespace RemoteServer.Remotes
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
-                return new TelnetRemote(options["Host"], Int32.Parse(options["Port"]), loggerFactory, config);
+                return new TelnetRemote(options["Host"], Int32.Parse(options["Port"]), options["CommandPrefix"], loggerFactory, config);
             }
         }
 
@@ -29,15 +29,17 @@ namespace RemoteServer.Remotes
         private TcpClient client;
         private NetworkStream socket;
         private IRemoteConfigurationManager config;
+        private string commandPrefix;
         private ILogger logger;
         private CancellationTokenSource tokenSource;
         private const int TimeoutMillis = 5000;
 
-        public TelnetRemote(String hostname, int port, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
+        public TelnetRemote(String hostname, int port, String commandPrefix, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
         {
             this.hostname = hostname;
             this.port = port;
             this.config = config;
+            this.commandPrefix = commandPrefix;
 
             this.logger = loggerFactory.CreateLogger<TelnetRemote>();
         }
@@ -143,7 +145,7 @@ namespace RemoteServer.Remotes
         {
             await consumeInput();
 
-            String commandData = config.getCommandData(command);
+            String commandData = config.getCommandData(commandPrefix, command);
 
             byte[] data = Encoding.UTF8.GetBytes(commandData + "\r");
             await socket.WriteAsync(data, 0, data.Length);

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using RemoteServer.Config;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RemoteServer.Config;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace RemoteServer.Remotes
 {
@@ -14,7 +15,7 @@ namespace RemoteServer.Remotes
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
-                return new EventClientRemote(options["Host"], Int32.Parse(options["Port"]), loggerFactory);
+                return new EventClientRemote(options["Host"], Int32.Parse(options["Port"]), options["CommandPrefix"], loggerFactory, config);
             }
         }
 
@@ -24,12 +25,16 @@ namespace RemoteServer.Remotes
         private int port;
         private string host;
         private ILogger<EventClientRemote> logger;
+        private IRemoteConfigurationManager config;
+        private string commandPrefix;
 
-        public EventClientRemote(string host, int port, ILoggerFactory loggerFactory)
+        public EventClientRemote(string host, int port, String commandPrefix, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
         {
             this.host = host;
             this.port = port;
             this.logger = loggerFactory.CreateLogger<EventClientRemote>();
+            this.config = config;
+            this.commandPrefix = commandPrefix;
         }
 
         public async Task<String> sendCommandAsync(string command)
@@ -40,13 +45,15 @@ namespace RemoteServer.Remotes
                 await eventClient.ConnectAsync(host, port);
             }
 
-            int ind = command.IndexOf(':');
-            String key = command;
+            String commandData = config.getCommandData(commandPrefix, command);
+
+            int ind = commandData.IndexOf(':');
+            String key = commandData;
             String map = "KB";
             if (ind >= 0)
             {
-                key = command.Substring(0, ind);
-                map = command.Substring(ind + 1);
+                key = commandData.Substring(0, ind);
+                map = commandData.Substring(ind + 1);
             }
 
             logger.LogInformation(new EventId(1), "Sending Kodi event {0} {1}", key, map);

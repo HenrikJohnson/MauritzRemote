@@ -12,7 +12,7 @@ namespace RemoteServer.Remotes
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
-                return new RokuRemote(options["BaseUrl"], options["Category"], options["SelectDevice"], loggerFactory, config);
+                return new RokuRemote(options["BaseUrl"], options["Category"], options["SelectDevice"], options["CommandPrefix"], loggerFactory, config);
             }
         }
 
@@ -28,8 +28,8 @@ namespace RemoteServer.Remotes
             private set;
         }
 
-        public RokuRemote(string baseUrl, string category, string selectDevice, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
-            : base(baseUrl, loggerFactory, config)
+        public RokuRemote(string baseUrl, string category, string selectDevice, string commandPrefix, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
+            : base(baseUrl, commandPrefix, loggerFactory, config)
         {
             Category = category;
             SelectDevice = selectDevice;

@@ -264,12 +264,20 @@ namespace RemoteServer.Config
 
         private Dictionary<String, int> toggleIndexes = new Dictionary<string, int>();
 
-        public String getCommandData(String name)
+        public String getCommandData(String commandPrefix, String name)
         {
             String[] pieces = name.Split('.');
             if (pieces.Length != 2)
             {
-                throw new FormatException("Command name should have {Category}.{Name} format");
+                if (commandPrefix != null && commandPrefix.Length > 0)
+                {
+                    name = commandPrefix + "." + name;
+                    pieces = name.Split('.');
+                }
+                if (pieces.Length != 2)
+                {
+                    throw new FormatException("Command name should have {Category}.{Name} format");
+                }
             }
             Dictionary<string, List<string>> map;
             if (Config.CommandData.TryGetValue(pieces[0], out map))

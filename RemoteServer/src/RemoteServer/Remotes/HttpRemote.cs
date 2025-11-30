@@ -14,7 +14,7 @@ namespace RemoteServer.Remotes
         {
             public IRemoteTarget createTarget(Dictionary<string, string> options, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
             {
-                return new HttpRemote(options["BaseUrl"], loggerFactory, config);
+                return new HttpRemote(options["BaseUrl"], options["CommandPrefix"], loggerFactory, config);
             }
         }
 
@@ -22,17 +22,19 @@ namespace RemoteServer.Remotes
 
         private String baseUrl;
         private IRemoteConfigurationManager config;
+        private string commandPrefix;
 
-        public HttpRemote(string baseUrl, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
+        public HttpRemote(string baseUrl, String commandPrefix, ILoggerFactory loggerFactory, IRemoteConfigurationManager config)
         {
             logger = loggerFactory.CreateLogger<HttpRemote>();
             this.baseUrl = baseUrl;
             this.config = config;
+            this.commandPrefix = commandPrefix;
         }
 
         public async Task<String> sendCommandAsync(string command)
         {
-            String commandData = config.getCommandData(command);
+            String commandData = config.getCommandData(commandPrefix, command);
             String method = "GET";
 
             if (commandData.StartsWith("POST:"))

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Home Remote",
     "slug": "MauritzRemote",
-    "version": "4.1.8",
+    "version": "4.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -18,7 +18,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.underscoreresearch.mauritzremote"
+      "bundleIdentifier": "com.underscoreresearch.mauritzremote",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

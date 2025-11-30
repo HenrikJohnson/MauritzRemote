@@ -9,7 +9,7 @@ namespace RemoteServer.Config
     public interface IRemoteConfigurationManager
     {
         IRemoteTarget getRemote(string remote);
-        string getCommandData(string name);
+        string getCommandData(string commandPrefix, string name);
         List<RemoteCommand> getRemoteCommand(string category, string name);
         string configJson(long previousVersion);
         RokuRemote getRokuRemote(string category);
