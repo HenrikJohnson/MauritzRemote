@@ -101,7 +101,7 @@ export function AppNavigator() {
                 drawerIcon: (props) => <BedRoomIcon width={props.size} height={props.size} fill={props.color}/>
             }}/>
         </Drawer.Navigator>
-        <View style={{height: 16, backgroundColor: theme.colors.background}}/>
+        <View style={{height: 12, backgroundColor: theme.colors.background}}/>
         {(appContext.keyboardView === "Tv" || appContext.keyboardView === "Movie" || appContext.keyboardView === "Music") &&
             <QueueManagement defaultQueue={appContext.keyboardView} initialRoute={"Queue"}/>
         }
